@@ -1,0 +1,29 @@
+package Aplicacion.ServiceImpl;
+
+import java.util.List;
+
+import Aplicacion.repositoryimpl.DetalleCompraRepositoryImpl;
+import Dominio.Modelo.DetalleCompra;
+import Dominio.Service.DetalleCompraService;
+import Dominio.repository.DetalleCompraRepository;
+
+public class DetalleCompraServiceImpl implements DetalleCompraService {
+    private final DetalleCompraRepository detalleCompraRepository;
+
+    public DetalleCompraServiceImpl() {
+        this.detalleCompraRepository = new DetalleCompraRepositoryImpl();
+
+    }
+
+    public DetalleCompra guardarUnDetalleCompra(DetalleCompra detalleCompra) {
+        return detalleCompraRepository.Guardar(detalleCompra);
+    }
+
+    public DetalleCompra obtenerUnDetalleCompraPorId(Long id) {
+        return detalleCompraRepository.ObtenerPorId(id);
+    }
+
+    public List<DetalleCompra> obtenerTodosLosDetalleCompras() {
+        return detalleCompraRepository.Listar();
+    }
+}
