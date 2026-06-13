@@ -40,7 +40,7 @@ public class Main extends javax.swing.JFrame {
         btnClientes.setIcon(escalarIcono("/recursos/usuarios.png", anchoIcono, altoIcono));
         btnProveedores.setIcon(escalarIcono("/recursos/avatar.png", anchoIcono, altoIcono));
         btnAlmacen.setIcon(escalarIcono("/recursos/capas.png", anchoIcono, altoIcono));
-        btnHistCompras.setIcon(escalarIcono("/recursos/carro-de-la-compra.png", anchoIcono, altoIcono));
+        btnHistCompras.setIcon(escalarIcono("/icon/carro-de-la-compra.png", anchoIcono, altoIcono));
         btnHistMovimientos.setIcon(escalarIcono("/recursos/biblioteca.png", anchoIcono, altoIcono));
         btnHistVentas.setIcon(escalarIcono("/recursos/dinero.png", anchoIcono, altoIcono));
         btnMonitGranja.setIcon(escalarIcono("/recursos/archivo.png", anchoIcono, altoIcono));
