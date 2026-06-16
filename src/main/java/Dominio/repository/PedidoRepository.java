@@ -6,6 +6,7 @@ import Dominio.Modelo.Pedido;
 import java.util.List;
 
 public interface PedidoRepository {
+    //CRUD de la table pedido
     List<Pedido> listarPedidos();
 
     Pedido ActualizarPedido(Pedido pedido);

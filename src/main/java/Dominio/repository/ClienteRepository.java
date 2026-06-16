@@ -5,6 +5,7 @@ import Dominio.Modelo.Cliente;
 import java.util.List;
 
 public interface ClienteRepository {
+    //CRUD  de la tabla cliente
     int save(Cliente cliente);
 
     Cliente finById(Integer id);

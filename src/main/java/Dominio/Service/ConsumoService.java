@@ -7,7 +7,7 @@ import Dominio.Modelo.ConsumoLote;
 import Dominio.Modelo.LoteAnimal;
 
 public interface ConsumoService {
-
+    //logica para la tabla consumo_lote
     int guardarConsumoLote(ConsumoLote consumoLote);
 
     List<ConsumoLote> obtenerConsumosPorLote(LoteAnimal lote);

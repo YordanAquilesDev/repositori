@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface VentaRepository {
+    //CRUD de la tabla ventas
     Venta guardar(Venta venta);
     List<Venta> listarVentas();
     List<Venta> listarMejoresVentas();

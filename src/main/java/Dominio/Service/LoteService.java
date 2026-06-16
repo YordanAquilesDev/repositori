@@ -6,6 +6,7 @@ import Dominio.Modelo.Animal;
 import Dominio.Modelo.LoteAnimal;
 
 public interface LoteService {
+    //logica para la tabla lote_animal
     LoteAnimal guardarUnLote(LoteAnimal lote);
 
     LoteAnimal obtenerUnLotePorId(Long id);

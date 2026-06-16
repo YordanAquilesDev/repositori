@@ -5,6 +5,7 @@ import Dominio.Modelo.Animal;
 import java.util.List;
 
 public interface AnimalRepository {
+    //CRUD de la tabla animal
     int save(Animal animal);
 
     Animal finById(Integer id);

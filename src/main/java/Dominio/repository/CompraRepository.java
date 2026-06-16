@@ -7,6 +7,7 @@ import Dominio.Modelo.Compra;
 import Dominio.Modelo.DetalleCompra;
 
 public interface CompraRepository {
+    //CRUD de la table compra
     int save(DetalleCompra detalleCompra);
 
     Compra traerCompraPorId(Integer id);

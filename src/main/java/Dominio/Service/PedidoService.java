@@ -5,7 +5,7 @@ import java.util.List;
 import Dominio.Modelo.Pedido;
 
 public interface PedidoService {
-
+    //logica para la tabla pedido
     Pedido guardarUnPedido(Pedido pedido);
 
     Pedido obtenerUnPedidoPorId(Long id);
