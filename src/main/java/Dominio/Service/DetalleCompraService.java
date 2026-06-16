@@ -6,7 +6,7 @@ import Dominio.Modelo.DetalleCompra;
 
 public interface DetalleCompraService {
 
-    DetalleCompra guardarUnDetalleCompra(DetalleCompra detalleCompra);
+    int guardarUnDetalleCompra(DetalleCompra detalleCompra);
 
     DetalleCompra obtenerUnDetalleCompraPorId(Long id);
 

@@ -15,5 +15,7 @@ public interface PedidoService {
     List<Pedido> obtenerPedidosEntregados();
 
     List<Pedido> obtenerPedidosNoEntregados();
+    List<Pedido> pedidoPorFiltro(String filtro);
+    int actualizarPedido(Pedido pedido);
 
 }

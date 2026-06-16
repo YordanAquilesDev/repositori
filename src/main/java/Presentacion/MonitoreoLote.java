@@ -4,6 +4,12 @@
  */
 package Presentacion;
 
+import Aplicacion.ServiceImpl.LoteAnimalServiceImpl;
+import Dominio.Modelo.LoteAnimal;
+import Dominio.Service.LoteService;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author yordan
@@ -13,7 +19,9 @@ public class MonitoreoLote extends javax.swing.JPanel {
     /**
      * Creates new form MonitoreoLote
      */
+    private LoteService loteService;
     public MonitoreoLote() {
+        this.loteService= new LoteAnimalServiceImpl();
         initComponents();
     }
 
@@ -30,10 +38,11 @@ public class MonitoreoLote extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbLotes = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbLotes = new javax.swing.JComboBox<>();
+        btnProcesar = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -52,7 +61,7 @@ public class MonitoreoLote extends javax.swing.JPanel {
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbLotes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -63,7 +72,7 @@ public class MonitoreoLote extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbLotes);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -86,7 +95,11 @@ public class MonitoreoLote extends javax.swing.JPanel {
 
         jTextField1.setText("Mostrar Lotes");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lotes En Desarrollo", "Lotes En Engorde", "Lotes Salidos", "Lotes Entrantes", " " }));
+        cmbLotes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lotes En Desarrollo", "Lotes En Engorde", "Lotes Salidos", "Lotes Entrantes", " " }));
+        cmbLotes.addActionListener(this::cmbLotesActionPerformed);
+
+        btnProcesar.setText("jButton1");
+        btnProcesar.addActionListener(this::btnProcesarActionPerformed);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -96,8 +109,12 @@ public class MonitoreoLote extends javax.swing.JPanel {
                 .addGap(69, 69, 69)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(89, 89, 89)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbLotes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnProcesar)
+                .addGap(190, 190, 190))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,8 +122,10 @@ public class MonitoreoLote extends javax.swing.JPanel {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(71, Short.MAX_VALUE))
+                    .addComponent(cmbLotes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnProcesar)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -149,15 +168,53 @@ public class MonitoreoLote extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbLotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLotesActionPerformed
+        DefaultTableModel modelo= (DefaultTableModel) tbLotes.getModel();
+        String columnas[]={"id_Lote","Animla","Fecha Inicio","CantidadInicio","Cantidad Actual","Peso promedio","Estado"};
+        int indice= cmbLotes.getSelectedIndex();
+        modelo.setDataVector(null,columnas);
+        switch(indice){
+            case 1:
+                List<LoteAnimal> lista= loteService.obtenerPorEstado("Desarrollo");
+                break;
+            case 2:
+                  List<LoteAnimal> listaEngorde= loteService.obtenerPorEstado("Engorde");
+                break;
+                
+            case 3:
+                  List<LoteAnimal> listaSalidos= loteService.obtenerPorEstado("Salidos");
+                break;
+            case 4:
+                  List<LoteAnimal> listaEntrantes= loteService.obtenerPorEstado("Entrantes");
+                break;
+            default:
+                  List<LoteAnimal> listaTodos= loteService.todos();
+                
+                
+                
+                
+        }
+       
+// TODO add your handling code here:
+    }//GEN-LAST:event_cmbLotesActionPerformed
+
+    private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarActionPerformed
+        // TODO add your handling code here:
+          DefaultTableModel modelo= (DefaultTableModel) tbLotes.getModel();
+        String columnas[]={"id_Lote","Animla","Fecha Inicio","CantidadInicio","Cantidad Actual","Peso promedio","Estado"};
+        int indice= cmbLotes.getSelectedIndex();
+    }//GEN-LAST:event_btnProcesarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnProcesar;
+    private javax.swing.JComboBox<String> cmbLotes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tbLotes;
     // End of variables declaration//GEN-END:variables
 }

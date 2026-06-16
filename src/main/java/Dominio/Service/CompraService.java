@@ -8,7 +8,7 @@ import Dominio.Modelo.DetalleCompra;
 
 public interface CompraService {
 
-    Compra guardarCompra(DetalleCompra detalleCompra);
+    int save(DetalleCompra detalleCompra);
 
     Compra obtenerCompraPorId(Long id);
 

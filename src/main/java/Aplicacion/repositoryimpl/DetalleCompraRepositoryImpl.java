@@ -17,46 +17,35 @@ import Presentacion.Principal.ConexionPostgresSQL;
 
 public class DetalleCompraRepositoryImpl implements DetalleCompraRepository {
     Connection conexion;
-    private final CompraRepository compraRepository;
-    private final ProductoRepository productoRepository;
 
+    private final ProductoRepository productoRepository;
     public DetalleCompraRepositoryImpl() {
         this.conexion = ConexionPostgresSQL.getConexion();
-        this.compraRepository = new CompraRepositoryImpl();
+
         this.productoRepository = new ProductoRepositoryImpl();
     }
 
     @Override
-    public DetalleCompra Guardar(DetalleCompra nuevoDetalle) {
+    public int  save (DetalleCompra nuevoDetalle) {
         String sql = """
                 INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal)
                 VALUES (?, ?, ?, ?) RETURNING *
                 """;
+        int resultado=-1;
 
         try {
             int i = 0;
 
             for (Producto p : nuevoDetalle.getProductos()) {
-                PreparedStatement preparar = conexion.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement preparar = conexion.prepareStatement(sql);
                 preparar.setInt(1, nuevoDetalle.getCompra().getIdCompra());
                 preparar.setInt(2, p.getIdProducto());
                 preparar.setInt(3, nuevoDetalle.getCantidad().get(i));
                 preparar.setDouble(4, nuevoDetalle.getSubtotal().get(i));
-                preparar.executeUpdate();
-                int filasAfectadas = preparar.getUpdateCount();
-                if (filasAfectadas > 0) {
-                    try (ResultSet rs = preparar.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            int idGenerado = rs.getInt(1);
-
-                            nuevoDetalle.setIdDetalle(idGenerado);
-                        }
-                    }
-
-                }
+               resultado+= preparar.executeUpdate();
 
             }
-            return nuevoDetalle;
+            return resultado;
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al guardar el detalle de compra", e);
@@ -86,7 +75,8 @@ public class DetalleCompraRepositoryImpl implements DetalleCompraRepository {
                 if (temp < rs.getInt("id_detalle")) {
                     detalles.add(new DetalleCompra(
                             rs.getInt("id_detalle"),
-                            compraRepository.traerCompraPorId(rs.getInt("id_compra")),
+                           null,
+                           // compraRepository.traerCompraPorId(rs.getInt("id_compra")),
                             productos,
                             cantidades,
                             subtotals));
@@ -123,8 +113,9 @@ public class DetalleCompraRepositoryImpl implements DetalleCompraRepository {
                 subtotals.add(rs.getDouble("subtotal"));
                 if (rs.next()) {
                     return new DetalleCompra(
-                            rs.getInt("id_detalle"), // entero
-                            compraRepository.traerCompraPorId(rs.getInt("id_compra")),
+                            rs.getInt("id_detalle"),
+                            null,// entero
+                           // compraRepository.traerCompraPorId(rs.getInt("id_compra")),
                             productos,
                             cantidades,
                             subtotals);
@@ -158,7 +149,8 @@ public class DetalleCompraRepositoryImpl implements DetalleCompraRepository {
                 if (temp < rs.getInt("id_detalle")) {
                     detalles.add(new DetalleCompra(
                             rs.getInt("id_detalle"),
-                            compraRepository.traerCompraPorId(rs.getInt("id_compra")),
+                          null,
+                          //  compraRepository.traerCompraPorId(rs.getInt("id_compra")),
                             productos,
                             cantidades,
                             subtotals));

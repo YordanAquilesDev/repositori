@@ -57,7 +57,7 @@ public class LoteAnimalImpl implements LoteAnimalRepository {
             resultado.next();
             return new LoteAnimal(
                     resultado.getInt("id_lote"),
-                    animalRepository.traerAnimalPorId(resultado.getInt("id_animal")),
+                    animalRepository.finById(resultado.getInt("id_animal")),
                     resultado.getDate("fecha_inicio"),
                     resultado.getInt("cantidad_inicio"),
                     resultado.getInt("cantidad_actual"),

@@ -6,10 +6,12 @@ import Dominio.Modelo.Animal;
 
 public interface AnimalService {
 
-    Animal guardarAnimal(Animal animal);
+    int save(Animal animal);
 
-    Animal obtenerAnimalPorId(Long id);
+    Animal finById(Integer id);
 
-    List<Animal> obtenerTodosLosAnimales();
+    List<Animal> finAll();
+
+    List<Animal> finAllConsumer();
 
 }

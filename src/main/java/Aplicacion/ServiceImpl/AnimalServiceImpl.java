@@ -18,21 +18,21 @@ public class AnimalServiceImpl implements AnimalService {
     //Cumple con su Objetivo de guardar en la DB
     //Faltaria aser pruevas más específico para decubrir
     //algún error
-    public Animal guardarAnimal(Animal animal) {
+    public int save(Animal animal) {
         /*
         El metodo guardarAnimal resive
         objeto de la Clase Animal
         para guardarlo en la Base de Datos
          */
         if (animal == null) {
-            return null;
+            return -1;
         }
 
         if (animal.getRaza() == null || animal.getEspecie() == null) {
-            return null;
+            return -1;
 
         } else {
-            return animalRepository.guardarAnimal(animal);
+            return animalRepository.save(animal);
 
         }
     }
@@ -42,28 +42,36 @@ public class AnimalServiceImpl implements AnimalService {
     //Cumple con su Objetivo de guardar en la DB
     //Faltaria aser pruevas más específico para decubrir
     //algún error
-    public Animal obtenerAnimalPorId(Long id) {
+    public Animal finById(Integer id) {
+        if(id<0){
+            return null;
+        }
         /*
         El metodo obtenerAnimalPorId recive como parametro un
         Long que será usado en el metodo
         traerAnimalPorId este retorna un Objeto Animal de la
         clase Animal
          */
-        Integer idNativo = Integer.parseInt(id.toString());
-        return animalRepository.traerAnimalPorId(idNativo);
+        return animalRepository.finById(id);
     }
 
     // Funciona Correctamente
     //Cumple con su Objetivo de guardar en la DB
     //Faltaria aser pruevas más específico para decubrir
     //algún error
-    public List<Animal> obtenerTodosLosAnimales() {
+    public List<Animal> finAll() {
         /*
         El metodo obtenerTodosLosAnimales
         trae todas las filas de la tabla animal
         de la base de datos granjadb
          */
-        return animalRepository.traerTodosAnimales();
+        return animalRepository.finAll();
+    }
+
+
+    @Override
+    public List<Animal> finAllConsumer() {
+        return animalRepository.finAllConsumer();
     }
 
 }

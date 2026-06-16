@@ -5,8 +5,13 @@ import Dominio.Modelo.Cliente;
 import java.util.List;
 
 public interface ClienteRepository {
-    Cliente guardar(Cliente cliente);
-    Cliente traerPorId(Integer id);
-    void borrarCliente(Cliente cliente);
-    List<Cliente> listarClientes();
+    int save(Cliente cliente);
+
+    Cliente finById(Integer id);
+
+    int delete(Cliente cliente);
+
+    int update(Cliente cliente);
+
+    List<Cliente> finAll();
 }

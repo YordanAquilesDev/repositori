@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteRepositoryImpl implements ClienteRepository {
-    Connection conexion;
-    public ClienteRepositoryImpl() {
- 
-        this.conexion= ConexionPostgresSQL.getConexion();
 
-    }
     @Override
-    public Cliente guardar(Cliente cliente) {
+    public int save(Cliente cliente) {
+        Connection conexion=null;
+        PreparedStatement preparar=null;
+        int resultado=-1;
+
         try{
             String sql = """
                     INSERT INTO cliente
@@ -25,35 +24,42 @@ public class ClienteRepositoryImpl implements ClienteRepository {
                     VALUES 
                                             (?,?,?,?,?) RETURNING id_cliente;
                     """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
+            conexion = ConexionPostgresSQL.getConexion();
+            preparar = conexion.prepareStatement(sql);
             preparar.setString(1, cliente.getNombre());
             preparar.setString(2, cliente.getApellido());
             preparar.setString(3,cliente.getDni());
             preparar.setString(4, cliente.getCelular());
             preparar.setString(5,cliente.getDireccion());
+            resultado = preparar.executeUpdate();
 
-            ResultSet resultado = preparar.executeQuery();
-            resultado.next();
-            int idGenerado= resultado.getInt("id_cliente");
-            cliente.setIdCliente(idGenerado);
-            return cliente;
-
-
+            return resultado;
         }catch(Exception e){
             e.printStackTrace();
+        }finally{
+            try{
+                if(conexion!=null) conexion.close();
+                if(preparar!=null) preparar.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return null;
+        return resultado;
     }
 
     @Override
-    public Cliente traerPorId(Integer id) {
+    public Cliente finById(Integer id) {
+        Connection conexion=null;
+        PreparedStatement preparar=null;
+        ResultSet  resultado=null;
         try{
             String sql= """
                     SELECT * FROM cliente WHERE id_cliente = ?;
                     """;
-            PreparedStatement preparar= conexion.prepareStatement(sql);
+            conexion = ConexionPostgresSQL.getConexion();
+            preparar= conexion.prepareStatement(sql);
             preparar.setInt(1, id);
-            ResultSet resultado = preparar.executeQuery();
+            resultado = preparar.executeQuery();
             resultado.next();
             return  new Cliente(
                     resultado.getInt("id_cliente"),
@@ -67,26 +73,101 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally{
+            try{
+                if(conexion!=null) conexion.close();
+                if(preparar!=null) preparar.close();
+                if(resultado!=null) resultado.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
 
     @Override
-    public void borrarCliente(Cliente cliente) {
+    public int delete(Cliente cliente) {
+        Connection conexion=null;
+        PreparedStatement preparar=null;
+
+        int resultado=-1;
+        try{
+            String sql = """
+                    DELETE FROM cliente WHERE id_cliente = ?;
+            """;
+            conexion = ConexionPostgresSQL.getConexion();
+            preparar=conexion.prepareStatement(sql);
+            preparar.setInt(1,cliente.getIdCliente());
+            resultado=preparar.executeUpdate();
+            return resultado;
+        } catch (SQLException e) {
+            return resultado;
+
+        }finally{
+            try{
+                if(conexion!=null) conexion.close();
+                if(preparar!=null) preparar.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
     }
 
     @Override
-    public List<Cliente> listarClientes() {
+    public int update(Cliente cliente) {
+        Connection conexion=null;
+        PreparedStatement preparar=null;
+        int resultado=-1;
+        try{
+            String sql = """
+                    UPDATE cliente
+                    SET nombre = ?, apellido = ?, direccion = ?, celular = ?, dni = ?
+                    WHERE id_cliente = ?;
+            """;
+            conexion = ConexionPostgresSQL.getConexion();
+            preparar=conexion.prepareStatement(sql);
+            preparar.setString(1,cliente.getNombre());
+            preparar.setString(2,cliente.getApellido());
+            preparar.setString(3,cliente.getDireccion());
+            preparar.setString(4,cliente.getCelular());
+            preparar.setString(5,cliente.getDni());
+            preparar.setInt(6,cliente.getIdCliente());
+            resultado=preparar.executeUpdate();
+            return resultado;
+        } catch (SQLException e) {
+            return resultado;
+
+        }finally{
+            try{
+                if(conexion!=null) conexion.close();
+                if(preparar!=null) preparar.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    @Override
+    public List<Cliente> finAll() {
       List<Cliente> clientes = new ArrayList <>()  ;
+      Connection conexion=null;
+      PreparedStatement preparar=null;
+      ResultSet resultado=null;
        try{
             String sql = """
                     SELECT * FROM cliente;
                     
                     
             """;
-            PreparedStatement preparar =conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
+            preparar =conexion.prepareStatement(sql);
+            resultado = preparar.executeQuery();
             while(resultado.next()){
                 clientes.add(new Cliente(
                         resultado.getInt("id_cliente"),
@@ -99,10 +180,18 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
             }
             return clientes;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }finally{
+           try{
+               if(conexion!=null) conexion.close();
+               if(preparar!=null) preparar.close();
+               if(resultado!=null) resultado.close();
+           } catch (SQLException e) {
+               throw new RuntimeException(e);
+           }
+
+       }
 
     }
 }

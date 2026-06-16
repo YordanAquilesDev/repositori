@@ -1,6 +1,8 @@
 package Aplicacion.repositoryimpl;
 
+import Aplicacion.ServiceImpl.ClienteServiceImpl;
 import Dominio.Modelo.Pedido;
+import Dominio.Service.ClienteService;
 import Dominio.repository.ClienteRepository;
 import Dominio.repository.PedidoRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
@@ -15,11 +17,12 @@ import java.util.List;
 public class PedidoRepositoryImpl implements PedidoRepository {
 
     Connection conexion;
-    private final ClienteRepository clienteRepository;
+    private final ClienteService clienteService;
+
 
     public PedidoRepositoryImpl() {
         this.conexion = ConexionPostgresSQL.getConexion();
-        this.clienteRepository = new ClienteRepositoryImpl();
+        this.clienteService = new ClienteServiceImpl();
     }
 
     @Override
@@ -36,7 +39,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 listaPedidos.add(new Pedido(
                         resultado.getInt("id_pedido"),
                         resultado.getDate("fecha"),
-                        clienteRepository.traerPorId(resultado.getInt("id_cliente")),
+                        clienteService.finById(resultado.getInt("id_cliente")),
                         resultado.getString("estado"),
                         resultado.getDouble("total")
                 ));
@@ -72,7 +75,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 listaPedidosEntregados.add(new Pedido(
                         resultado.getInt("id_pedido"),
                         resultado.getDate("fecha"),
-                        clienteRepository.traerPorId(resultado.getInt("id_cliente")),
+                        clienteService.finById(resultado.getInt("id_cliente")),
                         resultado.getString("estado"),
                         resultado.getDouble("total")
                 ));
@@ -99,7 +102,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 listaPedidosNoEntregados.add(new Pedido(
                         resultado.getInt("id_pedido"),
                         resultado.getDate("fecha"),
-                        clienteRepository.traerPorId(resultado.getInt("id_cliente")),
+                        clienteService.finById(resultado.getInt("id_cliente")),
                         resultado.getString("estado"),
                         resultado.getDouble("total")
                 ));

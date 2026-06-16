@@ -15,8 +15,8 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
 
     }
 
-    public DetalleCompra guardarUnDetalleCompra(DetalleCompra detalleCompra) {
-        return detalleCompraRepository.Guardar(detalleCompra);
+    public int guardarUnDetalleCompra(DetalleCompra detalleCompra) {
+        return detalleCompraRepository.save(detalleCompra);
     }
 
     public DetalleCompra obtenerUnDetalleCompraPorId(Long id) {

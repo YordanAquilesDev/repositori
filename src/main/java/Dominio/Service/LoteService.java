@@ -11,5 +11,9 @@ public interface LoteService {
     LoteAnimal obtenerUnLotePorId(Long id);
 
     List<LoteAnimal> obtenerTodosLosLotesPorAnimal(Animal animal);
+    
+    List<LoteAnimal> obtenerPorEstado(String estado);
+    
+    List<LoteAnimal> todos();
 
 }

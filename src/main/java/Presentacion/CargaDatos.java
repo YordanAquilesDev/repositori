@@ -81,7 +81,7 @@ public class CargaDatos extends javax.swing.JPanel {
         return proveedorRepository.listarProveedores();
     }
     private List<Cliente> listarClientes(){
-        return clienteRepository.listarClientes();
+        return clienteRepository.finAll();
     }
     /**
      * Consfiguracion por defecto de swing

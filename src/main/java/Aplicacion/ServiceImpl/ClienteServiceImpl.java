@@ -16,44 +16,28 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     @Override
-    public Cliente guardarCliente(Cliente cliente) {
-        /**
-         *     El metodo guardarCliente recive como parametro
-         *         un Objeto de la clase Cliente
-         *         Retorna un Objeto Cliente
-         **/
+    public int save(Cliente cliente) {
         if (cliente == null) {
-            return null;
+            return -1;
         }
         // Validamos que los campos obligatorios no sean nulos
         if (cliente.getNombre() == null || cliente.getApellido() == null || cliente.getDni() == null ||
                 cliente.getCelular() == null || cliente.getDireccion() == null) {
-            return null; // O lanzar una excepción según tu diseño
+            return -1;
         }
 
-        return clienteRepository.guardar(cliente); // Retorna el cliente guardado
+        return clienteRepository.save(cliente); // Retorna el cliente guardado
     }
 
     @Override
-    public Cliente obtenerClientePorId(Long id) {
-        /**
-         * El metodo obtenerClientePorId
-         * @param Long
-         * @return Cliente
-         *
-         */
-
-        return clienteRepository.traerPorId(id.intValue()); // Retorna el cliente encontrado por ID
+    public Cliente finById(Integer id) {
+        if(id<0) return null;
+        return clienteRepository.finById(id); // Retorna el cliente encontrado por ID
     }
 
     @Override
-    public List<Cliente> obtenerTodosLosClientes() {
-        /**
-         * El metodo obtenerTodosLosClientes
-         * @return List<Cliente>
-         *
-         */
-        return clienteRepository.listarClientes(); // Retorna la lista de clientes
+    public List<Cliente> finAll() {
+        return clienteRepository.finAll(); // Retorna la lista de clientes
     }
 
 }

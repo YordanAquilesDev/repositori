@@ -28,7 +28,8 @@ public class CompraRepositoryImpl implements CompraRepository {
     }
 
     @Override
-    public Compra guardarCompra(DetalleCompra detalleCompra) {
+    public int save(DetalleCompra detalleCompra) {
+        int resultado = -1;
         int total = 0;
         try {
             String sql = """
@@ -40,8 +41,7 @@ public class CompraRepositoryImpl implements CompraRepository {
             }
             detalleCompra.getCompra().setTotal(total);
 
-            PreparedStatement preparar = conexion.prepareStatement(
-                    sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparar = conexion.prepareStatement(sql);
 
             preparar.setInt(1, detalleCompra.getCompra().getProveedor().getIdProveedor());
 
@@ -49,17 +49,14 @@ public class CompraRepositoryImpl implements CompraRepository {
 
             preparar.setDouble(3, detalleCompra.getCompra().getTotal());
 
-            preparar.executeUpdate();
-            ResultSet resultado = preparar.getGeneratedKeys();
+           resultado= preparar.executeUpdate();
 
-            resultado.next();
-            int idGeneradoCompra = resultado.getInt(1);
-            detalleCompra.getCompra().setIdCompra(idGeneradoCompra);
-            detalleCompra.getCompra().setFecha(resultado.getDate(3));
-
-            detalleCompraRepository.Guardar(detalleCompra);
-
-            return detalleCompra.getCompra();
+            int resultadoDeDetalle= detalleCompraRepository.save(detalleCompra);
+            if(resultadoDeDetalle>0&& resultado>0){
+                return resultado;
+            }else{
+                return -1;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

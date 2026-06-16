@@ -15,6 +15,7 @@ import Dominio.repository.ConsumoLoteRepository;
 import Dominio.repository.LoteAnimalRepository;
 import Dominio.repository.ProductoRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
+import jdk.jshell.spi.SPIResolutionException;
 
 public class ConsumoLoteRepositoryImpl implements ConsumoLoteRepository {
     Connection conexion;
@@ -30,23 +31,29 @@ public class ConsumoLoteRepositoryImpl implements ConsumoLoteRepository {
     }
 
     @Override
-    public ConsumoLote guardarConsumoLote(ConsumoLote consumo) {
+    public int  save(ConsumoLote consumo) {
+        int respuesta = -1;
+        PreparedStatement preparar=null;
+        Connection conexion = null;
         try {
             String sql = """
                     INSERT INTO consumo_lote VALUES
                     (?,?,?,?)
 
                     """;
-            PreparedStatement preparar = conexion.prepareStatement(sql,
-                    Statement.RETURN_GENERATED_KEYS);
-            ResultSet resultado = preparar.executeQuery();
-            int idGenerado = resultado.getInt("id_consumo");
-            consumo.setIdConsumo(idGenerado);
-
-            return consumo;
+           preparar = conexion.prepareStatement(sql);
+            respuesta = preparar.executeUpdate();
+            return  respuesta;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            try{
+                 if(conexion!=null) conexion.close();
+                 if(preparar!=null) preparar.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

@@ -6,10 +6,10 @@ import Dominio.Modelo.Cliente;
 
 public interface ClienteService {
 
-    Cliente guardarCliente(Cliente cliente);
+    int save(Cliente cliente);
 
-    Cliente obtenerClientePorId(Long id);
+    Cliente finById(Integer id);
 
-    List<Cliente> obtenerTodosLosClientes();
+    List<Cliente>  finAll();
 
 }

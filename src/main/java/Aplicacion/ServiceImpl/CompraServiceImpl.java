@@ -16,17 +16,17 @@ public class CompraServiceImpl implements CompraService {
         this.compraRepository = new CompraRepositoryImpl();
     }
 
-    public Compra guardarCompra(DetalleCompra detalleCompra) {
+    public int save(DetalleCompra detalleCompra) {
         if (detalleCompra == null) {
-            return null;
+            return -1;
         }
         if (detalleCompra.getCompra() == null ||
                 detalleCompra.getProductos() == null ||
                 detalleCompra.getCantidad() == null ||
                 detalleCompra.getSubtotal().isEmpty()) {
-            return null;
+            return -1;
         } else {
-            return compraRepository.guardarCompra(detalleCompra);
+            return compraRepository.save(detalleCompra);
         }
 
     }

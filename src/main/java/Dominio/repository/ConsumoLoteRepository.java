@@ -6,7 +6,7 @@ import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
 
 public interface ConsumoLoteRepository {
-    ConsumoLote guardarConsumoLote(ConsumoLote consumo);
+    int save(ConsumoLote consumo);
 
     List<ConsumoLote> listarConsumoLotes();
 

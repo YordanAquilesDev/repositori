@@ -17,18 +17,18 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
         this.detallePedidoRepository = new DetallePedidoRepositoryImpl();
     }
     @Override
-    public DetallePedido guardarUnDetallePedido(DetallePedido detallePedido) {
+    public int  guardarUnDetallePedido(DetallePedido detallePedido) {
         if(detallePedido== null){
-            return  null;
+            return  -1;
         }
 
         if(detallePedido.getIdDetalle()==-1||
                 detallePedido.getCantidad()==0||
                 detallePedido.getProducto().getIdProducto()==-1||
                 detallePedido.getPedido().getIdPedido()==-1){
-            return  null;
+            return  -1;
         }
-        return detallePedidoRepository.guardar(detallePedido);
+        return detallePedidoRepository.save(detallePedido);
     }
 
     @Override
