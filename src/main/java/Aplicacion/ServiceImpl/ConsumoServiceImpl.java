@@ -18,8 +18,8 @@ public class ConsumoServiceImpl implements ConsumoService {
     }
 
     // ok
-    public ConsumoLote guardarConsumoLote(ConsumoLote consumoLote) {
-        return consumoLoteRepository.guardarConsumoLote(consumoLote);
+    public int guardarConsumoLote(ConsumoLote consumoLote) {
+        return consumoLoteRepository.save(consumoLote);
     }
 
     // ok

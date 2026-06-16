@@ -302,8 +302,8 @@ public class CargaDatos extends javax.swing.JPanel {
                         0,compra,productos,cantidad,subTotales);
 
 
-                Compra resultadoDelGuardarEnLaDB=compraService.guardarCompra(detalleCompra);
-                if(resultadoDelGuardarEnLaDB!=null){
+                int resultadoDelGuardarEnLaDB=compraService.save(detalleCompra);
+                if(resultadoDelGuardarEnLaDB>0){
                     JOptionPane.showMessageDialog(
                             null, "El compra se ha Reaclizdo con exito");
                 }else{
