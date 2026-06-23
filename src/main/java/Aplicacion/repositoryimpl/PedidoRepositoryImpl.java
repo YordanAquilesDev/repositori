@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PedidoRepositoryImpl implements PedidoRepository {
+public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
     Connection conexion;
     private final ClienteService clienteService;
