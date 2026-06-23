@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Dominio.Modelo.Animal;
-import Dominio.repository.AnimalRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 public class AnimalRepositoryImpl implements AnimalRepository {

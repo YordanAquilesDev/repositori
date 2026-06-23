@@ -131,3 +131,11 @@ CREATE TABLE detalle_venta (
                                FOREIGN KEY (id_venta) REFERENCES venta(id_venta) ON DELETE CASCADE,
                                FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT
 );
+
+Create Table empresa(
+    id_empresa int auto_increment primary key,
+    nombre varchar(80),
+    razon_social varchar(90),
+    ruc varchar(11),
+
+)

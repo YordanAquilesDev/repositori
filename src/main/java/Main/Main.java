@@ -20,6 +20,8 @@ import Presentacion.PanelClientes;
 import Presentacion.PanelProveedor;
 import Presentacion.Stock;
 
+import java.awt.*;
+
 /**
  *
  * @author yordan
@@ -398,7 +400,8 @@ public class Main extends javax.swing.JFrame {
             } else {
                 btn.setContentAreaFilled(false);
                 btn.setForeground(new java.awt.Color(230, 230, 230, 180)); // Texto un poco transparente/opaco
-                btn.setFont(btn.getFont().deriveFont(java.awt.Font.PLAIN)); // Texto normal
+                btn.setFont(btn.getFont().deriveFont(Font.BOLD)); // Texto normal
+                btn.setForeground(Color.BLACK);
                 btn.setBorder(bordeInactivo); // Regresa a su posición original
             }
         }

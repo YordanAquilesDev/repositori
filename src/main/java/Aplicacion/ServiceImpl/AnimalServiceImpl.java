@@ -5,7 +5,6 @@ import java.util.List;
 import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Service.AnimalService;
-import Dominio.repository.AnimalRepository;
 
 public class AnimalServiceImpl implements AnimalService {
     private final AnimalRepository animalRepository;

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import Dominio.Modelo.LoteAnimal;
-import Dominio.repository.AnimalRepository;
 import Dominio.repository.LoteAnimalRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
 
