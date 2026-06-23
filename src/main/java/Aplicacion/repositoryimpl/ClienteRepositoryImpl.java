@@ -46,7 +46,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     }
 
     @Override
-    public Cliente finById(Integer id) {
+    public Cliente findById(Integer id) {
         Connection conexion=null;
         PreparedStatement preparar=null;
         ResultSet  resultado=null;
@@ -153,7 +153,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     }
 
     @Override
-    public List<Cliente> finAll() {
+    public List<Cliente> findAll() {
       List<Cliente> clientes = new ArrayList <>()  ;
       Connection conexion=null;
       PreparedStatement preparar=null;
