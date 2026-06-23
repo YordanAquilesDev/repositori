@@ -4,8 +4,6 @@ import java.util.List;
 
 import Aplicacion.repositoryimpl.DetalleCompraRepositoryImpl;
 import Dominio.Modelo.DetalleCompra;
-import Dominio.Service.DetalleCompraService;
-import Dominio.repository.DetalleCompraRepository;
 
 public class DetalleCompraServiceImpl implements DetalleCompraService {
     private final DetalleCompraRepository detalleCompraRepository;

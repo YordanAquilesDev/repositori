@@ -6,7 +6,6 @@ package Presentacion;
 
 import Aplicacion.ServiceImpl.AnimalServiceImpl;
 import Dominio.Modelo.Animal;
-import Dominio.Service.AnimalService;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;

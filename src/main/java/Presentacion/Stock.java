@@ -6,7 +6,6 @@ package Presentacion;
 
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
 import Dominio.Modelo.Producto;
-import Dominio.repository.ProductoRepository;
 
 /**
  *

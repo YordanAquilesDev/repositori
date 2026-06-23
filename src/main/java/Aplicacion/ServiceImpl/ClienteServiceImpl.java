@@ -4,8 +4,6 @@ import java.util.List;
 
 import Aplicacion.repositoryimpl.ClienteRepositoryImpl;
 import Dominio.Modelo.Cliente;
-import Dominio.Service.ClienteService;
-import Dominio.repository.ClienteRepository;
 
 public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;

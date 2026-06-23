@@ -6,8 +6,6 @@ import java.util.List;
 import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Dominio.Modelo.Compra;
 import Dominio.Modelo.DetalleCompra;
-import Dominio.Service.CompraService;
-import Dominio.repository.CompraRepository;
 
 public class CompraServiceImpl implements CompraService {
     private final CompraRepository compraRepository;

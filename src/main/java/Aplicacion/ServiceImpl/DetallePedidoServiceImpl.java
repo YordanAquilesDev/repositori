@@ -1,12 +1,7 @@
 package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.DetallePedidoRepositoryImpl;
-import Aplicacion.repositoryimpl.PedidoRepositoryImpl;
 import Dominio.Modelo.DetallePedido;
-import Dominio.Modelo.Pedido;
-import Dominio.Service.DetallePedidoService;
-import Dominio.repository.DetallePedidoRepository;
-import Dominio.repository.PedidoRepository;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ package Presentacion;
 
 import Aplicacion.ServiceImpl.LoteAnimalServiceImpl;
 import Dominio.Modelo.LoteAnimal;
-import Dominio.Service.LoteService;
+
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 

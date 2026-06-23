@@ -10,9 +10,6 @@ import java.util.List;
 
 import Dominio.Modelo.DetalleCompra;
 import Dominio.Modelo.Producto;
-import Dominio.repository.CompraRepository;
-import Dominio.repository.DetalleCompraRepository;
-import Dominio.repository.ProductoRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 public class DetalleCompraRepositoryImpl implements DetalleCompraRepository {

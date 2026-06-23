@@ -1,7 +1,6 @@
 package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.Proveedor;
-import Dominio.repository.ProveedorRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 import java.sql.Connection;

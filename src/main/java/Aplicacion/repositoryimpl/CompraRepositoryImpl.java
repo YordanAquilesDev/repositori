@@ -11,9 +11,6 @@ import java.util.List;
 import Dominio.Modelo.Compra;
 import Dominio.Modelo.DetalleCompra;
 import Dominio.Modelo.Proveedor;
-import Dominio.repository.CompraRepository;
-import Dominio.repository.DetalleCompraRepository;
-import Dominio.repository.ProveedorRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 public class CompraRepositoryImpl implements CompraRepository {

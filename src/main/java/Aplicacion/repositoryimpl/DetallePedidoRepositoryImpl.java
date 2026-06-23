@@ -1,13 +1,9 @@
 package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.DetallePedido;
-import Dominio.repository.DetallePedidoRepository;
-import Dominio.repository.PedidoRepository;
-import Presentacion.Principal.ConexionPostgresSQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 

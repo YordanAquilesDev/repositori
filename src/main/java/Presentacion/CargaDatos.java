@@ -10,18 +10,11 @@ import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
 import Aplicacion.repositoryimpl.ProveedorRepositoryImpl;
 import Dominio.Modelo.*;
-import Dominio.Service.CompraService;
-import Dominio.repository.ClienteRepository;
-import Dominio.repository.CompraRepository;
-import Dominio.repository.ProductoRepository;
-import Dominio.repository.ProveedorRepository;
 
 import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

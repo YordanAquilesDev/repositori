@@ -3,10 +3,8 @@ package Aplicacion.ServiceImpl;
 
 import java.util.List;
 
-import Aplicacion.repositoryimpl.VentaRepositoryImpl;
 import Dominio.Modelo.Venta;
 import Dominio.Service.ServiceGenerico;
-import Dominio.Service.VentaService;
 
 
 public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {

@@ -2,7 +2,7 @@ package Aplicacion.ServiceImpl;
 
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.LoteAnimal;
-import Dominio.Service.LoteService;
+
 import java.util.List;
 
 public class LoteAnimalServiceImpl implements LoteService {

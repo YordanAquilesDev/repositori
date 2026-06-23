@@ -4,18 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
 import Dominio.Modelo.Producto;
-import Dominio.repository.ConsumoLoteRepository;
-import Dominio.repository.LoteAnimalRepository;
-import Dominio.repository.ProductoRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
-import jdk.jshell.spi.SPIResolutionException;
 
 public class ConsumoLoteRepositoryImpl implements ConsumoLoteRepository {
     Connection conexion;

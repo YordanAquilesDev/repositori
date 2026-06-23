@@ -1,8 +1,6 @@
 package Aplicacion.repositoryimpl;
 
-import Dominio.Modelo.Animal;
 import Dominio.Modelo.Cliente;
-import Dominio.repository.ClienteRepository;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 import java.sql.*;
