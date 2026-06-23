@@ -13,7 +13,16 @@ import Dominio.repository.CrudGenerico;
 
 //@Repository                                JpaRepository<T, ID>
 public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
+    // inyectamos al ClienteRepositoryImpl para aser uso
+    // de su metod finById en la linea 114 y 149
+    // devido a que la clase  Venta tiene un objeto
+    // cliente dentro, el finById trae ese objeto por si id
+    // supongo que el encargado de hacer ClienteRepositoryImpl ya debe haber implementado
+    // el metodo finById
   private ClienteRepositoryImpl clienteRepository = new ClienteRepositoryImpl();
+  // si su parte nesecita de otro repository inyectenlo  y agan uso del repository ya echo por su
+    // otro colega como este caso es de ClienteRepositoryImpl
+    // puede ser PedidoRepositoryImpl u otro
     @Override
     public int save(Venta beans) {
         Connection conn= null;
@@ -21,12 +30,15 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         int respuesta = -1;
         try{
             String sql= """
-                    INSERT INTO ventas VALUES(?,?,?)
+                    --                         id_cliente    fecha        total
+                    --                          |              |           |
+                    --                          |              |           |
+                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )
                     """;
             pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,beans.getCliente().getIdCliente());
-            pstmt.setDate(2,beans.getFecha());
-            pstmt.setDouble(3,beans.getTotal());
+            pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
+            pstmt.setDate(2,beans.getFecha()); // fecha
+            pstmt.setDouble(3,beans.getTotal());// total
             respuesta = pstmt.executeUpdate();
             return respuesta;
         } catch (SQLException e) {
@@ -149,7 +161,6 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
                        rs.getDouble(4)
                )
                );
-
            }
             return null;
         } catch (SQLException e) {
