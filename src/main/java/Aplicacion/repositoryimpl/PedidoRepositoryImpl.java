@@ -1,10 +1,10 @@
 package Aplicacion.repositoryimpl;
 
-import Aplicacion.ServiceImpl.ClienteServiceImpl;
 import Dominio.Modelo.Pedido;
-import Presentacion.Principal.ConexionPostgresSQL;
+import Dominio.repository.CrudGenerico;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,103 +13,196 @@ import java.util.List;
 
 public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
-    Connection conexion;
-    private final ClienteService clienteService;
+    // Inyectamos el repositorio Cliente para obtener el objeto Cliente
+    private ClienteRepositoryImpl clienteRepository = new ClienteRepositoryImpl();
 
+    @Override
+    public int save(Pedido beans) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int respuesta = -1;
 
-    public PedidoRepositoryImpl() {
-        this.conexion = ConexionPostgresSQL.getConexion();
-        this.clienteService = new ClienteServiceImpl();
+        try {
+            String sql = """
+                    INSERT INTO pedido(id_cliente,fecha,estado,total)
+                    VALUES(?,?,?,?)
+                    """;
+
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setDate(2, (Date) beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
+
+            respuesta = pstmt.executeUpdate();
+            return respuesta;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
-    public List<Pedido> listarPedidos() {
-        List<Pedido> listaPedidos = new ArrayList<>();
+    public int update(Pedido beans) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int respuesta = -1;
+
+        try {
+            String sql = """
+                    UPDATE pedido
+                    SET id_cliente=?, fecha=?, estado=?, total=?
+                    WHERE id_pedido=?
+                    """;
+
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setDate(2, (Date) beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
+            pstmt.setInt(5, beans.getIdPedido());
+
+            respuesta = pstmt.executeUpdate();
+            return respuesta;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public int delete(Integer id) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int respuesta = -1;
+
+        try {
+            String sql = """
+                    DELETE FROM pedido
+                    WHERE id_pedido=?
+                    """;
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+
+            respuesta = pstmt.executeUpdate();
+            return respuesta;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public Pedido findById(Integer id) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = """
+                    SELECT * FROM pedido
+                    WHERE id_pedido=?
+                    """;
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Pedido(
+    rs.getInt("id_pedido"),
+    rs.getDate("fecha"),
+    clienteRepository.findById(rs.getInt("id_cliente")),
+    rs.getString("estado"),
+    rs.getDouble("total")
+ );
+            }
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public List<Pedido> findAll() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        List<Pedido> lista = new ArrayList<>();
+
         try {
             String sql = """
                     SELECT * FROM pedido
                     """;
 
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                listaPedidos.add(new Pedido(
-                        resultado.getInt("id_pedido"),
-                        resultado.getDate("fecha"),
-                        clienteService.finById(resultado.getInt("id_cliente")),
-                        resultado.getString("estado"),
-                        resultado.getDouble("total")
-                ));
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
 
+            while (rs.next()) {
+
+                lista.add(
+                        new Pedido(
+                                rs.getInt("id_pedido"),
+                                rs.getDate("fecha"),
+                                clienteRepository.findById(rs.getInt("id_cliente")),
+                                rs.getString("estado"),
+                                rs.getDouble("total")
+                        )
+                );
             }
-            return listaPedidos;
+
+            return lista;
 
         } catch (SQLException e) {
-            System.out.println("ERROR EN "+ e);
             throw new RuntimeException(e);
-        }catch(Exception e){
-             System.out.println("ERROR EN "+ e);
-            return null;
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @Override
-    public Pedido ActualizarPedido(Pedido pedido) {
-        return null;
-    }
-
-    @Override
-    public List<Pedido> listarPedidosEntregados() {
-        List<Pedido> listaPedidosEntregados = new ArrayList<>();
-        try {
-            String sql = """
-                    SELECT * FROM Pedido
-                    WHERE estado='Entregado'
-            """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                listaPedidosEntregados.add(new Pedido(
-                        resultado.getInt("id_pedido"),
-                        resultado.getDate("fecha"),
-                        clienteService.finById(resultado.getInt("id_cliente")),
-                        resultado.getString("estado"),
-                        resultado.getDouble("total")
-                ));
-
-            }
-            return listaPedidosEntregados;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    @Override
-    public List<Pedido> listarPedidosNoEntregados() {
-        List<Pedido> listaPedidosNoEntregados = new ArrayList<>();
-        try {
-            String sql = """
-                    SELECT * FROM Pedido
-                    WHERE estado='No Entregado'
-            """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                listaPedidosNoEntregados.add(new Pedido(
-                        resultado.getInt("id_pedido"),
-                        resultado.getDate("fecha"),
-                        clienteService.finById(resultado.getInt("id_cliente")),
-                        resultado.getString("estado"),
-                        resultado.getDouble("total")
-                ));
-
-            }
-            return listaPedidosNoEntregados;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+    public int saveAndFinId(Pedido beans) {
+        return 0;
     }
 }

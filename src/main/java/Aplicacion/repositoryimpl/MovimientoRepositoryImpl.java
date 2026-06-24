@@ -1,28 +1,29 @@
 package Aplicacion.repositoryimpl;
 
-import Dominio.Modelo.Movimiento;
 import Dominio.Modelo.MovimientoAlmacen;
 import Dominio.repository.CrudGenerico;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Integer> {
+public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen, Integer> {
 
     private ProductoRepositoryImpl productoRepository = new ProductoRepositoryImpl();
 
     @Override
-    public int save(Movimiento beans) {
+    public int save(MovimientoAlmacen beans) {
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        int respuesta = -1;
 
         try {
+
+            conn = Conexion.getConnection();
 
             String sql = """
                     INSERT INTO movimiento_almacen
@@ -35,12 +36,10 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
             pstmt.setInt(1, beans.getProducto().getIdProducto());
             pstmt.setString(2, beans.getTipoMovimiento());
             pstmt.setDouble(3, beans.getCantidad());
-            pstmt.setDate(4, beans.getFecha());
+            pstmt.setDate(4, (Date) beans.getFecha());
             pstmt.setString(5, beans.getContexto());
 
-            respuesta = pstmt.executeUpdate();
-
-            return respuesta;
+            return pstmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -49,19 +48,20 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
                 if (pstmt != null) pstmt.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public int update(Movimiento beans) {
+    public int update(MovimientoAlmacen beans) {
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        int respuesta = -1;
 
         try {
+
+            conn = Conexion.getConnection();
 
             String sql = """
                     UPDATE movimiento_almacen
@@ -78,13 +78,11 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
             pstmt.setInt(1, beans.getProducto().getIdProducto());
             pstmt.setString(2, beans.getTipoMovimiento());
             pstmt.setDouble(3, beans.getCantidad());
-            pstmt.setDate(4, beans.getFecha());
+            pstmt.setDate(4, (Date) beans.getFecha());
             pstmt.setString(5, beans.getContexto());
             pstmt.setInt(6, beans.getIdMovimiento());
 
-            respuesta = pstmt.executeUpdate();
-
-            return respuesta;
+            return pstmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -93,19 +91,9 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
                 if (pstmt != null) pstmt.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public int save(MovimientoAlmacen beans) {
-        return 0;
-    }
-
-    @Override
-    public int update(MovimientoAlmacen beans) {
-        return 0;
     }
 
     @Override
@@ -113,9 +101,10 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        int respuesta = -1;
 
         try {
+
+            conn = Conexion.getConnection();
 
             String sql = """
                     DELETE FROM movimiento_almacen
@@ -123,12 +112,9 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
                     """;
 
             pstmt = conn.prepareStatement(sql);
-
             pstmt.setInt(1, id);
 
-            respuesta = pstmt.executeUpdate();
-
-            return respuesta;
+            return pstmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -137,13 +123,13 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
                 if (pstmt != null) pstmt.close();
                 if (conn != null) conn.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public Movimiento findById(Integer id) {
+    public MovimientoAlmacen findById(Integer id) {
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -151,20 +137,21 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
 
         try {
 
+            conn = Conexion.getConnection();
+
             String sql = """
                     SELECT * FROM movimiento_almacen
                     WHERE id_movimiento=?
                     """;
 
             pstmt = conn.prepareStatement(sql);
-
             pstmt.setInt(1, id);
 
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
 
-                return new Movimiento(
+                return new MovimientoAlmacen(
                         rs.getInt("id_movimiento"),
                         productoRepository.findById(rs.getInt("id_producto")),
                         rs.getString("tipo_movimiento"),
@@ -180,61 +167,67 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
             throw new RuntimeException(e);
         } finally {
             try {
+                if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
                 if (conn != null) conn.close();
-                if (rs != null) rs.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public List<Movimiento> findAll() {
+public List<MovimientoAlmacen> findAll() {
 
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
-        List<Movimiento> lista = new ArrayList<>();
+    List<MovimientoAlmacen> lista = new ArrayList<>();
 
-        try {
+    try {
 
-            String sql = """
-                    SELECT * FROM movimiento_almacen
-                    """;
+        conn = Conexion.getConnection();
 
-            pstmt = conn.prepareStatement(sql);
+        String sql = """
+                SELECT * FROM movimiento_almacen
+                """;
 
-            rs = pstmt.executeQuery();
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
-            while (rs.next()) {
+        while (rs.next()) {
 
-                lista.add(
-                        new Movimiento(
-                                rs.getInt("id_movimiento"),
-                                productoRepository.findById(rs.getInt("id_producto")),
-                                rs.getString("tipo_movimiento"),
-                                rs.getDouble("cantidad"),
-                                rs.getDate("fecha"),
-                                rs.getString("contexto")
-                        )
-                );
-            }
-
-            return lista;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-                if (rs != null) rs.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            lista.add(
+                    new MovimientoAlmacen(
+                            rs.getInt("id_movimiento"),
+                            productoRepository.findById(rs.getInt("id_producto")),
+                            rs.getString("tipo_movimiento"),
+                            rs.getDouble("cantidad"),
+                            rs.getDate("fecha"),
+                            rs.getString("contexto")
+                    )
+            );
         }
+
+        return lista;
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+    @Override
+    public int saveAndFinId(MovimientoAlmacen beans) {
+        return 0;
     }
 }
     
@@ -242,4 +235,3 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
     
     
     
-}

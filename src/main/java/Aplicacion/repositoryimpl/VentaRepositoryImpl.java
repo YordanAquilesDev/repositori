@@ -122,7 +122,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
            if(rs.next()){
                return new Venta(
                        rs.getInt(1),
-                       clienteRepository.finById(rs.getInt(2)),
+                       clienteRepository.findById(rs.getInt(2)),
                        rs.getDate(3),
                        rs.getDouble(4)
                );
@@ -157,7 +157,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
            while(rs.next()){
                list.add( new Venta(
                        rs.getInt(1),
-                       clienteRepository.finById(rs.getInt(2)),
+                       clienteRepository.findById(rs.getInt(2)),
                        rs.getDate(3),
                        rs.getDouble(4)
                )
