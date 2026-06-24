@@ -1,13 +1,22 @@
 package Dominio.Modelo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Venta {
     private int idVenta;
     private Cliente cliente;
     private Date fecha;
     private double total;
+    List<DetalleVenta> detalleVentas;
 
+    public List<DetalleVenta> getDetalleVentas() {
+        return detalleVentas;
+    }
+
+    public void setDetalleVentas(List<DetalleVenta> detalleVentas) {
+        this.detalleVentas = detalleVentas;
+    }
 
     public Venta(int idVenta, Cliente cliente, Date fecha, double total) {
         this.idVenta = idVenta;

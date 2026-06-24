@@ -1,6 +1,7 @@
 package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.Movimiento;
+import Dominio.Modelo.MovimientoAlmacen;
 import Dominio.repository.CrudGenerico;
 
 import java.sql.Connection;
@@ -95,6 +96,16 @@ public class MovimientoRepositoryImpl implements CrudGenerico<Movimiento, Intege
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public int save(MovimientoAlmacen beans) {
+        return 0;
+    }
+
+    @Override
+    public int update(MovimientoAlmacen beans) {
+        return 0;
     }
 
     @Override

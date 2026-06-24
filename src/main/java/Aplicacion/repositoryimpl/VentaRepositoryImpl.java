@@ -1,15 +1,13 @@
 package Aplicacion.repositoryimpl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import Dominio.Modelo.Cliente;
 import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
 
 //@Repository                                JpaRepository<T, ID>
 public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
@@ -33,9 +31,10 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
                     --                         id_cliente    fecha        total
                     --                          |              |           |
                     --                          |              |           |
-                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )
+                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )  RETURNING id_venta;
                     """;
-            pstmt=conn.prepareStatement(sql);
+            conn= ConexionMySQL.getConexionMySQL();
+            pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
             pstmt.setDate(2,beans.getFecha()); // fecha
             pstmt.setDouble(3,beans.getTotal());// total
@@ -62,6 +61,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
             String sql= """
                     UPDATE  venta SET id_cliente = ?,fecha = ?,total = ?
                     """;
+            conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,beans.getCliente().getIdCliente());
             pstmt.setDate(2,beans.getFecha());
@@ -90,6 +90,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
             String sql= """
                    DELETE FROM  ventas WHERE id_cliente = ?;
                     """;
+            conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,integer);
             respuesta = pstmt.executeUpdate();
@@ -170,6 +171,46 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
                 if (pstmt != null) pstmt.close();
                 if(conn!= null) conn.close();
                 if(rs != null) rs.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public int saveAndFinId(Venta beans) {
+        Connection conn= null;
+        PreparedStatement pstmt = null;
+        int idGenerado = 0;
+        try{
+            String sql= """
+                    --                         id_cliente    fecha        total
+                    --                          |              |           |
+                    --                          |              |           |
+                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )  RETURNING id_venta;
+                    """;
+            pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
+            pstmt.setDate(2,beans.getFecha()); // fecha
+            pstmt.setDouble(3,beans.getTotal());// total
+
+            int filaAfectadas = pstmt.executeUpdate();
+            if(filaAfectadas>0){
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        // Extraemos el ID (usualmente es la primera columna del ResultSet obtenido)
+                        idGenerado= generatedKeys.getInt(1);
+
+                    }
+                }
+            }
+            return idGenerado;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if(conn!= null) conn.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
