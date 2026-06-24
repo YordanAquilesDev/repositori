@@ -1,13 +1,15 @@
 package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.Cliente;
+import Dominio.repository.CrudGenerico;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class ClienteRepositoryImpl implements ClienteRepository {
+public class ClienteRepositoryImpl implements CrudGenerico<Cliente,Integer> {
 
     @Override
     public int save(Cliente cliente) {
@@ -46,7 +48,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     }
 
     @Override
-    public Cliente findById(Integer id) {
+    public Optional<Cliente> finById(Integer id) {
         Connection conexion=null;
         PreparedStatement preparar=null;
         ResultSet  resultado=null;
@@ -59,14 +61,14 @@ public class ClienteRepositoryImpl implements ClienteRepository {
             preparar.setInt(1, id);
             resultado = preparar.executeQuery();
             resultado.next();
-            return  new Cliente(
+            return Optional.of(new Cliente(
                     resultado.getInt("id_cliente"),
                     resultado.getString("nombre"),
                     resultado.getString("apellido"),
                     resultado.getString("celular"),
                     resultado.getString("dni"),
                     resultado.getString("direccion")
-            );
+            ));
 
 
         } catch (SQLException e) {
@@ -84,7 +86,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     }
 
     @Override
-    public int delete(Cliente cliente) {
+    public int delete(Integer cliente) {
         Connection conexion=null;
         PreparedStatement preparar=null;
 
@@ -95,7 +97,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
             """;
             conexion = ConexionPostgresSQL.getConexion();
             preparar=conexion.prepareStatement(sql);
-            preparar.setInt(1,cliente.getIdCliente());
+            preparar.setInt(1,cliente);
             resultado=preparar.executeUpdate();
             return resultado;
         } catch (SQLException e) {
@@ -153,7 +155,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     }
 
     @Override
-    public List<Cliente> findAll() {
+    public List<Cliente> finAll() {
       List<Cliente> clientes = new ArrayList <>()  ;
       Connection conexion=null;
       PreparedStatement preparar=null;
@@ -191,5 +193,10 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
        }
 
+    }
+
+    @Override
+    public int saveAndFinId(Cliente beans) {
+        return 0;
     }
 }

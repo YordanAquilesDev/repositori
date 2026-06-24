@@ -10,19 +10,14 @@ import java.util.List;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
 import Dominio.Modelo.Producto;
+import Dominio.repository.CrudGenerico;
 import Presentacion.Principal.ConexionPostgresSQL;
 
-public class ConsumoLoteRepositoryImpl implements ConsumoLoteRepository {
-    Connection conexion;
-    private final LoteAnimalRepository loteAnimal;
-    private final ProductoRepository producto;
+public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote,Integer> {
+    private final LoteAnimalImpl loteAnimal;
 
     public ConsumoLoteRepositoryImpl() {
-        this.loteAnimal = new LoteAnimalImpl();
-        this.producto = new ProductoRepositoryImpl();
-
-        this.conexion = ConexionPostgresSQL.getConexion();
-
+  this.loteAnimal = new LoteAnimalImpl();
     }
 
     @Override
@@ -53,7 +48,7 @@ public class ConsumoLoteRepositoryImpl implements ConsumoLoteRepository {
 
     }
 
-    @Override
+
     public List<ConsumoLote> listarConsumoLotes() {
         List<ConsumoLote> consumos = new ArrayList<>();
         List<Producto> productos = new ArrayList<>();

@@ -6,11 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import Dominio.Modelo.Animal;
+import Dominio.repository.CrudGenerico;
 import Presentacion.Principal.ConexionPostgresSQL;
 
-public class AnimalRepositoryImpl implements AnimalRepository {
+
+public class AnimalRepositoryImpl implements CrudGenerico<Animal,Integer> {
     // guardar
     @Override
     public int save(Animal animal) {
@@ -46,7 +49,7 @@ public class AnimalRepositoryImpl implements AnimalRepository {
 
     // traer por id
     @Override
-    public Animal finById(Integer id) {
+    public Optional<Animal> finById(Integer id) {
         Connection conexion = null;
         PreparedStatement preparar = null;
         ResultSet resultado = null;
@@ -59,10 +62,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
             preparar.setInt(1, id);
             resultado = preparar.executeQuery();
             resultado.next();
-            return new Animal(
+            return Optional.of(new Animal(
                     resultado.getInt("id_animal"),
                     resultado.getString("especie"),
-                    resultado.getString("raza"));
+                    resultado.getString("raza")));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -82,7 +85,6 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     }
 
     // listar animales por consumo
-    @Override
     public List<Animal> finAllConsumer() {
         List<Animal> animales = new ArrayList<>();
         Connection conexion = null;
@@ -215,5 +217,10 @@ public class AnimalRepositoryImpl implements AnimalRepository {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public int saveAndFinId(Animal beans) {
+        return 0;
     }
 }

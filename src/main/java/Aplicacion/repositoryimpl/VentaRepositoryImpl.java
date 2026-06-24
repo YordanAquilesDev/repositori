@@ -109,7 +109,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
     }
 
     @Override
-    public Optional<Venta> findById(Integer id) {
+    public Optional<Venta> finById(Integer id) {
         Connection conn= null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -123,7 +123,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
            if(rs.next()){
                return Optional.of(new Venta(
                        rs.getInt(1),
-                       clienteRepository.findById(rs.getInt(2)),
+                       clienteRepository.finById(rs.getInt(2)).orElse(null),
                        rs.getDate(3),
                        rs.getDouble(4)
                ));
@@ -158,7 +158,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
            while(rs.next()){
                list.add( new Venta(
                        rs.getInt(1),
-                       clienteRepository.findById(rs.getInt(2)),
+                       clienteRepository.finById(rs.getInt(2)).orElse(null),
                        rs.getDate(3),
                        rs.getDouble(4)
                )
