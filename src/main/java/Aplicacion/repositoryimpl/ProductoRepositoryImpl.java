@@ -201,4 +201,9 @@ public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
             }
         }
     }
+
+    @Override
+    public int saveAndFinId(Producto beans) {
+        return 0;
+    }
 }
