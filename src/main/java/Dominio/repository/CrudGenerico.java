@@ -1,6 +1,7 @@
 package Dominio.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 //              JpaRepository<T,ID>
 public interface CrudGenerico<T, ID> {
@@ -11,7 +12,7 @@ public interface CrudGenerico<T, ID> {
 
     int delete(ID id);
 
-    T findById(ID id);
+    Optional<T> findById(ID id);
 
     List<T> findAll();
 

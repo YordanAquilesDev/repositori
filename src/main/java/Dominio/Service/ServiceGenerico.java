@@ -1,6 +1,7 @@
 package Dominio.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ServiceGenerico<T,ID> {
 
@@ -10,7 +11,7 @@ public interface ServiceGenerico<T,ID> {
 
     int delete(ID id);
 
-    T findById(ID id);
+    Optional<T> findById(ID id);
 
     List<T> findAll();
 

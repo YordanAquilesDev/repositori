@@ -3,6 +3,7 @@ package Aplicacion.repositoryimpl;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import Dominio.Modelo.Cliente;
 import Dominio.Modelo.Venta;
@@ -108,7 +109,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
     }
 
     @Override
-    public Venta findById(Integer id) {
+    public Optional<Venta> findById(Integer id) {
         Connection conn= null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -120,12 +121,12 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
             pstmt.setInt(1,id);
            rs=pstmt.executeQuery();
            if(rs.next()){
-               return new Venta(
+               return Optional.of(new Venta(
                        rs.getInt(1),
                        clienteRepository.findById(rs.getInt(2)),
                        rs.getDate(3),
                        rs.getDouble(4)
-               );
+               ));
            }
            return null;
         } catch (SQLException e) {

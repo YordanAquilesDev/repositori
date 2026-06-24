@@ -1,6 +1,8 @@
 package Aplicacion.ServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
+
 import Aplicacion.repositoryimpl.VentaRepositoryImpl;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
@@ -61,29 +63,31 @@ public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
 
     @Override
     public int update(Venta beans) {
-       if(beans==null){
-           throw  new  IllegalArgumentException(" la venta no puede ser nula");
-       }
-       if(beans.getCliente()==null||beans.getFecha()==null||beans.getTotal()<0.0){
-           throw new IllegalArgumentException("valores de la venta  tiene algunos problemas ");
+       if(beans==null||beans.getCliente()==null||beans.getFecha()==null||beans.getTotal()<0.0){
+           throw  new  IllegalArgumentException(" los valores del objeto venta estan  inconpatibles");
        }
        return ventaRepository.update(beans);
-
     }
 
     @Override
     public int delete(Integer integer) {
-        return 0;
+       if(integer==null||integer<0){
+           throw new IllegalArgumentException("id no puede ser null o negativo");
+       }
+       return ventaRepository.delete(integer);
     }
 
     @Override
-    public Venta findById(Integer integer) {
-        return null;
+    public Optional<Venta> findById(Integer integer) {
+       if(integer==null||integer<0){
+           throw new IllegalArgumentException("id no puede ser null o negativo");
+       }
+        return ventaRepository.findById(integer);
     }
 
     @Override
     public List<Venta> findAll() {
-        return List.of();
+        return ventaRepository.findAll();
     }
 
     @Override
