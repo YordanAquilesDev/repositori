@@ -8,8 +8,6 @@ import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.Service.ServiceGenerico;
 
-
-
 public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
    private final VentaRepositoryImpl ventaRepository;
    private  final DetalleVentaServiceImpl detalleVentaService;
@@ -17,6 +15,7 @@ public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
        this.detalleVentaService = new DetalleVentaServiceImpl();
        this.ventaRepository =  new VentaRepositoryImpl();
    }
+
     @Override
     public int save(Venta beans) {
        int guardarYgenerarId = 0;
