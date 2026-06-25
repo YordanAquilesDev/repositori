@@ -7,7 +7,7 @@ public class DetalleCompra {
     private Compra compra;
     private Producto producto;
     private int cantidad;
-    private double subtotal;
+    private double subtotall;
     private List<Producto> productos;
     private List<Integer> cantidades;
     private List<Double> subtotal;
