@@ -1,11 +1,23 @@
 package Dominio.Modelo;
 
 public class DetalleVenta {
+
     private int idDetalle;
     private Venta venta;
     private Producto producto;
     private int cantidad;
     private double subtotal;
+
+    public DetalleVenta() {
+    }
+
+    public DetalleVenta(int idDetalle, Venta venta, Producto producto, int cantidad, double subtotal) {
+        this.idDetalle = idDetalle;
+        this.venta = venta;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.subtotal = subtotal;
+    }
 
     public int getIdDetalle() {
         return idDetalle;

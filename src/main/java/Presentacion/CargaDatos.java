@@ -21,11 +21,11 @@ import java.util.List;
  * @author yordan
  */
 public class CargaDatos extends javax.swing.JPanel {
-    private final CompraService compraService;
-  private final CompraRepository compraRepository;
-  private final ProductoRepository productoRepository;
-  private final ProveedorRepository proveedorRepository;
-  private final ClienteRepository clienteRepository;
+    private final CompraServiceImpl compraService;
+  private final CompraRepositoryImpl compraRepository;
+  private final ProductoRepositoryImpl productoRepository;
+  private final ProveedorRepositoryImpl proveedorRepository;
+  private final ClienteRepositoryImpl clienteRepository;
     /**
      * Creates new form CargaDatos
      */
@@ -287,15 +287,25 @@ public class CargaDatos extends javax.swing.JPanel {
                 Date fechaSql= new Date(fecha.getTime());
                 List<Double> subTotales=new ArrayList<>();
 
-                Compra compra = new Compra(0,fechaSql,proveedor,SumarValores(productos));
+                Compra compra = new Compra(0,fechaSql,proveedor,0);
+                List<DetalleCompra> detalles = new ArrayList<>();
+                double totalCompra = 0;
                 for(int i=0; i<productos.size();i++){
-                    subTotales.add(productos.get(1).getPrecio()*cantidad.get(i));
+                    double subtotal = productos.get(i).getPrecio()*cantidad.get(i);
+                    subTotales.add(subtotal);
+                    totalCompra += subtotal;
+                    detalles.add(new DetalleCompra(
+                            0,
+                            compra,
+                            productos.get(i),
+                            cantidad.get(i),
+                            subTotales.get(i)));
                 }
-                DetalleCompra detalleCompra = new DetalleCompra(
-                        0,compra,productos,cantidad,subTotales);
+                compra.setTotal(totalCompra);
+                compra.setDetalles(detalles);
 
 
-                int resultadoDelGuardarEnLaDB=compraService.save(detalleCompra);
+                int resultadoDelGuardarEnLaDB=compraService.save(compra);
                 if(resultadoDelGuardarEnLaDB>0){
                     JOptionPane.showMessageDialog(
                             null, "El compra se ha Reaclizdo con exito");

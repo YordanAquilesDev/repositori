@@ -9,6 +9,9 @@ public class DetallePedido {
     private int cantidad;
     private double subTotal;
 
+    public DetallePedido() {
+    }
+
     public DetallePedido(int idDetalle, Pedido pedido, Producto producto, int cantidad, double subTotal) {
         this.idDetalle = idDetalle;
         this.pedido = pedido;
