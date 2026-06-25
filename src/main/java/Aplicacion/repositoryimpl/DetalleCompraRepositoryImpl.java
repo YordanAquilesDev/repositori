@@ -34,7 +34,7 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
             pstmt.setInt(1, detalleCompra.getCompra().getIdCompra());
             pstmt.setInt(2, detalleCompra.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleCompra.getCantidad());
+            pstmt.setDouble(3, detalleCompra.getCantidad());
             pstmt.setDouble(4, detalleCompra.getSubtotal());
 
             return pstmt.executeUpdate();
@@ -56,7 +56,7 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
             pstmt.setInt(1, detalleCompra.getCompra().getIdCompra());
             pstmt.setInt(2, detalleCompra.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleCompra.getCantidad());
+            pstmt.setDouble(3, detalleCompra.getCantidad());
             pstmt.setDouble(4, detalleCompra.getSubtotal());
             pstmt.setInt(5, detalleCompra.getIdDetalle());
 
@@ -132,7 +132,7 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
             pstmt.setInt(1, detalleCompra.getCompra().getIdCompra());
             pstmt.setInt(2, detalleCompra.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleCompra.getCantidad());
+            pstmt.setDouble(3, detalleCompra.getCantidad());
             pstmt.setDouble(4, detalleCompra.getSubtotal());
 
             int filas = pstmt.executeUpdate();
@@ -191,8 +191,8 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
         return new DetalleCompra(
                 rs.getInt("id_detalle"),
                 null,
-                productoRepository.findById(rs.getInt("id_producto")),
-                rs.getInt("cantidad"),
+                productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                rs.getDouble("cantidad"),
                 rs.getDouble("subtotal")
         );
     }

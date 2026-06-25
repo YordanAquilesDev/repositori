@@ -2,236 +2,158 @@ package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.MovimientoAlmacen;
 import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen, Integer> {
 
-    private ProductoRepositoryImpl productoRepository = new ProductoRepositoryImpl();
+    private final ProductoRepositoryImpl productoRepository = new ProductoRepositoryImpl();
 
     @Override
     public int save(MovimientoAlmacen beans) {
+        String sql = """
+                INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto)
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-
-            conn = Conexion.getConnection();
-
-            String sql = """
-                    INSERT INTO movimiento_almacen
-                    (id_producto,tipo_movimiento,cantidad,fecha,contexto)
-                    VALUES(?,?,?,?,?)
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, beans.getProducto().getIdProducto());
             pstmt.setString(2, beans.getTipoMovimiento());
             pstmt.setDouble(3, beans.getCantidad());
-            pstmt.setDate(4, (Date) beans.getFecha());
+            pstmt.setDate(4, beans.getFecha());
             pstmt.setString(5, beans.getContexto());
 
             return pstmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public int update(MovimientoAlmacen beans) {
+        String sql = """
+                UPDATE movimiento_almacen
+                SET id_producto = ?, tipo_movimiento = ?, cantidad = ?, fecha = ?, contexto = ?
+                WHERE id_movimiento = ?
+                """;
 
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-
-            conn = Conexion.getConnection();
-
-            String sql = """
-                    UPDATE movimiento_almacen
-                    SET id_producto=?,
-                        tipo_movimiento=?,
-                        cantidad=?,
-                        fecha=?,
-                        contexto=?
-                    WHERE id_movimiento=?
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, beans.getProducto().getIdProducto());
             pstmt.setString(2, beans.getTipoMovimiento());
             pstmt.setDouble(3, beans.getCantidad());
-            pstmt.setDate(4, (Date) beans.getFecha());
+            pstmt.setDate(4, beans.getFecha());
             pstmt.setString(5, beans.getContexto());
             pstmt.setInt(6, beans.getIdMovimiento());
 
             return pstmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public int delete(Integer id) {
+        String sql = "DELETE FROM movimiento_almacen WHERE id_movimiento = ?";
 
-        Connection conn = null;
-        PreparedStatement pstmt = null;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        try {
-
-            conn = Conexion.getConnection();
-
-            String sql = """
-                    DELETE FROM movimiento_almacen
-                    WHERE id_movimiento=?
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
-
             return pstmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
-    public MovimientoAlmacen findById(Integer id) {
+    public Optional<MovimientoAlmacen> findById(Integer id) {
+        String sql = "SELECT * FROM movimiento_almacen WHERE id_movimiento = ?";
 
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        try {
-
-            conn = Conexion.getConnection();
-
-            String sql = """
-                    SELECT * FROM movimiento_almacen
-                    WHERE id_movimiento=?
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
 
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-
-                return new MovimientoAlmacen(
-                        rs.getInt("id_movimiento"),
-                        productoRepository.findById(rs.getInt("id_producto")),
-                        rs.getString("tipo_movimiento"),
-                        rs.getDouble("cantidad"),
-                        rs.getDate("fecha"),
-                        rs.getString("contexto")
-                );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapear(rs));
+                }
             }
 
-            return null;
-
+            return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
-public List<MovimientoAlmacen> findAll() {
+    public List<MovimientoAlmacen> findAll() {
+        List<MovimientoAlmacen> lista = new ArrayList<>();
+        String sql = "SELECT * FROM movimiento_almacen";
 
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
 
-    List<MovimientoAlmacen> lista = new ArrayList<>();
+            while (rs.next()) {
+                lista.add(mapear(rs));
+            }
 
-    try {
-
-        conn = Conexion.getConnection();
-
-        String sql = """
-                SELECT * FROM movimiento_almacen
-                """;
-
-        pstmt = conn.prepareStatement(sql);
-        rs = pstmt.executeQuery();
-
-        while (rs.next()) {
-
-            lista.add(
-                    new MovimientoAlmacen(
-                            rs.getInt("id_movimiento"),
-                            productoRepository.findById(rs.getInt("id_producto")),
-                            rs.getString("tipo_movimiento"),
-                            rs.getDouble("cantidad"),
-                            rs.getDate("fecha"),
-                            rs.getString("contexto")
-                    )
-            );
-        }
-
-        return lista;
-
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (pstmt != null) pstmt.close();
-            if (conn != null) conn.close();
+            return lista;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
-}
 
     @Override
     public int saveAndFinId(MovimientoAlmacen beans) {
-        return 0;
+        String sql = """
+                INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto)
+                VALUES (?, ?, ?, ?, ?)
+                """;
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setInt(1, beans.getProducto().getIdProducto());
+            pstmt.setString(2, beans.getTipoMovimiento());
+            pstmt.setDouble(3, beans.getCantidad());
+            pstmt.setDate(4, beans.getFecha());
+            pstmt.setString(5, beans.getContexto());
+
+            int filas = pstmt.executeUpdate();
+            if (filas == 0) return -1;
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+
+            return -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private MovimientoAlmacen mapear(ResultSet rs) throws SQLException {
+        return new MovimientoAlmacen(
+                rs.getInt("id_movimiento"),
+                productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                rs.getString("tipo_movimiento"),
+                rs.getDouble("cantidad"),
+                rs.getDate("fecha"),
+                rs.getString("contexto")
+        );
     }
 }
-    
-    
-    
-    
-    

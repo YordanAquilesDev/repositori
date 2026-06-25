@@ -28,7 +28,7 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
 
             pstmt.setInt(1, detalleVenta.getVenta().getIdVenta());
             pstmt.setInt(2, detalleVenta.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleVenta.getCantidad());
+            pstmt.setDouble(3, detalleVenta.getCantidad());
             pstmt.setDouble(4, detalleVenta.getSubtotal());
 
             return pstmt.executeUpdate();
@@ -50,7 +50,7 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
 
             pstmt.setInt(1, detalleVenta.getVenta().getIdVenta());
             pstmt.setInt(2, detalleVenta.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleVenta.getCantidad());
+            pstmt.setDouble(3, detalleVenta.getCantidad());
             pstmt.setDouble(4, detalleVenta.getSubtotal());
             pstmt.setInt(5, detalleVenta.getIdDetalle());
 
@@ -88,8 +88,8 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
                     return Optional.of(new DetalleVenta(
                             rs.getInt("id_detalle"),
                             ventaRepository.findById(rs.getInt("id_venta")).orElse(null),
-                            productoRepository.findById(rs.getInt("id_producto")),
-                            rs.getInt("cantidad"),
+                            productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                            rs.getDouble("cantidad"),
                             rs.getDouble("subtotal")
                     ));
                 }
@@ -113,8 +113,8 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
                 lista.add(new DetalleVenta(
                         rs.getInt("id_detalle"),
                         null,
-                        null,
-                        rs.getInt("cantidad"),
+                        productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                        rs.getDouble("cantidad"),
                         rs.getDouble("subtotal")
                 ));
             }
@@ -134,7 +134,7 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
 
             pstmt.setInt(1, detalleVenta.getVenta().getIdVenta());
             pstmt.setInt(2, detalleVenta.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleVenta.getCantidad());
+            pstmt.setDouble(3, detalleVenta.getCantidad());
             pstmt.setDouble(4, detalleVenta.getSubtotal());
 
             pstmt.executeUpdate();
