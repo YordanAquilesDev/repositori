@@ -1,14 +1,26 @@
 package Dominio.Modelo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class MovimientoAlmacen {
     private int idMovimiento;
     private Producto producto;
     private String tipoMovimiento;
-    private int cantidad;
+    private double cantidad;
     private Date fecha;
-    private String descripcion;
+    private String contexto;
+
+    public MovimientoAlmacen() {
+    }
+
+    public MovimientoAlmacen(int idMovimiento, Producto producto, String tipoMovimiento, double cantidad, Date fecha, String contexto) {
+        this.idMovimiento = idMovimiento;
+        this.producto = producto;
+        this.tipoMovimiento = tipoMovimiento;
+        this.cantidad = cantidad;
+        this.fecha = fecha;
+        this.contexto = contexto;
+    }
 
     public int getIdMovimiento() {
         return idMovimiento;
@@ -34,11 +46,11 @@ public class MovimientoAlmacen {
         this.tipoMovimiento = tipoMovimiento;
     }
 
-    public int getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -50,18 +62,11 @@ public class MovimientoAlmacen {
         this.fecha = fecha;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public String getContexto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return contexto;
     }
 
-
-    
+    public void setContexto(String contexto) {
+        this.contexto = contexto;
+    }
 }

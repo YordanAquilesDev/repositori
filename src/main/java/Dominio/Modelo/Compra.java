@@ -8,6 +8,9 @@ public class Compra {
     private Date fecha;
     private double total;
 
+    public Compra() {
+    }
+
     public Compra(int idCompra,
             Date fecha,
             Proveedor proveedor,
