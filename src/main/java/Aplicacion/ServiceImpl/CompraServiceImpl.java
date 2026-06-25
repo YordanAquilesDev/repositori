@@ -2,6 +2,7 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Dominio.Modelo.Compra;
+import Dominio.Modelo.DetalleCompra;
 import Dominio.Service.ServiceGenerico;
 
 import java.sql.Date;
@@ -11,15 +12,37 @@ import java.util.Optional;
 public class CompraServiceImpl implements ServiceGenerico<Compra, Integer> {
 
     private final CompraRepositoryImpl compraRepository;
+    private final DetalleCompraServiceImpl detalleCompraService;
 
     public CompraServiceImpl() {
         this.compraRepository = new CompraRepositoryImpl();
+        this.detalleCompraService = new DetalleCompraServiceImpl();
     }
 
     @Override
     public int save(Compra beans) {
         if (beans == null || beans.getProveedor() == null) return -1;
-        return compraRepository.save(beans);
+
+        List<DetalleCompra> detalles = beans.getDetalles();
+        if (detalles == null || detalles.isEmpty()) {
+            return -1;
+        }
+
+        double total = detalles.stream()
+                .mapToDouble(DetalleCompra::getSubtotal)
+                .sum();
+        beans.setTotal(total);
+
+        int idCompra = saveAndFinId(beans);
+        if (idCompra > 0) {
+            final int id = idCompra;
+            detalles.forEach(d -> d.getCompra().setIdCompra(id));
+            int filas = detalles.stream()
+                    .mapToInt(detalleCompraService::save)
+                    .sum();
+            return filas > 0 ? 1 : 0;
+        }
+        return -1;
     }
 
     @Override
