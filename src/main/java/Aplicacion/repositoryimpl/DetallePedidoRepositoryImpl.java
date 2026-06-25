@@ -23,10 +23,8 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public int save(DetallePedido detallePedido) {
-        String sql = """
-                INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -44,11 +42,9 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public int update(DetallePedido detallePedido) {
-        String sql = """
-                UPDATE detalle_pedido
-                SET id_pedido = ?, id_producto = ?, cantidad = ?, subtotal = ?
-                WHERE id_detalle = ?
-                """;
+        String sql = "UPDATE detalle_pedido "
+                + "SET id_pedido = ?, id_producto = ?, cantidad = ?, subtotal = ? "
+                + "WHERE id_detalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -121,10 +117,8 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public int saveAndFinId(DetallePedido detallePedido) {
-        String sql = """
-                INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

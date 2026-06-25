@@ -135,14 +135,12 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
 
     public List<Animal> finAllConsumer() {
         List<Animal> animales = new ArrayList<>();
-        String sql = """
-                SELECT a.id_animal, a.especie, a.raza
-                FROM animal a
-                JOIN lote_animal l ON a.id_animal = l.id_animal
-                JOIN consumo_lote c ON l.id_lote = c.id_lote
-                ORDER BY c.cantidad DESC
-                LIMIT 3
-                """;
+        String sql = "SELECT a.id_animal, a.especie, a.raza "
+                + "FROM animal a "
+                + "JOIN lote_animal l ON a.id_animal = l.id_animal "
+                + "JOIN consumo_lote c ON l.id_lote = c.id_lote "
+                + "ORDER BY c.cantidad DESC "
+                + "LIMIT 3";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql);

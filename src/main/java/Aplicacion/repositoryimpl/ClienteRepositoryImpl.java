@@ -17,10 +17,8 @@ public class ClienteRepositoryImpl implements CrudGenerico<Cliente, Integer> {
 
     @Override
     public int save(Cliente beans) {
-        String sql = """
-                INSERT INTO cliente (nombre, apellido, dni, celular, direccion)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO cliente (nombre, apellido, dni, celular, direccion) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -39,11 +37,9 @@ public class ClienteRepositoryImpl implements CrudGenerico<Cliente, Integer> {
 
     @Override
     public int update(Cliente beans) {
-        String sql = """
-                UPDATE cliente
-                SET nombre = ?, apellido = ?, dni = ?, celular = ?, direccion = ?
-                WHERE id_cliente = ?
-                """;
+        String sql = "UPDATE cliente "
+                + "SET nombre = ?, apellido = ?, dni = ?, celular = ?, direccion = ? "
+                + "WHERE id_cliente = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -131,10 +127,8 @@ public class ClienteRepositoryImpl implements CrudGenerico<Cliente, Integer> {
 
     @Override
     public int saveAndFinId(Cliente beans) {
-        String sql = """
-                INSERT INTO cliente (nombre, apellido, dni, celular, direccion)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO cliente (nombre, apellido, dni, celular, direccion) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

@@ -24,10 +24,8 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     @Override
     public int save(DetalleCompra detalleCompra) {
-        String sql = """
-                INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -45,11 +43,9 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     @Override
     public int update(DetalleCompra detalleCompra) {
-        String sql = """
-                UPDATE detalle_compra
-                SET id_compra = ?, id_producto = ?, cantidad = ?, subtotal = ?
-                WHERE id_detalle = ?
-                """;
+        String sql = "UPDATE detalle_compra "
+                + "SET id_compra = ?, id_producto = ?, cantidad = ?, subtotal = ? "
+                + "WHERE id_detalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -122,10 +118,8 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     @Override
     public int saveAndFinId(DetalleCompra detalleCompra) {
-        String sql = """
-                INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -154,12 +148,10 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     public List<DetalleCompra> listarPorFecha(Date fecha, Date fecha2) {
         List<DetalleCompra> detalles = new ArrayList<>();
-        String sql = """
-                SELECT dc.*
-                FROM detalle_compra dc
-                INNER JOIN compra c ON dc.id_compra = c.id_compra
-                WHERE c.fecha BETWEEN ? AND ?
-                """;
+        String sql = "SELECT dc.* "
+                + "FROM detalle_compra dc "
+                + "INNER JOIN compra c ON dc.id_compra = c.id_compra "
+                + "WHERE c.fecha BETWEEN ? AND ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

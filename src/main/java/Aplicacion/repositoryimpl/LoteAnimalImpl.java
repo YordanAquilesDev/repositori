@@ -23,10 +23,8 @@ public class LoteAnimalImpl implements CrudGenerico<LoteAnimal, Integer> {
 
     @Override
     public int save(LoteAnimal beans) {
-        String sql = """
-                INSERT INTO lote_animal (id_animal, fecha_inicio, cantidad_inicio, cantidad_actual, peso_promedio, estado)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO lote_animal (id_animal, fecha_inicio, cantidad_inicio, cantidad_actual, peso_promedio, estado) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -46,12 +44,10 @@ public class LoteAnimalImpl implements CrudGenerico<LoteAnimal, Integer> {
 
     @Override
     public int update(LoteAnimal beans) {
-        String sql = """
-                UPDATE lote_animal
-                SET id_animal = ?, fecha_inicio = ?, cantidad_inicio = ?,
-                    cantidad_actual = ?, peso_promedio = ?, estado = ?
-                WHERE id_lote = ?
-                """;
+        String sql = "UPDATE lote_animal "
+                + "SET id_animal = ?, fecha_inicio = ?, cantidad_inicio = ?, "
+                + "cantidad_actual = ?, peso_promedio = ?, estado = ? "
+                + "WHERE id_lote = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -126,10 +122,8 @@ public class LoteAnimalImpl implements CrudGenerico<LoteAnimal, Integer> {
 
     @Override
     public int saveAndFinId(LoteAnimal beans) {
-        String sql = """
-                INSERT INTO lote_animal (id_animal, fecha_inicio, cantidad_inicio, cantidad_actual, peso_promedio, estado)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO lote_animal (id_animal, fecha_inicio, cantidad_inicio, cantidad_actual, peso_promedio, estado) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

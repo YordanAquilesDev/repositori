@@ -19,10 +19,8 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
 
     @Override
     public int save(DetalleVenta detalleVenta) {
-        String sql = """
-                INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -40,11 +38,9 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
 
     @Override
     public int update(DetalleVenta detalleVenta) {
-        String sql = """
-                UPDATE detalle_venta
-                SET id_venta = ?, id_producto = ?, cantidad = ?, subtotal = ?
-                WHERE id_detalle = ?
-                """;
+        String sql = "UPDATE detalle_venta "
+                + "SET id_venta = ?, id_producto = ?, cantidad = ?, subtotal = ? "
+                + "WHERE id_detalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 

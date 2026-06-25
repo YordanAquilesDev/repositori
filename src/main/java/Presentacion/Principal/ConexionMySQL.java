@@ -10,9 +10,9 @@ public class ConexionMySQL {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/granjaerp";
+            String url = "jdbc:mysql://localhost:3306/granjaerp?useSSL=false&allowPublicKeyRetrieval=true";
             String user = "root";
-            String password = "961508";
+            String password = "mysql";
              conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (ClassNotFoundException e) {

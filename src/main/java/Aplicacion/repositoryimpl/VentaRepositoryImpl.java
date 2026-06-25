@@ -28,9 +28,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= """
-                    INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)
-                    """;
+            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
@@ -56,9 +54,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= """
-                    UPDATE  venta SET id_cliente = ?,fecha = ?,total = ? WHERE id_venta = ?
-                    """;
+            String sql= "UPDATE venta SET id_cliente = ?, fecha = ?, total = ? WHERE id_venta = ?";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,beans.getCliente().getIdCliente());
@@ -86,9 +82,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= """
-                    DELETE FROM  venta WHERE id_venta = ?
-                    """;
+            String sql= "DELETE FROM venta WHERE id_venta = ?";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,integer);
@@ -113,9 +107,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         ResultSet rs = null;
         try{
             conn= ConexionMySQL.getConexionMySQL();
-            String sql= """
-                    SELECT * FROM  venta WHERE id_venta = ?
-                    """;
+            String sql= "SELECT * FROM venta WHERE id_venta = ?";
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,id);
            rs=pstmt.executeQuery();
@@ -149,9 +141,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         ResultSet rs = null;
         List<Venta> list = new ArrayList<>();
         try{
-            String sql= """
-                    SELECT * FROM  venta
-                    """;
+            String sql= "SELECT * FROM venta";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             rs=pstmt.executeQuery();
@@ -184,9 +174,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int idGenerado = 0;
         try{
-            String sql= """
-                    INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)
-                    """;
+            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente

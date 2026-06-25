@@ -19,10 +19,8 @@ public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen,
 
     @Override
     public int save(MovimientoAlmacen beans) {
-        String sql = """
-                INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -41,11 +39,9 @@ public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen,
 
     @Override
     public int update(MovimientoAlmacen beans) {
-        String sql = """
-                UPDATE movimiento_almacen
-                SET id_producto = ?, tipo_movimiento = ?, cantidad = ?, fecha = ?, contexto = ?
-                WHERE id_movimiento = ?
-                """;
+        String sql = "UPDATE movimiento_almacen "
+                + "SET id_producto = ?, tipo_movimiento = ?, cantidad = ?, fecha = ?, contexto = ? "
+                + "WHERE id_movimiento = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -119,10 +115,8 @@ public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen,
 
     @Override
     public int saveAndFinId(MovimientoAlmacen beans) {
-        String sql = """
-                INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

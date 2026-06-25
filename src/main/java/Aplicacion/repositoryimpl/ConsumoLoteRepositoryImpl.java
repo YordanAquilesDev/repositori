@@ -28,8 +28,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
     public int save(ConsumoLote beans) {
         String sql = "INSERT INTO consumo_lote (id_lote, id_producto, cantidad, fecha) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, beans.getLote().getIdLote());
             pstmt.setInt(2, beans.getProducto().getIdProducto());
@@ -44,14 +43,11 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
 
     @Override
     public int update(ConsumoLote beans) {
-        String sql = """
-                UPDATE consumo_lote
-                SET id_lote = ?, id_producto = ?, cantidad = ?, fecha = ?
-                WHERE id_consumo = ?
-                """;
+        String sql = "UPDATE consumo_lote "
+                + "SET id_lote = ?, id_producto = ?, cantidad = ?, fecha = ? "
+                + "WHERE id_consumo = ?";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, beans.getLote().getIdLote());
             pstmt.setInt(2, beans.getProducto().getIdProducto());
@@ -69,8 +65,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
     public int delete(Integer id) {
         String sql = "DELETE FROM consumo_lote WHERE id_consumo = ?";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
@@ -83,8 +78,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
     public Optional<ConsumoLote> findById(Integer id) {
         String sql = "SELECT * FROM consumo_lote WHERE id_consumo = ?";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
 
@@ -105,9 +99,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
         List<ConsumoLote> list = new ArrayList<>();
         String sql = "SELECT * FROM consumo_lote";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 list.add(mapear(rs));
@@ -123,8 +115,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
     public int saveAndFinId(ConsumoLote beans) {
         String sql = "INSERT INTO consumo_lote (id_lote, id_producto, cantidad, fecha) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, beans.getLote().getIdLote());
             pstmt.setInt(2, beans.getProducto().getIdProducto());
@@ -132,10 +123,14 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
             pstmt.setDate(4, beans.getFecha());
 
             int filas = pstmt.executeUpdate();
-            if (filas == 0) return -1;
+            if (filas == 0) {
+                return -1;
+            }
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
 
             return -1;
@@ -150,14 +145,11 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
 
     public List<ConsumoLote> obtenerConsumoLotePorAnimal(Animal animal) {
         List<ConsumoLote> consumos = new ArrayList<>();
-        String sql = """
-                SELECT cl.* FROM consumo_lote cl
-                JOIN lote_animal la ON cl.id_lote = la.id_lote
-                WHERE la.id_animal = ?
-                """;
+        String sql = "SELECT cl.* FROM consumo_lote cl "
+                + "JOIN lote_animal la ON cl.id_lote = la.id_lote "
+                + "WHERE la.id_animal = ?";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, animal.getIdAnimal());
 

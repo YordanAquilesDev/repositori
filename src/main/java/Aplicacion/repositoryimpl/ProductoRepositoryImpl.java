@@ -17,10 +17,8 @@ public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
 
     @Override
     public int save(Producto beans) {
-        String sql = """
-                INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -39,10 +37,8 @@ public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
 
     @Override
     public int update(Producto beans) {
-        String sql = """
-                UPDATE producto SET nombre = ?, tipo_producto = ?, unidad_medida = ?,
-                    precio_unidad = ?, stock_actual = ? WHERE id_producto = ?
-                """;
+        String sql = "UPDATE producto SET nombre = ?, tipo_producto = ?, unidad_medida = ?, "
+                + "precio_unidad = ?, stock_actual = ? WHERE id_producto = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -130,10 +126,8 @@ public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
 
     @Override
     public int saveAndFinId(Producto beans) {
-        String sql = """
-                INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual)
-                VALUES (?, ?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
