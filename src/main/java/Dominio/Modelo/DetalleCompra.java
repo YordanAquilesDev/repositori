@@ -5,8 +5,11 @@ import java.util.List;
 public class DetalleCompra {
     private int idDetalle;
     private Compra compra;
+    private Producto producto;
+    private int cantidad;
+    private double subtotal;
     private List<Producto> productos;
-    private List<Integer> cantidad;
+    private List<Integer> cantidades;
     private List<Double> subtotal;
 //------
 

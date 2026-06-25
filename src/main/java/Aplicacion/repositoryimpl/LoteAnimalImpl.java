@@ -9,33 +9,29 @@ import java.sql.Statement;
 import Dominio.Modelo.LoteAnimal;
 import Presentacion.Principal.ConexionPostgresSQL;
 
-public class LoteAnimalImpl implements LoteAnimalRepository {
-    Connection conexion;
-    private final AnimalRepository animalRepository;
+public class LoteAnimalImpl implements CrudGenerico<LoteAnimal,Integer>{
 
+    private final AnimalServiceImpl animalService;
     public LoteAnimalImpl() {
-        this.animalRepository = new AnimalRepositoryImpl();
-        this.conexion = ConexionPostgresSQL.getConexion();
+        this.animalService = new AnimalRepositoryImpl();
     }
 
     @Override
-    public LoteAnimal guardarLoteAnimal(LoteAnimal loteAnimal) {
+    public int save(LoteAnimal loteAnimal) {
+        Connection connn=null;
+        PreparedStatement preparar= null;
         try {
             String sql = """
                     INSERT INTO lote_animal VALUES (?,?,?,?,?,?)
                     """;
-            PreparedStatement preparar = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparar = conexion.prepareStatement(sql);
             preparar.setInt(1, loteAnimal.getAnimal().getIdAnimal());
             preparar.setDate(2, loteAnimal.getFechaInicio());
             preparar.setInt(3, loteAnimal.getCantidadInicio());
             preparar.setInt(4, loteAnimal.getCantidadActual());
             preparar.setDouble(5, loteAnimal.getPesoPromedio());
             preparar.setString(6, loteAnimal.getEstadoLote());
-            ResultSet resultado = preparar.executeQuery();
-            resultado.next();
-            int idGenerado = resultado.getInt("id_animal");
-            loteAnimal.setIdLote(idGenerado);
-            return loteAnimal;
+            return preparar.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -43,7 +39,10 @@ public class LoteAnimalImpl implements LoteAnimalRepository {
     }
 
     @Override
-    public LoteAnimal traerPorId(int id) {
+    public LoteAnimal finById(Integer id) {
+                Connection connn=null;
+        PreparedStatement preparar= null;
+        ResultSet resultado= null;
         try {
             String sql = """
                     SELECT * FROM lote_animal
@@ -55,7 +54,7 @@ public class LoteAnimalImpl implements LoteAnimalRepository {
             resultado.next();
             return new LoteAnimal(
                     resultado.getInt("id_lote"),
-                    animalRepository.finById(resultado.getInt("id_animal")),
+                    animalService.finById(resultado.getInt("id_animal")),
                     resultado.getDate("fecha_inicio"),
                     resultado.getInt("cantidad_inicio"),
                     resultado.getInt("cantidad_actual"),
@@ -64,7 +63,16 @@ public class LoteAnimalImpl implements LoteAnimalRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally{
+             try{
+                if(conn!= null) conn.close();
+                if(preparar!= null) preparar.close();
+                if(resultado!= null) resultado.close();
+             }catch( Exception error){
+                 error.printStackTrace();
+             }
         }
 
     }
+    
 }

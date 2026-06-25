@@ -7,11 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DetalleVentaRepositoryImpl implements DetalleVentaRepository {
+public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta,Integer> {
+
+    private final VentaServiceImpl ventaService;
+    public DetalleVentaRepositoryImpl(){
+        this.ventaService= new VentaServiceImpl();
+    }
 
     @Override
     public int save(DetalleVenta detalleVenta) {
-
         int respuesta = -1;
         Connection conexion = null;
         PreparedStatement preparar = null;
