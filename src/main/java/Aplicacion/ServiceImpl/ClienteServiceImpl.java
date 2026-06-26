@@ -4,9 +4,11 @@ import java.util.List;
 
 import Aplicacion.repositoryimpl.ClienteRepositoryImpl;
 import Dominio.Modelo.Cliente;
+import Dominio.Service.ServiceGenerico;
+import java.util.Optional;
 
-public class ClienteServiceImpl implements ClienteService {
-    private final ClienteRepository clienteRepository;
+public class ClienteServiceImpl implements ServiceGenerico<Cliente,Integer> {
+    private final ClienteRepositoryImpl  clienteRepository;
 
     public ClienteServiceImpl() {
         this.clienteRepository = new ClienteRepositoryImpl();
@@ -28,7 +30,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente finById(Integer id) {
+    public Optional<Cliente> finById(Integer id) {
         if(id<0) return null;
         return clienteRepository.finById(id); // Retorna el cliente encontrado por ID
     }
@@ -36,6 +38,21 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public List<Cliente> finAll() {
         return clienteRepository.finAll(); // Retorna la lista de clientes
+    }
+
+    @Override
+    public int update(Cliente beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int delete(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int saveAndFinId(Cliente beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

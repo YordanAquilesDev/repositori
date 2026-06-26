@@ -4,9 +4,11 @@ import java.util.List;
 
 import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
+import Dominio.Service.ServiceGenerico;
+import java.util.Optional;
 
-public class AnimalServiceImpl implements AnimalService {
-    private final AnimalRepository animalRepository;
+public class AnimalServiceImpl implements ServiceGenerico<Animal,Integer>{
+    private final AnimalRepositoryImpl animalRepository;
 
     public AnimalServiceImpl() {
         this.animalRepository = new AnimalRepositoryImpl();
@@ -16,6 +18,7 @@ public class AnimalServiceImpl implements AnimalService {
     //Cumple con su Objetivo de guardar en la DB
     //Faltaria aser pruevas más específico para decubrir
     //algún error
+    @Override
     public int save(Animal animal) {
         /*
         El metodo guardarAnimal resive
@@ -40,7 +43,8 @@ public class AnimalServiceImpl implements AnimalService {
     //Cumple con su Objetivo de guardar en la DB
     //Faltaria aser pruevas más específico para decubrir
     //algún error
-    public Animal finById(Integer id) {
+    @Override
+    public Optional<Animal> finById(Integer id) {
         if(id<0){
             return null;
         }
@@ -57,6 +61,7 @@ public class AnimalServiceImpl implements AnimalService {
     //Cumple con su Objetivo de guardar en la DB
     //Faltaria aser pruevas más específico para decubrir
     //algún error
+    @Override
     public List<Animal> finAll() {
         /*
         El metodo obtenerTodosLosAnimales
@@ -67,9 +72,23 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
 
-    @Override
     public List<Animal> finAllConsumer() {
         return animalRepository.finAllConsumer();
+    }
+
+    @Override
+    public int update(Animal beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int delete(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int saveAndFinId(Animal beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

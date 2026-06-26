@@ -6,40 +6,53 @@ import java.util.List;
 import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Dominio.Modelo.Compra;
 import Dominio.Modelo.DetalleCompra;
+import Dominio.Service.ServiceGenerico;
+import java.util.Optional;
 
-public class CompraServiceImpl implements CompraService {
-    private final CompraRepository compraRepository;
+public class CompraServiceImpl implements ServiceGenerico<Compra,Integer> {
+    private final CompraRepositoryImpl compraRepository;
 
     public CompraServiceImpl() {
         this.compraRepository = new CompraRepositoryImpl();
     }
 
-    public int save(DetalleCompra detalleCompra) {
-        if (detalleCompra == null) {
-            return -1;
-        }
-        if (detalleCompra.getCompra() == null ||
-                detalleCompra.getProductos() == null ||
-                detalleCompra.getCantidad() == null ||
-                detalleCompra.getSubtotal().isEmpty()) {
-            return -1;
-        } else {
-            return compraRepository.save(detalleCompra);
-        }
 
-    }
-
-    public Compra obtenerCompraPorId(Long id) {
-        Integer idNativo = Integer.parseInt(id.toString());
-        return compraRepository.traerCompraPorId(idNativo);
-    }
-
-    public List<Compra> obtenerTodasLasCompras() {
-        return compraRepository.listarCompras();
-    }
 
     public List<Compra> obtenerComprasPorFecha(Date fecha, Date fecha2) {
         return compraRepository.listarComprasPorFecha(fecha, fecha2);
+    }
+
+    @Override
+    public int save(Compra beans) {
+         if (beans== null) {
+            return -1;
+        }
+     return compraRepository.save(beans);
+    }
+
+    @Override
+    public int update(Compra beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int delete(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional<Compra> finById(Integer id) {
+          return compraRepository.finById(id);
+    }
+
+    @Override
+    public List<Compra> finAll() {
+      return compraRepository.finAll();
+    }
+
+    @Override
+    public int saveAndFinId(Compra beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

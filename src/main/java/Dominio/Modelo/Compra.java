@@ -7,11 +7,13 @@ public class Compra {
     private Proveedor proveedor;
     private Date fecha;
     private double total;
+    private Lis<DetalleCompra> detalles;
 
     public Compra(int idCompra,
             Date fecha,
             Proveedor proveedor,
             double total) {
+            detalles= new ArrayList<>();
         this.idCompra = idCompra;
         this.fecha = fecha;
         this.proveedor = proveedor;

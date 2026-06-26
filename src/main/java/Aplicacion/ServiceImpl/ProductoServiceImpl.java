@@ -4,6 +4,7 @@ import Dominio.Modelo.Producto;
 import Dominio.Service.ServiceGenerico;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductoServiceImpl implements ServiceGenerico<Producto,Integer> {
     @Override
@@ -23,12 +24,17 @@ public class ProductoServiceImpl implements ServiceGenerico<Producto,Integer> {
     }
 
     @Override
-    public Producto findById(Integer integer) {
+    public Optional<Producto> finById(Integer integer) {
         return null;
     }
 
     @Override
-    public List<Producto> findAll() {
+    public List<Producto> finAll() {
         return List.of();
+    }
+
+    @Override
+    public int saveAndFinId(Producto beans) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

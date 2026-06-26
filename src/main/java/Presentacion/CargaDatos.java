@@ -4,7 +4,10 @@
  */
 package Presentacion;
 
+import Aplicacion.ServiceImpl.ClienteServiceImpl;
 import Aplicacion.ServiceImpl.CompraServiceImpl;
+import Aplicacion.ServiceImpl.ProductoServiceImpl;
+import Aplicacion.ServiceImpl.ProveedorServiceImpl;
 import Aplicacion.repositoryimpl.ClienteRepositoryImpl;
 import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
@@ -14,18 +17,19 @@ import Dominio.Modelo.*;
 import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author yordan
  */
 public class CargaDatos extends javax.swing.JPanel {
-    private final CompraService compraService;
-  private final CompraRepository compraRepository;
-  private final ProductoRepository productoRepository;
-  private final ProveedorRepository proveedorRepository;
-  private final ClienteRepository clienteRepository;
+    private final CompraServiceImpl compraService;
+  private final ProductoServiceImpl productoService;
+  private final ProveedorServiceImpl proveedorService;
+  private final ClienteServiceImpl clienteRepository;
     /**
      * Creates new form CargaDatos
      */
@@ -34,29 +38,17 @@ public class CargaDatos extends javax.swing.JPanel {
     List<String> nombreProveedor= new ArrayList<>();
     List<Integer> idProveedor= new ArrayList<>();
     List<Integer> cantidad= new ArrayList<>();
-    List<Integer> idProducto= new ArrayList<>();
     List<Producto> productos= new ArrayList<>();
     List<String> nombreProductos= new ArrayList<>();
 
     public CargaDatos() {
         this.compraService = new CompraServiceImpl();
-     this.clienteRepository = new ClienteRepositoryImpl();
-     this.productoRepository= new ProductoRepositoryImpl();
-     this.compraRepository= new CompraRepositoryImpl();
-     this.proveedorRepository= new ProveedorRepositoryImpl();
+     this.clienteRepository = new ClienteServiceImpl();
+     this.productoService= new ProductoServiceImpl();
+     this.proveedorService= new ProveedorServiceImpl();
 
         initComponents();
-
-        listarProductos().forEach(producto -> {
-           nombreProductos.add(producto.getNombre());
-           idProducto.add(producto.getIdProducto());
-        });
-        for(String nombreProducto: nombreProductos){
-            cmbProducto.addItem(nombreProducto);
-
-        }
-        txtAreaProductos.setText("LISTA DE PRDUSCTOS AGREGADOS ");
-
+        
         listarProveedores().forEach(proveedor -> {
             nombreProveedor.add(proveedor.getNombre());
             idProveedor.add(proveedor.getIdProveedor());
@@ -66,10 +58,7 @@ public class CargaDatos extends javax.swing.JPanel {
         }
 
     }
-
-    private List<Producto> listarProductos(){
-        return productoRepository.listarProductos();
-    }
+    
     private  List<Proveedor> listarProveedores(){
         return proveedorRepository.listarProveedores();
     }
@@ -117,6 +106,8 @@ public class CargaDatos extends javax.swing.JPanel {
 
         jLabel1.setText("Proveedor");
 
+        cmbProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbProveedor.addActionListener(this::cmbProveedorActionPerformed);
 
         jLabel2.setText("Productos");
 
@@ -146,15 +137,6 @@ public class CargaDatos extends javax.swing.JPanel {
                         .addGap(20, 20, 20)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(btnProcesarDatos)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(31, 31, 31)
-                                .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +153,17 @@ public class CargaDatos extends javax.swing.JPanel {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel4)
-                                .addGap(112, 112, 112)))))
+                                .addGap(112, 112, 112))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnProcesarDatos)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(31, 31, 31)
+                                        .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(29, 29, 29))
         );
         jPanel4Layout.setVerticalGroup(
@@ -323,13 +315,26 @@ public class CargaDatos extends javax.swing.JPanel {
         }
         return suma;
     }
+    
+    void llenarComponentes(){
+   productoService.finAll().forEach(p->{
+       cmbProducto.addItem(p);
+   });
+   
+   proveedorService.finAll().forEach(pr->{
+       cmbProveedor.addItem(pr);
+   });
+
+  
+       
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnProcesarDatos;
     private javax.swing.JComboBox<String> cmbCargaDatos;
-    private javax.swing.JComboBox<String> cmbProducto;
-    private javax.swing.JComboBox<String> cmbProveedor;
+    private javax.swing.JComboBox<Producto> cmbProducto;
+    private javax.swing.JComboBox<Proveedor> cmbProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

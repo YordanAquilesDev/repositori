@@ -118,7 +118,7 @@ public class CompraRepositoryImpl implements CrudGenerico<Compra,Integer> {
             String sql = """
                     SELECT * FROM compra
                     """;
-   conexion = ConexionMySQL.getConexionMySQL();
+           conexion = ConexionMySQL.getConexionMySQL();
              preparar = conexion.prepareStatement(sql);
             ResultSet resultado = preparar.executeQuery();
             while (resultado.next()) {
