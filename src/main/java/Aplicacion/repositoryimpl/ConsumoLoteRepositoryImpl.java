@@ -11,6 +11,7 @@ import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
 import Dominio.Modelo.Producto;
 import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
 import Presentacion.Principal.ConexionPostgresSQL;
 
 public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote,Integer> {
@@ -52,12 +53,16 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote,Integ
     public List<ConsumoLote> listarConsumoLotes() {
         List<ConsumoLote> consumos = new ArrayList<>();
         List<Producto> productos = new ArrayList<>();
+        PreparedStatement preparar=null;
+        ResultSet resultado=null;
+        Connection conexion = null;
         try {
             String sql = """
                     SELECT * FROM consumo_lote;
                     """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
+            conexion = ConexionMySQL.getConexionMySQL();
+            preparar = conexion.prepareStatement(sql);
+            resultado = preparar.executeQuery();
             boolean Cambia = false;
             int temp = 1;
             while (resultado.next()) {

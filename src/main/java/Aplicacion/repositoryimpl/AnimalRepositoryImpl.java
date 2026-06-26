@@ -46,7 +46,6 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal,Integer> {
         }
 
     }
-
     // traer por id
     @Override
     public Optional<Animal> finById(Integer id) {
