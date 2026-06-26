@@ -1,67 +1,42 @@
 package Aplicacion.ServiceImpl;
 
+import java.util.List;
+
 import Aplicacion.repositoryimpl.ConsumoLoteRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
-import Dominio.Service.ServiceGenerico;
+import Dominio.Modelo.LoteAnimal;
 
-import java.util.List;
-import java.util.Optional;
+public class ConsumoServiceImpl implements ConsumoService {
 
-public class ConsumoServiceImpl implements ServiceGenerico<ConsumoLote, Integer> {
-
-    private final ConsumoLoteRepositoryImpl consumoLoteRepository;
+    private final ConsumoLoteRepository consumoLoteRepository;
 
     public ConsumoServiceImpl() {
         this.consumoLoteRepository = new ConsumoLoteRepositoryImpl();
     }
 
-    @Override
-    public int save(ConsumoLote beans) {
-        if (beans == null) return -1;
-        return consumoLoteRepository.save(beans);
-    }
-
-    @Override
-    public int update(ConsumoLote beans) {
-        if (beans == null || beans.getIdConsumo() <= 0) return -1;
-        return consumoLoteRepository.update(beans);
-    }
-
-    @Override
-    public int delete(Integer id) {
-        if (id == null || id < 0) return -1;
-        return consumoLoteRepository.delete(id);
-    }
-
-    @Override
-    public Optional<ConsumoLote> findById(Integer id) {
-        if (id == null || id < 0) return Optional.empty();
-        return consumoLoteRepository.findById(id);
-    }
-
-    @Override
-    public List<ConsumoLote> findAll() {
-        return consumoLoteRepository.findAll();
-    }
-
-    @Override
-    public int saveAndFinId(ConsumoLote beans) {
-        if (beans == null) return -1;
-        return consumoLoteRepository.saveAndFinId(beans);
-    }
-
+    // ok
     public int guardarConsumoLote(ConsumoLote consumoLote) {
-        return save(consumoLote);
+        return consumoLoteRepository.save(consumoLote);
     }
 
+    // ok
+    public List<ConsumoLote> obtenerConsumosPorLote(LoteAnimal lote) {
+        return consumoLoteRepository.listarConsumoLotes();
+    }
+
+    // ok
     public ConsumoLote obtenerConsumoPorId(Long id) {
         return consumoLoteRepository.obtenerConsumoPorId(id);
     }
 
+    // ok
     public List<ConsumoLote> obtenerConsumoLotePorAnimal(Animal animal) {
-        if (animal == null || animal.getIdAnimal() <= 0) {
-            throw new IllegalArgumentException("El animal no es valido");
+        if (animal == null) {
+            throw new IllegalArgumentException("El animal no puede ser nulo");
+        }
+        if (animal.getIdAnimal() <= 0) {
+            throw new IllegalArgumentException("El id del animal debe ser mayor a cero");
         }
         return consumoLoteRepository.obtenerConsumoLotePorAnimal(animal);
     }

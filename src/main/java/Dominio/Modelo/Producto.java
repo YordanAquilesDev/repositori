@@ -5,21 +5,21 @@ public class Producto {
     private String nombre;
     private String tipoProducto;
     private String unidadMedida;
-    private double precioUnidad;
-    private double stockActual;
+    private double precio;
+    private int stock;
 
     public Producto(int idProducto,
-                    double stockActual,
+                    int stock,
                     String unidadMedida,
                     String nombre,
                     String tipoProducto,
-                    double precioUnidad) {
+                    double precio) {
         this.idProducto = idProducto;
-        this.stockActual = stockActual;
+        this.stock = stock;
         this.unidadMedida = unidadMedida;
         this.nombre = nombre;
         this.tipoProducto = tipoProducto;
-        this.precioUnidad = precioUnidad;
+        this.precio = precio;
     }
 
     public int getIdProducto() {
@@ -54,19 +54,27 @@ public class Producto {
         this.unidadMedida = unidadMedida;
     }
 
-    public double getPrecioUnidad() {
-        return precioUnidad;
+    public double getPrecio() {
+        return precio;
     }
 
-    public void setPrecioUnidad(double precioUnidad) {
-        this.precioUnidad = precioUnidad;
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public double getPrecioUnidad() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public double getStockActual() {
-        return stockActual;
-    }
-
-    public void setStockActual(double stockActual) {
-        this.stockActual = stockActual;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -33,7 +33,7 @@ public class CargaDatos extends javax.swing.JPanel {
     List<Integer> idCliente= new ArrayList<>();
     List<String> nombreProveedor= new ArrayList<>();
     List<Integer> idProveedor= new ArrayList<>();
-    List<Double> cantidad= new ArrayList<>();
+    List<Integer> cantidad= new ArrayList<>();
     List<Integer> idProducto= new ArrayList<>();
     List<Producto> productos= new ArrayList<>();
     List<String> nombreProductos= new ArrayList<>();
@@ -68,13 +68,13 @@ public class CargaDatos extends javax.swing.JPanel {
     }
 
     private List<Producto> listarProductos(){
-        return productoRepository.findAll();
+        return productoRepository.listarProductos();
     }
     private  List<Proveedor> listarProveedores(){
         return proveedorRepository.listarProveedores();
     }
     private List<Cliente> listarClientes(){
-        return clienteRepository.findAll();
+        return clienteRepository.finAll();
     }
     /**
      * Consfiguracion por defecto de swing
@@ -265,21 +265,20 @@ public class CargaDatos extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Por favor ingrese un cantidad");
         }
 
+        productos= new ArrayList<>();
         int indice=-1;
         indice= cmbProducto.getSelectedIndex();
         int idProduct= idProducto.get(indice);
-        Producto producto = productoRepository.findById(idProduct).orElse(null);
-        if (producto == null) return;
-        productos.add(producto);
+        productos.add(productoRepository.buscarPorId(idProduct));
         String valorString = txtCantidad.getText();
-        cantidad.add(Double.parseDouble(valorString));
-        txtAreaProductos.append(productos.get(productos.size()-1).getNombre()+"\n");
+        cantidad.add(Integer.parseInt(valorString));
+        txtAreaProductos.append(productos.get(idProduct).getNombre()+"\n");
     }
 
     private void btnProcesarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarDatosActionPerformed
          int seleccion= cmbCargaDatos.getSelectedIndex();
          int indiceDelComboBox= cmbProveedor.getSelectedIndex();
-         int idroveedor= idProveedor.get(indiceDelComboBox);
+         int idroveedor= idProducto.get(indiceDelComboBox);
         Proveedor proveedor= proveedorRepository.buscarPorId(idroveedor);
          int idProveedor;
         switch(seleccion){
@@ -292,7 +291,7 @@ public class CargaDatos extends javax.swing.JPanel {
                 List<DetalleCompra> detalles = new ArrayList<>();
                 double totalCompra = 0;
                 for(int i=0; i<productos.size();i++){
-                    double subtotal = productos.get(i).getPrecioUnidad()*cantidad.get(i);
+                    double subtotal = productos.get(i).getPrecio()*cantidad.get(i);
                     subTotales.add(subtotal);
                     totalCompra += subtotal;
                     detalles.add(new DetalleCompra(
@@ -330,7 +329,7 @@ public class CargaDatos extends javax.swing.JPanel {
 
         double suma=0;
         for(Producto producto:productos){
-            suma+=producto.getPrecioUnidad();
+            suma+=producto.getPrecio();
         }
         return suma;
     }

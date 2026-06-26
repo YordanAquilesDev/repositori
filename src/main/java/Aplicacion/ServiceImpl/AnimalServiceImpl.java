@@ -1,68 +1,75 @@
 package Aplicacion.ServiceImpl;
 
+import java.util.List;
+
 import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
-import Dominio.Service.ServiceGenerico;
 
-import java.util.List;
-import java.util.Optional;
-
-public class AnimalServiceImpl implements ServiceGenerico<Animal, Integer> {
-
-    private final AnimalRepositoryImpl animalRepository;
+public class AnimalServiceImpl implements AnimalService {
+    private final AnimalRepository animalRepository;
 
     public AnimalServiceImpl() {
         this.animalRepository = new AnimalRepositoryImpl();
     }
 
-    @Override
-    public int save(Animal beans) {
-        if (beans == null || beans.getRaza() == null || beans.getEspecie() == null) {
+    // Funciona Correctamente
+    //Cumple con su Objetivo de guardar en la DB
+    //Faltaria aser pruevas más específico para decubrir
+    //algún error
+    public int save(Animal animal) {
+        /*
+        El metodo guardarAnimal resive
+        objeto de la Clase Animal
+        para guardarlo en la Base de Datos
+         */
+        if (animal == null) {
             return -1;
         }
-        return animalRepository.save(beans);
-    }
 
-    @Override
-    public int update(Animal beans) {
-        if (beans == null || beans.getIdAnimal() <= 0) return -1;
-        return animalRepository.update(beans);
-    }
-
-    @Override
-    public int delete(Integer id) {
-        if (id == null || id < 0) return -1;
-        return animalRepository.delete(id);
-    }
-
-    @Override
-    public Optional<Animal> findById(Integer id) {
-        if (id == null || id < 0) return Optional.empty();
-        return animalRepository.findById(id);
-    }
-
-    @Override
-    public List<Animal> findAll() {
-        return animalRepository.findAll();
-    }
-
-    @Override
-    public int saveAndFinId(Animal beans) {
-        if (beans == null || beans.getRaza() == null || beans.getEspecie() == null) {
+        if (animal.getRaza() == null || animal.getEspecie() == null) {
             return -1;
+
+        } else {
+            return animalRepository.save(animal);
+
         }
-        return animalRepository.saveAndFinId(beans);
     }
 
+
+    //Funciona Correctamente
+    //Cumple con su Objetivo de guardar en la DB
+    //Faltaria aser pruevas más específico para decubrir
+    //algún error
     public Animal finById(Integer id) {
-        return findById(id).orElse(null);
+        if(id<0){
+            return null;
+        }
+        /*
+        El metodo obtenerAnimalPorId recive como parametro un
+        Long que será usado en el metodo
+        traerAnimalPorId este retorna un Objeto Animal de la
+        clase Animal
+         */
+        return animalRepository.finById(id);
     }
 
+    // Funciona Correctamente
+    //Cumple con su Objetivo de guardar en la DB
+    //Faltaria aser pruevas más específico para decubrir
+    //algún error
     public List<Animal> finAll() {
-        return findAll();
+        /*
+        El metodo obtenerTodosLosAnimales
+        trae todas las filas de la tabla animal
+        de la base de datos granjadb
+         */
+        return animalRepository.finAll();
     }
 
+
+    @Override
     public List<Animal> finAllConsumer() {
         return animalRepository.finAllConsumer();
     }
+
 }

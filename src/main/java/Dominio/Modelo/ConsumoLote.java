@@ -1,18 +1,19 @@
 package Dominio.Modelo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class ConsumoLote {
     private  int idConsumo;
     private LoteAnimal lote;
-    private Producto producto;
-    private double cantidad;
+    private List<Producto> producto;
+    private int cantidad;
     private Date fecha;
 
     public ConsumoLote(int idConsumo,
                        LoteAnimal lote,
-                       double cantidad,
-                       Producto producto,
+                       int cantidad,
+                       List<Producto> producto,
                        Date fecha) {
         this.idConsumo = idConsumo;
         this.lote = lote;
@@ -40,19 +41,19 @@ public class ConsumoLote {
         this.lote = lote;
     }
 
-    public Producto getProducto() {
+    public List<Producto> getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(List<Producto> producto) {
         this.producto = producto;
     }
 
-    public double getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(double cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
