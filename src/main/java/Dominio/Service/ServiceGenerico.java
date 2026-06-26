@@ -1,4 +1,5 @@
 package Dominio.Service;
+import java.util.List;
 
 public  interface ServiceGenerico<T,ID> {
     int save(T beans);
