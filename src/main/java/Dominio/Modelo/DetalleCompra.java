@@ -4,13 +4,13 @@ public class DetalleCompra {
     private int idDetalle;
     private Compra compra;
     private Producto producto;
-    private double cantidad;
+    private int cantidad;
     private double subtotal;
 
     public DetalleCompra() {
     }
 
-    public DetalleCompra(int idDetalle, Compra compra, Producto producto, double cantidad, double subtotal) {
+    public DetalleCompra(int idDetalle, Compra compra, Producto producto, int cantidad, double subtotal) {
         this.idDetalle = idDetalle;
         this.compra = compra;
         this.producto = producto;
@@ -42,11 +42,11 @@ public class DetalleCompra {
         this.producto = producto;
     }
 
-    public double getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(double cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 

@@ -7,46 +7,40 @@ import Dominio.Service.ServiceGenerico;
 import java.util.List;
 import java.util.Optional;
 
-public class DetallePedidoServiceImpl implements ServiceGenerico<DetallePedido, Integer> {
+public class DetallePedidoServiceImpl implements ServiceGenerico<DetallePedido,Integer> {
 
     private final DetallePedidoRepositoryImpl detallePedidoRepository;
-
     public DetallePedidoServiceImpl() {
         this.detallePedidoRepository = new DetallePedidoRepositoryImpl();
     }
 
     @Override
     public int save(DetallePedido beans) {
-        if (beans == null) return -1;
-        return detallePedidoRepository.save(beans);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public int update(DetallePedido beans) {
-        if (beans == null || beans.getIdDetalle() <= 0) return -1;
-        return detallePedidoRepository.update(beans);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public int delete(Integer id) {
-        if (id == null || id < 0) return -1;
-        return detallePedidoRepository.delete(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Optional<DetallePedido> findById(Integer id) {
-        if (id == null || id < 0) return Optional.empty();
-        return detallePedidoRepository.findById(id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public List<DetallePedido> findAll() {
-        return detallePedidoRepository.findAll();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public int saveAndFinId(DetallePedido beans) {
-        if (beans == null) return -1;
-        return detallePedidoRepository.saveAndFinId(beans);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

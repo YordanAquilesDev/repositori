@@ -1,21 +1,23 @@
 package Dominio.Modelo;
 
+import java.util.List;
+
 public class DetallePedido {
     private int idDetalle;
     private Pedido pedido;
     private Producto producto;
-    private double cantidad;
-    private double subtotal;
+    private int cantidad;
+    private double subTotal;
 
     public DetallePedido() {
     }
 
-    public DetallePedido(int idDetalle, Pedido pedido, Producto producto, double cantidad, double subtotal) {
+    public DetallePedido(int idDetalle, Pedido pedido, Producto producto, int cantidad, double subTotal) {
         this.idDetalle = idDetalle;
         this.pedido = pedido;
         this.producto = producto;
         this.cantidad = cantidad;
-        this.subtotal = subtotal;
+        this.subTotal = subTotal;
     }
 
     public int getIdDetalle() {
@@ -42,19 +44,19 @@ public class DetallePedido {
         this.producto = producto;
     }
 
-    public double getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(double cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
-    public double getSubtotal() {
-        return subtotal;
+    public double getSubTotal() {
+        return subTotal;
     }
 
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
     }
 }

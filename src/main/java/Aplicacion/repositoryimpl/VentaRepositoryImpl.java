@@ -28,9 +28,14 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
+            String sql= """
+                    --                         id_cliente    fecha        total
+                    --                          |              |           |
+                    --                          |              |           |
+                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )  RETURNING id_venta;
+                    """;
             conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql);
+            pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
             pstmt.setDate(2,beans.getFecha()); // fecha
             pstmt.setDouble(3,beans.getTotal());// total
@@ -54,13 +59,14 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= "UPDATE venta SET id_cliente = ?, fecha = ?, total = ? WHERE id_venta = ?";
+            String sql= """
+                    UPDATE  venta SET id_cliente = ?,fecha = ?,total = ?
+                    """;
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,beans.getCliente().getIdCliente());
             pstmt.setDate(2,beans.getFecha());
             pstmt.setDouble(3,beans.getTotal());
-            pstmt.setInt(4,beans.getIdVenta());
             respuesta = pstmt.executeUpdate();
             return respuesta;
         } catch (SQLException e) {
@@ -82,7 +88,9 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= "DELETE FROM venta WHERE id_venta = ?";
+            String sql= """
+                   DELETE FROM  ventas WHERE id_cliente = ?;
+                    """;
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,integer);
@@ -106,20 +114,21 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            conn= ConexionMySQL.getConexionMySQL();
-            String sql= "SELECT * FROM venta WHERE id_venta = ?";
+            String sql= """
+                    SELECT * FROM  ventas WHERE id_cliente = ?;
+                    """;
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,id);
            rs=pstmt.executeQuery();
            if(rs.next()){
                return Optional.of(new Venta(
                        rs.getInt(1),
-                       clienteRepository.findById(rs.getInt(2)).orElse(null),
+                       clienteRepository.findById(rs.getInt(2)),
                        rs.getDate(3),
                        rs.getDouble(4)
                ));
            }
-           return Optional.empty();
+           return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }finally {
@@ -141,20 +150,21 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         ResultSet rs = null;
         List<Venta> list = new ArrayList<>();
         try{
-            String sql= "SELECT * FROM venta";
-            conn= ConexionMySQL.getConexionMySQL();
+            String sql= """
+                    SELECT * FROM  venta ;
+                    """;
             pstmt=conn.prepareStatement(sql);
             rs=pstmt.executeQuery();
            while(rs.next()){
                list.add( new Venta(
-                        rs.getInt(1),
-                        clienteRepository.findById(rs.getInt(2)).orElse(null),
-                        rs.getDate(3),
-                        rs.getDouble(4)
-                )
-                );
-            }
-             return list;
+                       rs.getInt(1),
+                       clienteRepository.findById(rs.getInt(2)),
+                       rs.getDate(3),
+                       rs.getDouble(4)
+               )
+               );
+           }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }finally {
@@ -174,12 +184,16 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int idGenerado = 0;
         try{
-            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
-            conn= ConexionMySQL.getConexionMySQL();
+            String sql= """
+                    --                         id_cliente    fecha        total
+                    --                          |              |           |
+                    --                          |              |           |
+                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )  RETURNING id_venta;
+                    """;
             pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
             pstmt.setDate(2,beans.getFecha()); // fecha
-            pstmt.setDouble(3,beans.getTotal());
+            pstmt.setDouble(3,beans.getTotal());// total
 
             int filaAfectadas = pstmt.executeUpdate();
             if(filaAfectadas>0){

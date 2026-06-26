@@ -8,7 +8,7 @@ public class Venta {
     private Cliente cliente;
     private Date fecha;
     private double total;
-    private List<DetalleVenta> detalleVentas;
+    List<DetalleVenta> detalleVentas;
 
     public List<DetalleVenta> getDetalleVentas() {
         return detalleVentas;
@@ -16,9 +16,6 @@ public class Venta {
 
     public void setDetalleVentas(List<DetalleVenta> detalleVentas) {
         this.detalleVentas = detalleVentas;
-    }
-
-    public Venta() {
     }
 
     public Venta(int idVenta, Cliente cliente, Date fecha, double total) {

@@ -1,24 +1,14 @@
 package Dominio.Modelo;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Pedido {
 
-    private int idPedido;
+    int idPedido;
     private Cliente cliente;
     private Date fecha;
     private String estado;
-    private double total;
-
-    public Pedido() {
-    }
-
-    public Pedido(Date fecha, Cliente cliente, String estado, double total) {
-        this.fecha = fecha;
-        this.cliente = cliente;
-        this.estado = estado;
-        this.total = total;
-    }
+    double total;
 
     public Pedido(int id,
             Date fecha,
@@ -26,7 +16,7 @@ public class Pedido {
             String estado,
             double total) {
         this.fecha = fecha;
-        this.idPedido = id;
+        this.idPedido=id;
         this.cliente = cliente;
         this.estado = estado;
         this.total = total;
@@ -71,6 +61,14 @@ public class Pedido {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public Pedido() {
+
+    }
+
+    public int getIdCliente() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
