@@ -1,8 +1,10 @@
 package Dominio.repository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface CrudGenerico<T,ID> {
+//              JpaRepository<T,ID>
+public interface CrudGenerico<T, ID> {
 
     int save(T beans);
 
@@ -10,7 +12,9 @@ public interface CrudGenerico<T,ID> {
 
     int delete(ID id);
 
-    T findById(ID id);
+    Optional<T> findById(ID id);
 
     List<T> findAll();
+
+    int saveAndFinId(T beans);
 }

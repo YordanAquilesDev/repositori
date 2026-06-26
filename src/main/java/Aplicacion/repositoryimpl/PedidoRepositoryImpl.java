@@ -1,118 +1,149 @@
 package Aplicacion.repositoryimpl;
 
-import Aplicacion.ServiceImpl.ClienteServiceImpl;
 import Dominio.Modelo.Pedido;
-import Dominio.Service.ClienteService;
-import Dominio.repository.ClienteRepository;
-import Dominio.repository.PedidoRepository;
-import Presentacion.Principal.ConexionPostgresSQL;
+import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class PedidoRepositoryImpl implements PedidoRepository {
+public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
-    Connection conexion;
-    private final ClienteService clienteService;
-
+    private final ClienteRepositoryImpl clienteRepository;
 
     public PedidoRepositoryImpl() {
-        this.conexion = ConexionPostgresSQL.getConexion();
-        this.clienteService = new ClienteServiceImpl();
+        this.clienteRepository = new ClienteRepositoryImpl();
     }
 
     @Override
-    public List<Pedido> listarPedidos() {
-        List<Pedido> listaPedidos = new ArrayList<>();
-        try {
-            String sql = """
-                    SELECT * FROM pedido
-                    """;
+    public int save(Pedido beans) {
+        String sql = "INSERT INTO pedido (id_cliente, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                listaPedidos.add(new Pedido(
-                        resultado.getInt("id_pedido"),
-                        resultado.getDate("fecha"),
-                        clienteService.finById(resultado.getInt("id_cliente")),
-                        resultado.getString("estado"),
-                        resultado.getDouble("total")
-                ));
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            }
-            return listaPedidos;
+            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
 
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("ERROR EN "+ e);
             throw new RuntimeException(e);
-        }catch(Exception e){
-             System.out.println("ERROR EN "+ e);
-            return null;
+        }
+    }
+
+    @Override
+    public int update(Pedido beans) {
+        String sql = "UPDATE pedido SET id_cliente = ?, fecha = ?, estado = ?, total = ? WHERE id_pedido = ?";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
+            pstmt.setInt(5, beans.getIdPedido());
+
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int delete(Integer id) {
+        String sql = "DELETE FROM pedido WHERE id_pedido = ?";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Pedido> findById(Integer id) {
+        String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapear(rs));
+                }
+            }
+
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Pedido> findAll() {
+        List<Pedido> list = new ArrayList<>();
+        String sql = "SELECT * FROM pedido";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(mapear(rs));
+            }
+
+            return list;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Pedido ActualizarPedido(Pedido pedido) {
-        return null;
-    }
+    public int saveAndFinId(Pedido beans) {
+        String sql = "INSERT INTO pedido (id_cliente, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
-    @Override
-    public List<Pedido> listarPedidosEntregados() {
-        List<Pedido> listaPedidosEntregados = new ArrayList<>();
-        try {
-            String sql = """
-                    SELECT * FROM Pedido
-                    WHERE estado='Entregado'
-            """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                listaPedidosEntregados.add(new Pedido(
-                        resultado.getInt("id_pedido"),
-                        resultado.getDate("fecha"),
-                        clienteService.finById(resultado.getInt("id_cliente")),
-                        resultado.getString("estado"),
-                        resultado.getDouble("total")
-                ));
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
+
+            int filas = pstmt.executeUpdate();
+            if (filas == 0) return -1;
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
             }
-            return listaPedidosEntregados;
+
+            return -1;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    @Override
-    public List<Pedido> listarPedidosNoEntregados() {
-        List<Pedido> listaPedidosNoEntregados = new ArrayList<>();
-        try {
-            String sql = """
-                    SELECT * FROM Pedido
-                    WHERE estado='No Entregado'
-            """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                listaPedidosNoEntregados.add(new Pedido(
-                        resultado.getInt("id_pedido"),
-                        resultado.getDate("fecha"),
-                        clienteService.finById(resultado.getInt("id_cliente")),
-                        resultado.getString("estado"),
-                        resultado.getDouble("total")
-                ));
-
-            }
-            return listaPedidosNoEntregados;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+    private Pedido mapear(ResultSet rs) throws SQLException {
+        return new Pedido(
+                rs.getInt("id_pedido"),
+                rs.getDate("fecha"),
+                clienteRepository.findById(rs.getInt("id_cliente")).orElse(null),
+                rs.getString("estado"),
+                rs.getDouble("total")
+        );
     }
 }

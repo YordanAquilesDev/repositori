@@ -6,7 +6,6 @@ package Presentacion;
 
 import Aplicacion.repositoryimpl.PedidoRepositoryImpl;
 import Dominio.Modelo.Pedido;
-import Dominio.repository.PedidoRepository;
 import Presentacion.ProcesarAccion.AccionPedidos;
 
 import java.util.List;
@@ -352,88 +351,14 @@ public class MonitoreoPedidos extends javax.swing.JPanel {
     private void btnProcesarPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarPedidosActionPerformed
         int indice = cmbPedidos.getSelectedIndex();
         System.out.println("SE PRESIONO EL BOTON PEDIDOS");
-        PedidoRepository pedidoRepository = new PedidoRepositoryImpl();
+        PedidoRepositoryImpl pedidoRepository = new PedidoRepositoryImpl();
        DefaultTableModel modelo = (DefaultTableModel) tbPedidos.getModel();
         // 1. Definimos el array de columnas con la ortografía correcta
         String[] columnas = {"ID", "Cliente / Razón Social", "Fcha Pedido", "Estado", "Total Comprado"};
 
         modelo.setDataVector(null, columnas);
 
-        switch (indice) {
-            case 0 -> {
-                //total pedidos
-                if (pedidoRepository.listarPedidos() == null) {
-                    System.out.println("LISTA VASIA");
-                    break;
-                }
-                try {
-                    System.out.println("LISTANDO TODOS LOS PEDIDOS");
-                    List<Pedido> pedidos = pedidoRepository.listarPedidos();
-                    System.out.println("TODOS LOS PEDIDOS LISTADOS");
-
-                    //aca esta error
-                    for (Pedido p : pedidos) {
-
-                        Object[] fila = new Object[]{
-                            p.getIdPedido(),
-                            p.getCliente().getNombre(),
-                            p.getFecha(),
-                            p.getEstado(),
-                            p.getTotal()
-
-                        };
-                        modelo.addRow(fila);
-
-                    }
-                    System.out.println("Todos los pedidos  listos en la tabla");
-                } catch (Exception e) {
-                    System.out.println("ERROR " + e);
-                }
-            }
-            case 1 -> {
-                //pedidos entregados
-                if (pedidoRepository.listarPedidosEntregados() == null) {
-                    System.out.println("LISTA VASIA");
-                    break;
-                }
-                for (Pedido p : pedidoRepository.listarPedidosEntregados()) {
-
-                    Object[] fila = new Object[]{
-                        p.getIdPedido(),
-                        p.getCliente().getNombre(),
-                        p.getFecha(),
-                        p.getEstado(),
-                        p.getTotal()
-
-                    };
-                    modelo.addRow(fila);
-
-                }
-            }
-            case 2 -> {
-                // pedidos no entregados
-                for (Pedido p : pedidoRepository.listarPedidosNoEntregados()) {
-
-                    Object[] fila = new Object[]{
-                        p.getIdPedido(),
-                        p.getCliente().getNombre(),
-                        p.getFecha(),
-                        p.getEstado(),
-                        p.getTotal()
-
-                    };
-
-                    modelo.addRow(fila);
-                }
-            }
-            case 3 -> {
-                //pedidos canselados
-                System.out.println("ESTA EN EL 3");
-            }
-            default ->
-                System.out.println("ERROR EN EL CASE");
-        }
-
+    
 
     }//GEN-LAST:event_btnProcesarPedidosActionPerformed
 
@@ -446,7 +371,7 @@ public class MonitoreoPedidos extends javax.swing.JPanel {
 
 
 
-       accionPedidos.modificarPedido(new Pedido());
+
 
         
     }//GEN-LAST:event_btnActualizarPedidoActionPerformed

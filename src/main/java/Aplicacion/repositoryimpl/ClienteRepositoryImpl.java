@@ -1,197 +1,154 @@
 package Aplicacion.repositoryimpl;
 
-import Dominio.Modelo.Animal;
 import Dominio.Modelo.Cliente;
-import Dominio.repository.ClienteRepository;
-import Presentacion.Principal.ConexionPostgresSQL;
+import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class ClienteRepositoryImpl implements ClienteRepository {
-
-    @Override
-    public int save(Cliente cliente) {
-        Connection conexion=null;
-        PreparedStatement preparar=null;
-        int resultado=-1;
-
-        try{
-            String sql = """
-                    INSERT INTO cliente
-                        (nombre,apellido,dni,celular,direccion)
-                    VALUES 
-                                            (?,?,?,?,?) RETURNING id_cliente;
-                    """;
-            conexion = ConexionPostgresSQL.getConexion();
-            preparar = conexion.prepareStatement(sql);
-            preparar.setString(1, cliente.getNombre());
-            preparar.setString(2, cliente.getApellido());
-            preparar.setString(3,cliente.getDni());
-            preparar.setString(4, cliente.getCelular());
-            preparar.setString(5,cliente.getDireccion());
-            resultado = preparar.executeUpdate();
-
-            return resultado;
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            try{
-                if(conexion!=null) conexion.close();
-                if(preparar!=null) preparar.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return resultado;
-    }
+public class ClienteRepositoryImpl implements CrudGenerico<Cliente, Integer> {
 
     @Override
-    public Cliente finById(Integer id) {
-        Connection conexion=null;
-        PreparedStatement preparar=null;
-        ResultSet  resultado=null;
-        try{
-            String sql= """
-                    SELECT * FROM cliente WHERE id_cliente = ?;
-                    """;
-            conexion = ConexionPostgresSQL.getConexion();
-            preparar= conexion.prepareStatement(sql);
-            preparar.setInt(1, id);
-            resultado = preparar.executeQuery();
-            resultado.next();
-            return  new Cliente(
-                    resultado.getInt("id_cliente"),
-                    resultado.getString("nombre"),
-                    resultado.getString("apellido"),
-                    resultado.getString("celular"),
-                    resultado.getString("dni"),
-                    resultado.getString("direccion")
-            );
+    public int save(Cliente beans) {
+        String sql = "INSERT INTO cliente (nombre, apellido, dni, celular, direccion) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            pstmt.setString(1, beans.getNombre());
+            pstmt.setString(2, beans.getApellido());
+            pstmt.setString(3, beans.getDni());
+            pstmt.setString(4, beans.getCelular());
+            pstmt.setString(5, beans.getDireccion());
+
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally{
-            try{
-                if(conexion!=null) conexion.close();
-                if(preparar!=null) preparar.close();
-                if(resultado!=null) resultado.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
-
     }
 
     @Override
-    public int delete(Cliente cliente) {
-        Connection conexion=null;
-        PreparedStatement preparar=null;
+    public int update(Cliente beans) {
+        String sql = "UPDATE cliente "
+                + "SET nombre = ?, apellido = ?, dni = ?, celular = ?, direccion = ? "
+                + "WHERE id_cliente = ?";
 
-        int resultado=-1;
-        try{
-            String sql = """
-                    DELETE FROM cliente WHERE id_cliente = ?;
-            """;
-            conexion = ConexionPostgresSQL.getConexion();
-            preparar=conexion.prepareStatement(sql);
-            preparar.setInt(1,cliente.getIdCliente());
-            resultado=preparar.executeUpdate();
-            return resultado;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, beans.getNombre());
+            pstmt.setString(2, beans.getApellido());
+            pstmt.setString(3, beans.getDni());
+            pstmt.setString(4, beans.getCelular());
+            pstmt.setString(5, beans.getDireccion());
+            pstmt.setInt(6, beans.getIdCliente());
+
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
-            return resultado;
-
-        }finally{
-            try{
-                if(conexion!=null) conexion.close();
-                if(preparar!=null) preparar.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+            throw new RuntimeException(e);
         }
-
-
     }
 
     @Override
-    public int update(Cliente cliente) {
-        Connection conexion=null;
-        PreparedStatement preparar=null;
-        int resultado=-1;
-        try{
-            String sql = """
-                    UPDATE cliente
-                    SET nombre = ?, apellido = ?, direccion = ?, celular = ?, dni = ?
-                    WHERE id_cliente = ?;
-            """;
-            conexion = ConexionPostgresSQL.getConexion();
-            preparar=conexion.prepareStatement(sql);
-            preparar.setString(1,cliente.getNombre());
-            preparar.setString(2,cliente.getApellido());
-            preparar.setString(3,cliente.getDireccion());
-            preparar.setString(4,cliente.getCelular());
-            preparar.setString(5,cliente.getDni());
-            preparar.setInt(6,cliente.getIdCliente());
-            resultado=preparar.executeUpdate();
-            return resultado;
+    public int delete(Integer id) {
+        String sql = "DELETE FROM cliente WHERE id_cliente = ?";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
-            return resultado;
-
-        }finally{
-            try{
-                if(conexion!=null) conexion.close();
-                if(preparar!=null) preparar.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+            throw new RuntimeException(e);
         }
-
     }
 
     @Override
-    public List<Cliente> finAll() {
-      List<Cliente> clientes = new ArrayList <>()  ;
-      Connection conexion=null;
-      PreparedStatement preparar=null;
-      ResultSet resultado=null;
-       try{
-            String sql = """
-                    SELECT * FROM cliente;
-                    
-                    
-            """;
-            preparar =conexion.prepareStatement(sql);
-            resultado = preparar.executeQuery();
-            while(resultado.next()){
-                clientes.add(new Cliente(
-                        resultado.getInt("id_cliente"),
-                        resultado.getString("nombre"),
-                        resultado.getString("apellido"),
-                        resultado.getString("dni"),
-                        resultado.getString("celular"),
-                        resultado.getString("direccion")
+    public Optional<Cliente> findById(Integer id) {
+        String sql = "SELECT * FROM cliente WHERE id_cliente = ?";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(new Cliente(
+                            rs.getInt("id_cliente"),
+                            rs.getString("nombre"),
+                            rs.getString("apellido"),
+                            rs.getString("dni"),
+                            rs.getString("celular"),
+                            rs.getString("direccion")
+                    ));
+                }
+            }
+
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Cliente> findAll() {
+        List<Cliente> list = new ArrayList<>();
+        String sql = "SELECT * FROM cliente";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new Cliente(
+                        rs.getInt("id_cliente"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido"),
+                        rs.getString("dni"),
+                        rs.getString("celular"),
+                        rs.getString("direccion")
                 ));
-
             }
-            return clientes;
+
+            return list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally{
-           try{
-               if(conexion!=null) conexion.close();
-               if(preparar!=null) preparar.close();
-               if(resultado!=null) resultado.close();
-           } catch (SQLException e) {
-               throw new RuntimeException(e);
-           }
+        }
+    }
 
-       }
+    @Override
+    public int saveAndFinId(Cliente beans) {
+        String sql = "INSERT INTO cliente (nombre, apellido, dni, celular, direccion) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, beans.getNombre());
+            pstmt.setString(2, beans.getApellido());
+            pstmt.setString(3, beans.getDni());
+            pstmt.setString(4, beans.getCelular());
+            pstmt.setString(5, beans.getDireccion());
+
+            int filas = pstmt.executeUpdate();
+            if (filas == 0) return -1;
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+
+            return -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

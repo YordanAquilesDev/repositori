@@ -1,14 +1,25 @@
 package Dominio.Modelo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Pedido {
 
-    int idPedido;
+    private int idPedido;
     private Cliente cliente;
     private Date fecha;
     private String estado;
-    double total;
+    private double total;
+    List<DetallePedido> detalles;
+
+    public Pedido() {
+    }
+
+    public Pedido(Date fecha, Cliente cliente, String estado, double total) {
+        this.fecha = fecha;
+        this.cliente = cliente;
+        this.estado = estado;
+        this.total = total;
+    }
 
     public Pedido(int id,
             Date fecha,
@@ -16,7 +27,7 @@ public class Pedido {
             String estado,
             double total) {
         this.fecha = fecha;
-        this.idPedido=id;
+        this.idPedido = id;
         this.cliente = cliente;
         this.estado = estado;
         this.total = total;
@@ -61,10 +72,6 @@ public class Pedido {
 
     public void setTotal(double total) {
         this.total = total;
-    }
-
-    public Pedido() {
-
     }
 
 }

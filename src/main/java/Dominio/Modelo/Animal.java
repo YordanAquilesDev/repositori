@@ -5,6 +5,7 @@ public class Animal {
     private int idAnimal;
     private String especie;
     private String raza;
+    List<LoteAnimal> lotes;
 
     public Animal(int idAnimal, String especie, String raza) {
         this.idAnimal = idAnimal;

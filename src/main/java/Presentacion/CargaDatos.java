@@ -10,29 +10,22 @@ import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
 import Aplicacion.repositoryimpl.ProveedorRepositoryImpl;
 import Dominio.Modelo.*;
-import Dominio.Service.CompraService;
-import Dominio.repository.ClienteRepository;
-import Dominio.repository.CompraRepository;
-import Dominio.repository.ProductoRepository;
-import Dominio.repository.ProveedorRepository;
 
 import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author yordan
  */
 public class CargaDatos extends javax.swing.JPanel {
-    private final CompraService compraService;
-  private final CompraRepository compraRepository;
-  private final ProductoRepository productoRepository;
-  private final ProveedorRepository proveedorRepository;
-  private final ClienteRepository clienteRepository;
+    private final CompraServiceImpl compraService;
+  private final CompraRepositoryImpl compraRepository;
+  private final ProductoRepositoryImpl productoRepository;
+  private final ProveedorRepositoryImpl proveedorRepository;
+  private final ClienteRepositoryImpl clienteRepository;
     /**
      * Creates new form CargaDatos
      */
@@ -40,7 +33,7 @@ public class CargaDatos extends javax.swing.JPanel {
     List<Integer> idCliente= new ArrayList<>();
     List<String> nombreProveedor= new ArrayList<>();
     List<Integer> idProveedor= new ArrayList<>();
-    List<Integer> cantidad= new ArrayList<>();
+    List<Double> cantidad= new ArrayList<>();
     List<Integer> idProducto= new ArrayList<>();
     List<Producto> productos= new ArrayList<>();
     List<String> nombreProductos= new ArrayList<>();
@@ -75,13 +68,13 @@ public class CargaDatos extends javax.swing.JPanel {
     }
 
     private List<Producto> listarProductos(){
-        return productoRepository.listarProductos();
+        return productoRepository.findAll();
     }
     private  List<Proveedor> listarProveedores(){
         return proveedorRepository.listarProveedores();
     }
     private List<Cliente> listarClientes(){
-        return clienteRepository.finAll();
+        return clienteRepository.findAll();
     }
     /**
      * Consfiguracion por defecto de swing
@@ -272,20 +265,21 @@ public class CargaDatos extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Por favor ingrese un cantidad");
         }
 
-        productos= new ArrayList<>();
         int indice=-1;
         indice= cmbProducto.getSelectedIndex();
         int idProduct= idProducto.get(indice);
-        productos.add(productoRepository.buscarPorId(idProduct));
+        Producto producto = productoRepository.findById(idProduct).orElse(null);
+        if (producto == null) return;
+        productos.add(producto);
         String valorString = txtCantidad.getText();
-        cantidad.add(Integer.parseInt(valorString));
-        txtAreaProductos.append(productos.get(idProduct).getNombre()+"\n");
+        cantidad.add(Double.parseDouble(valorString));
+        txtAreaProductos.append(productos.get(productos.size()-1).getNombre()+"\n");
     }
 
     private void btnProcesarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarDatosActionPerformed
          int seleccion= cmbCargaDatos.getSelectedIndex();
          int indiceDelComboBox= cmbProveedor.getSelectedIndex();
-         int idroveedor= idProducto.get(indiceDelComboBox);
+         int idroveedor= idProveedor.get(indiceDelComboBox);
         Proveedor proveedor= proveedorRepository.buscarPorId(idroveedor);
          int idProveedor;
         switch(seleccion){
@@ -294,15 +288,25 @@ public class CargaDatos extends javax.swing.JPanel {
                 Date fechaSql= new Date(fecha.getTime());
                 List<Double> subTotales=new ArrayList<>();
 
-                Compra compra = new Compra(0,fechaSql,proveedor,SumarValores(productos));
+                Compra compra = new Compra(0,fechaSql,proveedor,0);
+                List<DetalleCompra> detalles = new ArrayList<>();
+                double totalCompra = 0;
                 for(int i=0; i<productos.size();i++){
-                    subTotales.add(productos.get(1).getPrecio()*cantidad.get(i));
+                    double subtotal = productos.get(i).getPrecioUnidad()*cantidad.get(i);
+                    subTotales.add(subtotal);
+                    totalCompra += subtotal;
+                    detalles.add(new DetalleCompra(
+                            0,
+                            compra,
+                            productos.get(i),
+                            cantidad.get(i),
+                            subTotales.get(i)));
                 }
-                DetalleCompra detalleCompra = new DetalleCompra(
-                        0,compra,productos,cantidad,subTotales);
+                compra.setTotal(totalCompra);
+                compra.setDetalles(detalles);
 
 
-                int resultadoDelGuardarEnLaDB=compraService.save(detalleCompra);
+                int resultadoDelGuardarEnLaDB=compraService.save(compra);
                 if(resultadoDelGuardarEnLaDB>0){
                     JOptionPane.showMessageDialog(
                             null, "El compra se ha Reaclizdo con exito");
@@ -326,7 +330,7 @@ public class CargaDatos extends javax.swing.JPanel {
 
         double suma=0;
         for(Producto producto:productos){
-            suma+=producto.getPrecio();
+            suma+=producto.getPrecioUnidad();
         }
         return suma;
     }

@@ -5,21 +5,22 @@ public class Producto {
     private String nombre;
     private String tipoProducto;
     private String unidadMedida;
-    private double precio;
-    private int stock;
+    private double precioUnidad;
+    private double stockActual;
+    List<MovimientoAlmacen> movimientos;
 
     public Producto(int idProducto,
-                    int stock,
+                    double stockActual,
                     String unidadMedida,
                     String nombre,
                     String tipoProducto,
-                    double precio) {
+                    double precioUnidad) {
         this.idProducto = idProducto;
-        this.stock = stock;
+        this.stockActual = stockActual;
         this.unidadMedida = unidadMedida;
         this.nombre = nombre;
         this.tipoProducto = tipoProducto;
-        this.precio = precio;
+        this.precioUnidad = precioUnidad;
     }
 
     public int getIdProducto() {
@@ -54,19 +55,19 @@ public class Producto {
         this.unidadMedida = unidadMedida;
     }
 
-    public double getPrecio() {
-        return precio;
+    public double getPrecioUnidad() {
+        return precioUnidad;
     }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
+    public void setPrecioUnidad(double precioUnidad) {
+        this.precioUnidad = precioUnidad;
     }
 
-    public int getStock() {
-        return stock;
+    public double getStockActual() {
+        return stockActual;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setStockActual(double stockActual) {
+        this.stockActual = stockActual;
     }
 }

@@ -6,7 +6,6 @@ package Presentacion;
 
 import Aplicacion.ServiceImpl.AnimalServiceImpl;
 import Dominio.Modelo.Animal;
-import Dominio.Service.AnimalService;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class AnimalPanel extends javax.swing.JPanel {
 
-    private final AnimalService animalService;
+    private final AnimalServiceImpl animalService;
 
     // inyectamos la dependencia de AnimalService
     public AnimalPanel() {
