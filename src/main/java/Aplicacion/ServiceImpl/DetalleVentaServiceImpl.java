@@ -20,37 +20,29 @@ public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, In
 
     @Override
     public int save(DetalleVenta detalleVenta) {
-        int resultado = 0;
-        double subtotal = 0;
-        //verificamos que  DetalleVenta no sea nulo
         if (detalleVenta == null || detalleVenta.getVenta() == null || detalleVenta.getProducto() == null) {
             throw new IllegalArgumentException("valores de objetos nulos ");
         }
-        // recuperamos el producto  del detalle por su id
-        Producto p = productoService.findById(detalleVenta.getProducto().getIdProducto());
-        // validamos si el valor del detalleVenta es mayor al de stock
-        //  no puede ser mayor al stock disponible
-        if (p.getStock() > detalleVenta.getCantidad()) {
-            // calculamos el subtotal  del detalleVenta
-            subtotal = p.getPrecio() * detalleVenta.getCantidad();
+
+        Producto p = productoService.findById(detalleVenta.getProducto().getIdProducto()).orElse(null);
+        if (p == null) {
+            throw new IllegalArgumentException("producto no encontrado");
+        }
+
+        if (p.getStockActual() > detalleVenta.getCantidad()) {
+            double subtotal = p.getPrecioUnidad() * detalleVenta.getCantidad();
             detalleVenta.setSubtotal(subtotal);
             int resultadoDetalleVenta = detalleVentaRepository.save(detalleVenta);
-            //si se guardo correctamente
             if (resultadoDetalleVenta > 0) {
-                //restamos al stock la cantidad del producto vendido
-                p.setStock(p.getStock() - detalleVenta.getCantidad());
-                //actualizamos la tabla productos
-                resultado = productoService.update(p);
+                p.setStockActual(p.getStockActual() - detalleVenta.getCantidad());
+                int resultado = productoService.update(p);
                 if (resultado > 0) {
-                    //si se guardo el detalleVenta y se actualizo la tabla producto
                     return 1;
                 }
-                // si solo se guardo el detalle y no se actualizo la tabla productos
                 return 0;
             }
-
         } else {
-            throw new IllegalArgumentException("stock negativo");
+            throw new IllegalArgumentException("stock insuficiente");
         }
         return -1;
     }
@@ -60,7 +52,7 @@ public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, In
         if (beans == null || beans.getVenta() == null || beans.getProducto() == null) {
             throw new IllegalArgumentException("valores de objetos nulos ");
         }
-        return detalleVentaRepository.delete(beans.getIdDetalle());
+        return detalleVentaRepository.update(beans);
     }
 
     @Override
@@ -82,11 +74,11 @@ public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, In
     @Override
     public List<DetalleVenta> findAll() {
         return detalleVentaRepository.findAll();
-
     }
 
     @Override
     public int saveAndFinId(DetalleVenta beans) {
-        return 0;
+        if (beans == null) return -1;
+        return detalleVentaRepository.saveAndFinId(beans);
     }
 }

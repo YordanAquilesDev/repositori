@@ -19,7 +19,7 @@ public class MonitoreoLote extends javax.swing.JPanel {
     /**
      * Creates new form MonitoreoLote
      */
-    private LoteService loteService;
+    private LoteAnimalServiceImpl loteService;
     public MonitoreoLote() {
         this.loteService= new LoteAnimalServiceImpl();
         initComponents();
@@ -173,27 +173,7 @@ public class MonitoreoLote extends javax.swing.JPanel {
         String columnas[]={"id_Lote","Animla","Fecha Inicio","CantidadInicio","Cantidad Actual","Peso promedio","Estado"};
         int indice= cmbLotes.getSelectedIndex();
         modelo.setDataVector(null,columnas);
-        switch(indice){
-            case 1:
-                List<LoteAnimal> lista= loteService.obtenerPorEstado("Desarrollo");
-                break;
-            case 2:
-                  List<LoteAnimal> listaEngorde= loteService.obtenerPorEstado("Engorde");
-                break;
-                
-            case 3:
-                  List<LoteAnimal> listaSalidos= loteService.obtenerPorEstado("Salidos");
-                break;
-            case 4:
-                  List<LoteAnimal> listaEntrantes= loteService.obtenerPorEstado("Entrantes");
-                break;
-            default:
-                  List<LoteAnimal> listaTodos= loteService.todos();
-                
-                
-                
-                
-        }
+  
        
 // TODO add your handling code here:
     }//GEN-LAST:event_cmbLotesActionPerformed

@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class AnimalPanel extends javax.swing.JPanel {
 
-    private final AnimalService animalService;
+    private final AnimalServiceImpl animalService;
 
     // inyectamos la dependencia de AnimalService
     public AnimalPanel() {

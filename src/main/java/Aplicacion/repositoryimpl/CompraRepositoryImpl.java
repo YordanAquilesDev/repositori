@@ -1,164 +1,190 @@
 package Aplicacion.repositoryimpl;
 
+import Dominio.Modelo.Compra;
+import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import Dominio.Modelo.Compra;
-import Dominio.Modelo.DetalleCompra;
-import Dominio.Modelo.Proveedor;
-import Presentacion.Principal.ConexionPostgresSQL;
+public class CompraRepositoryImpl implements CrudGenerico<Compra, Integer> {
 
-public class CompraRepositoryImpl implements CompraRepository {
-    Connection conexion;
-    private final ProveedorRepository proveedorRepository;
-    private final DetalleCompraRepository detalleCompraRepository;
+    private final ProveedorRepositoryImpl proveedorRepository;
 
     public CompraRepositoryImpl() {
-        this.conexion = ConexionPostgresSQL.getConexion();
         this.proveedorRepository = new ProveedorRepositoryImpl();
-        this.detalleCompraRepository = new DetalleCompraRepositoryImpl();
     }
 
     @Override
-    public int save(DetalleCompra detalleCompra) {
-        int resultado = -1;
-        int total = 0;
-        try {
-            String sql = """
-                    INSERT INTO compra(id_proveedor,fecha,total)VALUES
-                    (?,?,?) RETURNING *;
-                    """;
-            for (int i = 0; i < detalleCompra.getProductos().size(); i++) {
-                total += (int) (detalleCompra.getProductos().get(i).getPrecio() * detalleCompra.getCantidad().get(i));
-            }
-            detalleCompra.getCompra().setTotal(total);
+    public int save(Compra beans) {
+        String sql = "INSERT INTO compra (id_proveedor, fecha, total) VALUES (?, ?, ?)";
 
-            PreparedStatement preparar = conexion.prepareStatement(sql);
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            preparar.setInt(1, detalleCompra.getCompra().getProveedor().getIdProveedor());
+            pstmt.setInt(1, beans.getProveedor().getIdProveedor());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setDouble(3, beans.getTotal());
 
-            preparar.setDate(2, detalleCompra.getCompra().getFecha());
-
-            preparar.setDouble(3, detalleCompra.getCompra().getTotal());
-
-           resultado= preparar.executeUpdate();
-
-            int resultadoDeDetalle= detalleCompraRepository.save(detalleCompra);
-            if(resultadoDeDetalle>0&& resultado>0){
-                return resultado;
-            }else{
-                return -1;
-            }
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Compra> listarCompras() {
-        List<Compra> compras = new ArrayList<>();
-        try {
-            String sql = """
-                    SELECT * FROM compra
-                    """;
+    public int update(Compra beans) {
+        String sql = "UPDATE compra SET id_proveedor = ?, fecha = ?, total = ? WHERE id_compra = ?";
 
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                Proveedor p = new Proveedor();
-                p = proveedorRepository.buscarPorId(
-                        resultado.getInt("id_proveedor"));
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-                compras.add(new Compra(
-                        resultado.getInt("id_compra"),
-                        resultado.getDate("fecha"),
-                        p,
-                        resultado.getDouble("total")));
-            }
-            return compras;
+            pstmt.setInt(1, beans.getProveedor().getIdProveedor());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setDouble(3, beans.getTotal());
+            pstmt.setInt(4, beans.getIdCompra());
+
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Compra> listarComprasMasAltos() {
+    public int delete(Integer id) {
+        String sql = "DELETE FROM compra WHERE id_compra = ?";
 
-        List<Compra> comprasMasAltos = new ArrayList<>();
-        try {
-            String sql = """
-                            SELECT  * FROM compra
-                            ORDER BY total DESC
-                            LIMIT 5;
-                    """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                comprasMasAltos.add(new Compra(
-                        resultado.getInt("id_compra"),
-                        resultado.getDate("fecha"),
-                        proveedorRepository.buscarPorId(resultado.getInt("id_proveedor")),
-                        resultado.getDouble("total")));
-            }
-            return comprasMasAltos;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
-    public List<Compra> listarComprasPorFecha(Date fecha, Date fecha2) {
-        List<Compra> compras = new ArrayList<>();
-        try {
-            String sql = """
-                            SELECT  * FROM compra
-                           WHERE fecha BETWEEN ? AND ?
-                    """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            preparar.setDate(1, fecha);
-            preparar.setDate(2, fecha2);
-            ResultSet resultado = preparar.executeQuery();
-            while (resultado.next()) {
-                compras.add(new Compra(
-                        resultado.getInt("id_compra"),
-                        resultado.getDate("fecha"),
-                        proveedorRepository.buscarPorId(resultado.getInt("id_proveedor")),
-                        resultado.getDouble("total")
+    public Optional<Compra> findById(Integer id) {
+        String sql = "SELECT * FROM compra WHERE id_compra = ?";
 
-                ));
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapear(rs));
+                }
             }
-            return compras;
+
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Compra> findAll() {
+        List<Compra> list = new ArrayList<>();
+        String sql = "SELECT * FROM compra";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(mapear(rs));
+            }
+
+            return list;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int saveAndFinId(Compra beans) {
+        String sql = "INSERT INTO compra (id_proveedor, fecha, total) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setInt(1, beans.getProveedor().getIdProveedor());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setDouble(3, beans.getTotal());
+
+            int filas = pstmt.executeUpdate();
+            if (filas == 0) return -1;
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+
+            return -1;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public Compra traerCompraPorId(Integer id) {
-        try {
-            String sql = """
-                            SELECT * FROM compra
-                            WHERE id_compra=?
-                    """;
-            PreparedStatement preparar = conexion.prepareStatement(sql);
-            preparar.setInt(1, id);
-            ResultSet resultado = preparar.executeQuery();
-            if (resultado.next()) {
-                return new Compra(
-                        resultado.getInt("id_compra"),
-                        resultado.getDate("fecha"),
-                        proveedorRepository.buscarPorId(resultado.getInt("id_proveedor")),
-                        resultado.getDouble("total"));
+        return findById(id).orElse(null);
+    }
+
+    public List<Compra> listarComprasMasAltos() {
+        List<Compra> comprasMasAltos = new ArrayList<>();
+        String sql = "SELECT * FROM compra ORDER BY total DESC LIMIT 5";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                comprasMasAltos.add(mapear(rs));
             }
 
+            return comprasMasAltos;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+    }
+
+    public List<Compra> listarComprasPorFecha(Date fecha, Date fecha2) {
+        List<Compra> compras = new ArrayList<>();
+        String sql = "SELECT * FROM compra WHERE fecha BETWEEN ? AND ?";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setDate(1, fecha);
+            pstmt.setDate(2, fecha2);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    compras.add(mapear(rs));
+                }
+            }
+
+            return compras;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Compra mapear(ResultSet rs) throws SQLException {
+        return new Compra(
+                rs.getInt("id_compra"),
+                rs.getDate("fecha"),
+                proveedorRepository.findById(rs.getInt("id_proveedor")).orElse(null),
+                rs.getDouble("total")
+        );
     }
 }

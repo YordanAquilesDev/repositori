@@ -24,17 +24,15 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     @Override
     public int save(DetalleCompra detalleCompra) {
-        String sql = """
-                INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, detalleCompra.getCompra().getIdCompra());
             pstmt.setInt(2, detalleCompra.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleCompra.getCantidad());
+            pstmt.setDouble(3, detalleCompra.getCantidad());
             pstmt.setDouble(4, detalleCompra.getSubtotal());
 
             return pstmt.executeUpdate();
@@ -45,18 +43,16 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     @Override
     public int update(DetalleCompra detalleCompra) {
-        String sql = """
-                UPDATE detalle_compra
-                SET id_compra = ?, id_producto = ?, cantidad = ?, subtotal = ?
-                WHERE id_detalle = ?
-                """;
+        String sql = "UPDATE detalle_compra "
+                + "SET id_compra = ?, id_producto = ?, cantidad = ?, subtotal = ? "
+                + "WHERE id_detalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, detalleCompra.getCompra().getIdCompra());
             pstmt.setInt(2, detalleCompra.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleCompra.getCantidad());
+            pstmt.setDouble(3, detalleCompra.getCantidad());
             pstmt.setDouble(4, detalleCompra.getSubtotal());
             pstmt.setInt(5, detalleCompra.getIdDetalle());
 
@@ -122,17 +118,15 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     @Override
     public int saveAndFinId(DetalleCompra detalleCompra) {
-        String sql = """
-                INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_compra (id_compra, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, detalleCompra.getCompra().getIdCompra());
             pstmt.setInt(2, detalleCompra.getProducto().getIdProducto());
-            pstmt.setInt(3, detalleCompra.getCantidad());
+            pstmt.setDouble(3, detalleCompra.getCantidad());
             pstmt.setDouble(4, detalleCompra.getSubtotal());
 
             int filas = pstmt.executeUpdate();
@@ -154,12 +148,10 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
 
     public List<DetalleCompra> listarPorFecha(Date fecha, Date fecha2) {
         List<DetalleCompra> detalles = new ArrayList<>();
-        String sql = """
-                SELECT dc.*
-                FROM detalle_compra dc
-                INNER JOIN compra c ON dc.id_compra = c.id_compra
-                WHERE c.fecha BETWEEN ? AND ?
-                """;
+        String sql = "SELECT dc.* "
+                + "FROM detalle_compra dc "
+                + "INNER JOIN compra c ON dc.id_compra = c.id_compra "
+                + "WHERE c.fecha BETWEEN ? AND ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -191,8 +183,8 @@ public class DetalleCompraRepositoryImpl implements CrudGenerico<DetalleCompra, 
         return new DetalleCompra(
                 rs.getInt("id_detalle"),
                 null,
-                productoRepository.findById(rs.getInt("id_producto")),
-                rs.getInt("cantidad"),
+                productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                rs.getDouble("cantidad"),
                 rs.getDouble("subtotal")
         );
     }

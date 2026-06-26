@@ -17,11 +17,11 @@ public class Cliente {
     }
 
     public Cliente(int id, String nombre, String apellido,
-                   String dni, String telefono,String direccion) {
+                   String dni, String celular, String direccion) {
         this.idCliente = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        celular = telefono;
+        this.celular = celular;
         this.dni = dni;
         this.direccion = direccion;
     }
