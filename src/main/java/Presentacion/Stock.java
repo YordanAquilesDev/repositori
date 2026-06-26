@@ -167,8 +167,8 @@ public class Stock extends javax.swing.JPanel {
 
         // 3. Llamar a tu método que trae la lista de la base de datos
         // (Asumo que 'productoDAO' o tu servicio es donde vive 'listarProductos()')
-        ProductoRepository repositoryProductos = new ProductoRepositoryImpl();
-        java.util.List<Producto> lista = repositoryProductos.listarProductos();
+        ProductoRepositoryImpl repositoryProductos = new ProductoRepositoryImpl();
+        java.util.List<Producto> lista = repositoryProductos.findAll();
 
         // 4. Recorrer la lista con un bucle for-each
         for (Producto prod : lista) {
@@ -181,7 +181,7 @@ public class Stock extends javax.swing.JPanel {
                 prod.getIdProducto(),
                 prod.getNombre(),
                 prod.getUnidadMedida(),
-                prod.getStock()
+                prod.getStockActual()
             };
 
             // 5. Agregar la fila al modelo

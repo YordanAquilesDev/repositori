@@ -5,15 +5,15 @@ public class Proveedor {
     private String nombre;
     private String apellido;
     private String dni;
-    private String celular;
+    private String telefono;
 
-    public Proveedor(int idProveedor, String apellido, String nombre, String dni, String celular) {
+    public Proveedor(int idProveedor, String apellido, String nombre, String dni, String telefono) {
 
         this.idProveedor = idProveedor;
         this.apellido = apellido;
         this.nombre = nombre;
         this.dni = dni;
-        this.celular = celular;
+        this.telefono = telefono;
     }
     public Proveedor() {
 
@@ -51,11 +51,11 @@ public class Proveedor {
         this.dni = dni;
     }
 
-    public String getCelular() {
-        return celular;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setCelular(String celular) {
-        this.celular = celular;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 }

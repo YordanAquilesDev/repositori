@@ -23,18 +23,16 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public int save(DetallePedido detallePedido) {
-        String sql = """
-                INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, detallePedido.getPedido().getIdPedido());
             pstmt.setInt(2, detallePedido.getProducto().getIdProducto());
-            pstmt.setInt(3, detallePedido.getCantidad());
-            pstmt.setDouble(4, detallePedido.getSubTotal());
+            pstmt.setDouble(3, detallePedido.getCantidad());
+            pstmt.setDouble(4, detallePedido.getSubtotal());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -44,19 +42,17 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public int update(DetallePedido detallePedido) {
-        String sql = """
-                UPDATE detalle_pedido
-                SET id_pedido = ?, id_producto = ?, cantidad = ?, subtotal = ?
-                WHERE id_detalle = ?
-                """;
+        String sql = "UPDATE detalle_pedido "
+                + "SET id_pedido = ?, id_producto = ?, cantidad = ?, subtotal = ? "
+                + "WHERE id_detalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, detallePedido.getPedido().getIdPedido());
             pstmt.setInt(2, detallePedido.getProducto().getIdProducto());
-            pstmt.setInt(3, detallePedido.getCantidad());
-            pstmt.setDouble(4, detallePedido.getSubTotal());
+            pstmt.setDouble(3, detallePedido.getCantidad());
+            pstmt.setDouble(4, detallePedido.getSubtotal());
             pstmt.setInt(5, detallePedido.getIdDetalle());
 
             return pstmt.executeUpdate();
@@ -121,18 +117,16 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public int saveAndFinId(DetallePedido detallePedido) {
-        String sql = """
-                INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal)
-                VALUES (?, ?, ?, ?)
-                """;
+        String sql = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) "
+                + "VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, detallePedido.getPedido().getIdPedido());
             pstmt.setInt(2, detallePedido.getProducto().getIdProducto());
-            pstmt.setInt(3, detallePedido.getCantidad());
-            pstmt.setDouble(4, detallePedido.getSubTotal());
+            pstmt.setDouble(3, detallePedido.getCantidad());
+            pstmt.setDouble(4, detallePedido.getSubtotal());
 
             int filas = pstmt.executeUpdate();
             if (filas == 0) {
@@ -176,8 +170,8 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
         return new DetallePedido(
                 rs.getInt("id_detalle"),
                 null,
-                productoRepository.findById(rs.getInt("id_producto")),
-                rs.getInt("cantidad"),
+                productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                rs.getDouble("cantidad"),
                 rs.getDouble("subtotal")
         );
     }

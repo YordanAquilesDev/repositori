@@ -2,207 +2,148 @@ package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.Pedido;
 import Dominio.repository.CrudGenerico;
+import Presentacion.Principal.ConexionMySQL;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
-    // Inyectamos el repositorio Cliente para obtener el objeto Cliente
-    private ClienteRepositoryImpl clienteRepository = new ClienteRepositoryImpl();
+    private final ClienteRepositoryImpl clienteRepository;
+
+    public PedidoRepositoryImpl() {
+        this.clienteRepository = new ClienteRepositoryImpl();
+    }
 
     @Override
     public int save(Pedido beans) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        int respuesta = -1;
+        String sql = "INSERT INTO pedido (id_cliente, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
-        try {
-            String sql = """
-                    INSERT INTO pedido(id_cliente,fecha,estado,total)
-                    VALUES(?,?,?,?)
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, beans.getCliente().getIdCliente());
-            pstmt.setDate(2, (Date) beans.getFecha());
+            pstmt.setDate(2, beans.getFecha());
             pstmt.setString(3, beans.getEstado());
             pstmt.setDouble(4, beans.getTotal());
 
-            respuesta = pstmt.executeUpdate();
-            return respuesta;
-
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public int update(Pedido beans) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        int respuesta = -1;
+        String sql = "UPDATE pedido SET id_cliente = ?, fecha = ?, estado = ?, total = ? WHERE id_pedido = ?";
 
-        try {
-            String sql = """
-                    UPDATE pedido
-                    SET id_cliente=?, fecha=?, estado=?, total=?
-                    WHERE id_pedido=?
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, beans.getCliente().getIdCliente());
-            pstmt.setDate(2, (Date) beans.getFecha());
+            pstmt.setDate(2, beans.getFecha());
             pstmt.setString(3, beans.getEstado());
             pstmt.setDouble(4, beans.getTotal());
             pstmt.setInt(5, beans.getIdPedido());
 
-            respuesta = pstmt.executeUpdate();
-            return respuesta;
-
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public int delete(Integer id) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        int respuesta = -1;
+        String sql = "DELETE FROM pedido WHERE id_pedido = ?";
 
-        try {
-            String sql = """
-                    DELETE FROM pedido
-                    WHERE id_pedido=?
-                    """;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
-
-            respuesta = pstmt.executeUpdate();
-            return respuesta;
-
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
-    public Pedido findById(Integer id) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+    public Optional<Pedido> findById(Integer id) {
+        String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
 
-        try {
-            String sql = """
-                    SELECT * FROM pedido
-                    WHERE id_pedido=?
-                    """;
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
 
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return new Pedido(
-    rs.getInt("id_pedido"),
-    rs.getDate("fecha"),
-    clienteRepository.findById(rs.getInt("id_cliente")),
-    rs.getString("estado"),
-    rs.getDouble("total")
- );
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapear(rs));
+                }
             }
-            return null;
 
+            return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-                if (rs != null) rs.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public List<Pedido> findAll() {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        List<Pedido> list = new ArrayList<>();
+        String sql = "SELECT * FROM pedido";
 
-        List<Pedido> lista = new ArrayList<>();
-
-        try {
-            String sql = """
-                    SELECT * FROM pedido
-                    """;
-
-            pstmt = conn.prepareStatement(sql);
-            rs = pstmt.executeQuery();
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-
-                lista.add(
-                        new Pedido(
-                                rs.getInt("id_pedido"),
-                                rs.getDate("fecha"),
-                                clienteRepository.findById(rs.getInt("id_cliente")),
-                                rs.getString("estado"),
-                                rs.getDouble("total")
-                        )
-                );
+                list.add(mapear(rs));
             }
 
-            return lista;
-
+            return list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-                if (rs != null) rs.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
     @Override
     public int saveAndFinId(Pedido beans) {
-        return 0;
+        String sql = "INSERT INTO pedido (id_cliente, fecha, estado, total) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
+
+            int filas = pstmt.executeUpdate();
+            if (filas == 0) return -1;
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+
+            return -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Pedido mapear(ResultSet rs) throws SQLException {
+        return new Pedido(
+                rs.getInt("id_pedido"),
+                rs.getDate("fecha"),
+                clienteRepository.findById(rs.getInt("id_cliente")).orElse(null),
+                rs.getString("estado"),
+                rs.getDouble("total")
+        );
     }
 }

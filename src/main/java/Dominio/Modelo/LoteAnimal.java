@@ -11,6 +11,9 @@ public class LoteAnimal {
     private double pesoPromedio;
     private String estadoLote;
 
+    public LoteAnimal() {
+    }
+
     public LoteAnimal(int idLote, Animal animal,
                       Date fechaInicio,
                       int cantidadInicio,
