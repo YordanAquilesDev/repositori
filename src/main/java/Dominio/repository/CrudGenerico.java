@@ -12,9 +12,9 @@ public interface CrudGenerico<T, ID> {
 
     int delete(ID id);
 
-    Optional<T> finById(ID id);
+    Optional<T> findById(ID id);
 
-    List<T> finAll();
+    List<T> findAll();
 
     int saveAndFinId(T beans);
 }

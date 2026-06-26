@@ -1,26 +1,19 @@
 package Dominio.Modelo;
 
-import java.util.List;
-
 public class DetalleCompra {
     private int idDetalle;
     private Compra compra;
     private Producto producto;
-    private int cantidad;
-    private double subtotall;
-    private List<Producto> productos;
-    private List<Integer> cantidades;
-    private List<Double> subtotal;
-//------
+    private double cantidad;
+    private double subtotal;
 
-    public DetalleCompra(int idDetalle,
-            Compra compra,
-            List<Producto> productos,
-            List<Integer> cantidad,
-            List<Double> subtotal) {
+    public DetalleCompra() {
+    }
+
+    public DetalleCompra(int idDetalle, Compra compra, Producto producto, double cantidad, double subtotal) {
         this.idDetalle = idDetalle;
         this.compra = compra;
-        this.productos = productos;
+        this.producto = producto;
         this.cantidad = cantidad;
         this.subtotal = subtotal;
     }
@@ -41,27 +34,27 @@ public class DetalleCompra {
         this.compra = compra;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
-    public List<Integer> getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(List<Integer> cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 
-    public List<Double> getSubtotal() {
+    public double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(List<Double> subtotal) {
+    public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
 }

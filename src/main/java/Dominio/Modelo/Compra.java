@@ -1,19 +1,22 @@
 package Dominio.Modelo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Compra {
     private int idCompra;
     private Proveedor proveedor;
     private Date fecha;
     private double total;
-    private Lis<DetalleCompra> detalles;
+    private List<DetalleCompra> detalles;
+
+    public Compra() {
+    }
 
     public Compra(int idCompra,
             Date fecha,
             Proveedor proveedor,
             double total) {
-            detalles= new ArrayList<>();
         this.idCompra = idCompra;
         this.fecha = fecha;
         this.proveedor = proveedor;
@@ -50,5 +53,13 @@ public class Compra {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public List<DetalleCompra> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleCompra> detalles) {
+        this.detalles = detalles;
     }
 }

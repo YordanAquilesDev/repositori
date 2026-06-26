@@ -1,5 +1,6 @@
 package Aplicacion.ServiceImpl;
 
+import Aplicacion.repositoryimpl.ProveedorRepositoryImpl;
 import Dominio.Modelo.Proveedor;
 import Dominio.Service.ServiceGenerico;
 
@@ -7,33 +8,45 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProveedorServiceImpl implements ServiceGenerico<Proveedor, Integer> {
+
+    private final ProveedorRepositoryImpl proveedorRepository;
+
+    public ProveedorServiceImpl() {
+        this.proveedorRepository = new ProveedorRepositoryImpl();
+    }
+
     @Override
     public int save(Proveedor beans) {
-        return 0;
+        if (beans == null) return -1;
+        return proveedorRepository.save(beans);
     }
 
     @Override
     public int update(Proveedor beans) {
-        return 0;
+        if (beans == null || beans.getIdProveedor() <= 0) return -1;
+        return proveedorRepository.update(beans);
     }
 
     @Override
-    public int delete(Integer integer) {
-        return 0;
+    public int delete(Integer id) {
+        if (id == null || id < 0) return -1;
+        return proveedorRepository.delete(id);
     }
 
     @Override
-    public Optional<Proveedor> finById(Integer integer) {
-        return Optional.empty();
+    public Optional<Proveedor> findById(Integer id) {
+        if (id == null || id < 0) return Optional.empty();
+        return proveedorRepository.findById(id);
     }
 
     @Override
-    public List<Proveedor> finAll() {
-        return List.of();
+    public List<Proveedor> findAll() {
+        return proveedorRepository.findAll();
     }
 
     @Override
     public int saveAndFinId(Proveedor beans) {
-        return 0;
+        if (beans == null) return -1;
+        return proveedorRepository.saveAndFinId(beans);
     }
 }

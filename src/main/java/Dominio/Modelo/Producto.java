@@ -5,21 +5,21 @@ public class Producto {
     private String nombre;
     private String tipoProducto;
     private String unidadMedida;
-    private double precio;
-    private int stock;
+    private double precioUnidad;
+    private double stockActual;
 
     public Producto(int idProducto,
-                    int stock,
+                    double stockActual,
                     String unidadMedida,
                     String nombre,
                     String tipoProducto,
-                    double precio) {
+                    double precioUnidad) {
         this.idProducto = idProducto;
-        this.stock = stock;
+        this.stockActual = stockActual;
         this.unidadMedida = unidadMedida;
         this.nombre = nombre;
         this.tipoProducto = tipoProducto;
-        this.precio = precio;
+        this.precioUnidad = precioUnidad;
     }
 
     public int getIdProducto() {
@@ -54,33 +54,19 @@ public class Producto {
         this.unidadMedida = unidadMedida;
     }
 
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
     public double getPrecioUnidad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return precioUnidad;
+    }
+
+    public void setPrecioUnidad(double precioUnidad) {
+        this.precioUnidad = precioUnidad;
     }
 
     public double getStockActual() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
- 
+        return stockActual;
     }
-    
-    @Override
-    public String toString(){
-        return nombre;
+
+    public void setStockActual(double stockActual) {
+        this.stockActual = stockActual;
     }
 }

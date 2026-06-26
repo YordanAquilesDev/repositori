@@ -4,10 +4,7 @@
  */
 package Presentacion;
 
-import Aplicacion.ServiceImpl.ClienteServiceImpl;
 import Aplicacion.ServiceImpl.CompraServiceImpl;
-import Aplicacion.ServiceImpl.ProductoServiceImpl;
-import Aplicacion.ServiceImpl.ProveedorServiceImpl;
 import Aplicacion.repositoryimpl.ClienteRepositoryImpl;
 import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
@@ -17,9 +14,7 @@ import Dominio.Modelo.*;
 import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -27,9 +22,10 @@ import java.util.Map;
  */
 public class CargaDatos extends javax.swing.JPanel {
     private final CompraServiceImpl compraService;
-  private final ProductoServiceImpl productoService;
-  private final ProveedorServiceImpl proveedorService;
-  private final ClienteServiceImpl clienteRepository;
+  private final CompraRepositoryImpl compraRepository;
+  private final ProductoRepositoryImpl productoRepository;
+  private final ProveedorRepositoryImpl proveedorRepository;
+  private final ClienteRepositoryImpl clienteRepository;
     /**
      * Creates new form CargaDatos
      */
@@ -37,18 +33,30 @@ public class CargaDatos extends javax.swing.JPanel {
     List<Integer> idCliente= new ArrayList<>();
     List<String> nombreProveedor= new ArrayList<>();
     List<Integer> idProveedor= new ArrayList<>();
-    List<Integer> cantidad= new ArrayList<>();
+    List<Double> cantidad= new ArrayList<>();
+    List<Integer> idProducto= new ArrayList<>();
     List<Producto> productos= new ArrayList<>();
     List<String> nombreProductos= new ArrayList<>();
 
     public CargaDatos() {
         this.compraService = new CompraServiceImpl();
-     this.clienteRepository = new ClienteServiceImpl();
-     this.productoService= new ProductoServiceImpl();
-     this.proveedorService= new ProveedorServiceImpl();
+     this.clienteRepository = new ClienteRepositoryImpl();
+     this.productoRepository= new ProductoRepositoryImpl();
+     this.compraRepository= new CompraRepositoryImpl();
+     this.proveedorRepository= new ProveedorRepositoryImpl();
 
         initComponents();
-        
+
+        listarProductos().forEach(producto -> {
+           nombreProductos.add(producto.getNombre());
+           idProducto.add(producto.getIdProducto());
+        });
+        for(String nombreProducto: nombreProductos){
+            cmbProducto.addItem(nombreProducto);
+
+        }
+        txtAreaProductos.setText("LISTA DE PRDUSCTOS AGREGADOS ");
+
         listarProveedores().forEach(proveedor -> {
             nombreProveedor.add(proveedor.getNombre());
             idProveedor.add(proveedor.getIdProveedor());
@@ -58,12 +66,15 @@ public class CargaDatos extends javax.swing.JPanel {
         }
 
     }
-    
+
+    private List<Producto> listarProductos(){
+        return productoRepository.findAll();
+    }
     private  List<Proveedor> listarProveedores(){
         return proveedorRepository.listarProveedores();
     }
     private List<Cliente> listarClientes(){
-        return clienteRepository.finAll();
+        return clienteRepository.findAll();
     }
     /**
      * Consfiguracion por defecto de swing
@@ -106,8 +117,6 @@ public class CargaDatos extends javax.swing.JPanel {
 
         jLabel1.setText("Proveedor");
 
-        cmbProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbProveedor.addActionListener(this::cmbProveedorActionPerformed);
 
         jLabel2.setText("Productos");
 
@@ -137,6 +146,15 @@ public class CargaDatos extends javax.swing.JPanel {
                         .addGap(20, 20, 20)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(btnProcesarDatos)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(31, 31, 31)
+                                .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,17 +171,7 @@ public class CargaDatos extends javax.swing.JPanel {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel4)
-                                .addGap(112, 112, 112))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnProcesarDatos)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(31, 31, 31)
-                                        .addComponent(txtProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(112, 112, 112)))))
                 .addGap(29, 29, 29))
         );
         jPanel4Layout.setVerticalGroup(
@@ -257,20 +265,21 @@ public class CargaDatos extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Por favor ingrese un cantidad");
         }
 
-        productos= new ArrayList<>();
         int indice=-1;
         indice= cmbProducto.getSelectedIndex();
         int idProduct= idProducto.get(indice);
-        productos.add(productoRepository.buscarPorId(idProduct));
+        Producto producto = productoRepository.findById(idProduct).orElse(null);
+        if (producto == null) return;
+        productos.add(producto);
         String valorString = txtCantidad.getText();
-        cantidad.add(Integer.parseInt(valorString));
-        txtAreaProductos.append(productos.get(idProduct).getNombre()+"\n");
+        cantidad.add(Double.parseDouble(valorString));
+        txtAreaProductos.append(productos.get(productos.size()-1).getNombre()+"\n");
     }
 
     private void btnProcesarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarDatosActionPerformed
          int seleccion= cmbCargaDatos.getSelectedIndex();
          int indiceDelComboBox= cmbProveedor.getSelectedIndex();
-         int idroveedor= idProducto.get(indiceDelComboBox);
+         int idroveedor= idProveedor.get(indiceDelComboBox);
         Proveedor proveedor= proveedorRepository.buscarPorId(idroveedor);
          int idProveedor;
         switch(seleccion){
@@ -279,15 +288,25 @@ public class CargaDatos extends javax.swing.JPanel {
                 Date fechaSql= new Date(fecha.getTime());
                 List<Double> subTotales=new ArrayList<>();
 
-                Compra compra = new Compra(0,fechaSql,proveedor,SumarValores(productos));
+                Compra compra = new Compra(0,fechaSql,proveedor,0);
+                List<DetalleCompra> detalles = new ArrayList<>();
+                double totalCompra = 0;
                 for(int i=0; i<productos.size();i++){
-                    subTotales.add(productos.get(1).getPrecio()*cantidad.get(i));
+                    double subtotal = productos.get(i).getPrecioUnidad()*cantidad.get(i);
+                    subTotales.add(subtotal);
+                    totalCompra += subtotal;
+                    detalles.add(new DetalleCompra(
+                            0,
+                            compra,
+                            productos.get(i),
+                            cantidad.get(i),
+                            subTotales.get(i)));
                 }
-                DetalleCompra detalleCompra = new DetalleCompra(
-                        0,compra,productos,cantidad,subTotales);
+                compra.setTotal(totalCompra);
+                compra.setDetalles(detalles);
 
 
-                int resultadoDelGuardarEnLaDB=compraService.save(detalleCompra);
+                int resultadoDelGuardarEnLaDB=compraService.save(compra);
                 if(resultadoDelGuardarEnLaDB>0){
                     JOptionPane.showMessageDialog(
                             null, "El compra se ha Reaclizdo con exito");
@@ -311,30 +330,17 @@ public class CargaDatos extends javax.swing.JPanel {
 
         double suma=0;
         for(Producto producto:productos){
-            suma+=producto.getPrecio();
+            suma+=producto.getPrecioUnidad();
         }
         return suma;
-    }
-    
-    void llenarComponentes(){
-   productoService.finAll().forEach(p->{
-       cmbProducto.addItem(p);
-   });
-   
-   proveedorService.finAll().forEach(pr->{
-       cmbProveedor.addItem(pr);
-   });
-
-  
-       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnProcesarDatos;
     private javax.swing.JComboBox<String> cmbCargaDatos;
-    private javax.swing.JComboBox<Producto> cmbProducto;
-    private javax.swing.JComboBox<Proveedor> cmbProveedor;
+    private javax.swing.JComboBox<String> cmbProducto;
+    private javax.swing.JComboBox<String> cmbProveedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

@@ -1,5 +1,6 @@
 package Aplicacion.ServiceImpl;
 
+import Aplicacion.repositoryimpl.LoteAnimalImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.LoteAnimal;
 import Dominio.Service.ServiceGenerico;
@@ -9,33 +10,56 @@ import java.util.Optional;
 
 public class LoteAnimalServiceImpl implements ServiceGenerico<LoteAnimal, Integer> {
 
+    private final LoteAnimalImpl loteAnimalRepository;
+
+    public LoteAnimalServiceImpl() {
+        this.loteAnimalRepository = new LoteAnimalImpl();
+    }
+
     @Override
     public int save(LoteAnimal beans) {
-        return 0;
+        if (beans == null) return -1;
+        return loteAnimalRepository.save(beans);
     }
 
     @Override
     public int update(LoteAnimal beans) {
-        return 0;
+        if (beans == null || beans.getIdLote() <= 0) return -1;
+        return loteAnimalRepository.update(beans);
     }
 
     @Override
-    public int delete(Integer integer) {
-        return 0;
+    public int delete(Integer id) {
+        if (id == null || id < 0) return -1;
+        return loteAnimalRepository.delete(id);
     }
 
     @Override
-    public Optional<LoteAnimal> finById(Integer integer) {
-        return Optional.empty();
+    public Optional<LoteAnimal> findById(Integer id) {
+        if (id == null || id < 0) return Optional.empty();
+        return loteAnimalRepository.findById(id);
     }
 
     @Override
-    public List<LoteAnimal> finAll() {
-        return List.of();
+    public List<LoteAnimal> findAll() {
+        return loteAnimalRepository.findAll();
     }
 
     @Override
     public int saveAndFinId(LoteAnimal beans) {
-        return 0;
+        if (beans == null) return -1;
+        return loteAnimalRepository.saveAndFinId(beans);
+    }
+
+    public LoteAnimal guardarUnLote(LoteAnimal lote) {
+        return loteAnimalRepository.guardarLoteAnimal(lote);
+    }
+
+    public LoteAnimal obtenerUnLotePorId(Long id) {
+        return loteAnimalRepository.traerPorId(id.intValue());
+    }
+
+    public List<LoteAnimal> obtenerTodosLosLotesPorAnimal(Animal animal) {
+        return loteAnimalRepository.findAll();
     }
 }

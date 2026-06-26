@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import Dominio.Modelo.Cliente;
 import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 //@Repository                                JpaRepository<T, ID>
 public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
@@ -28,14 +27,9 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= """
-                    --                         id_cliente    fecha        total
-                    --                          |              |           |
-                    --                          |              |           |
-                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )  RETURNING id_venta;
-                    """;
+            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
             pstmt.setDate(2,beans.getFecha()); // fecha
             pstmt.setDouble(3,beans.getTotal());// total
@@ -59,14 +53,13 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= """
-                    UPDATE  venta SET id_cliente = ?,fecha = ?,total = ?
-                    """;
+            String sql= "UPDATE venta SET id_cliente = ?, fecha = ?, total = ? WHERE id_venta = ?";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,beans.getCliente().getIdCliente());
             pstmt.setDate(2,beans.getFecha());
             pstmt.setDouble(3,beans.getTotal());
+            pstmt.setInt(4,beans.getIdVenta());
             respuesta = pstmt.executeUpdate();
             return respuesta;
         } catch (SQLException e) {
@@ -88,9 +81,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= """
-                   DELETE FROM  ventas WHERE id_cliente = ?;
-                    """;
+            String sql= "DELETE FROM venta WHERE id_venta = ?";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,integer);
@@ -109,26 +100,25 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
     }
 
     @Override
-    public Optional<Venta> finById(Integer id) {
+    public Optional<Venta> findById(Integer id) {
         Connection conn= null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            String sql= """
-                    SELECT * FROM  ventas WHERE id_cliente = ?;
-                    """;
+            conn= ConexionMySQL.getConexionMySQL();
+            String sql= "SELECT * FROM venta WHERE id_venta = ?";
             pstmt=conn.prepareStatement(sql);
             pstmt.setInt(1,id);
            rs=pstmt.executeQuery();
            if(rs.next()){
                return Optional.of(new Venta(
                        rs.getInt(1),
-                       clienteRepository.finById(rs.getInt(2)).orElse(null),
+                       clienteRepository.findById(rs.getInt(2)).orElse(null),
                        rs.getDate(3),
                        rs.getDouble(4)
                ));
            }
-           return null;
+           return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }finally {
@@ -150,21 +140,20 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         ResultSet rs = null;
         List<Venta> list = new ArrayList<>();
         try{
-            String sql= """
-                    SELECT * FROM  venta ;
-                    """;
+            String sql= "SELECT * FROM venta";
+            conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
             rs=pstmt.executeQuery();
            while(rs.next()){
                list.add( new Venta(
-                       rs.getInt(1),
-                       clienteRepository.finById(rs.getInt(2)).orElse(null),
-                       rs.getDate(3),
-                       rs.getDouble(4)
-               )
-               );
-           }
-            return null;
+                        rs.getInt(1),
+                        clienteRepository.findById(rs.getInt(2)).orElse(null),
+                        rs.getDate(3),
+                        rs.getDouble(4)
+                )
+                );
+            }
+             return list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }finally {
@@ -184,16 +173,12 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int idGenerado = 0;
         try{
-            String sql= """
-                    --                         id_cliente    fecha        total
-                    --                          |              |           |
-                    --                          |              |           |
-                    INSERT INTO ventas VALUES( ?       ,      ?       ,    ? )  RETURNING id_venta;
-                    """;
+            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
+            conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
             pstmt.setDate(2,beans.getFecha()); // fecha
-            pstmt.setDouble(3,beans.getTotal());// total
+            pstmt.setDouble(3,beans.getTotal());
 
             int filaAfectadas = pstmt.executeUpdate();
             if(filaAfectadas>0){

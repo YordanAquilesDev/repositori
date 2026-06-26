@@ -8,84 +8,77 @@ import Dominio.Service.ServiceGenerico;
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaServiceImpl  implements ServiceGenerico<DetalleVenta,Integer> {
+public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, Integer> {
+
     private final ProductoServiceImpl productoService;
     private final DetalleVentaRepositoryImpl detalleVentaRepository;
-
 
     public DetalleVentaServiceImpl() {
         this.productoService = new ProductoServiceImpl();
         this.detalleVentaRepository = new DetalleVentaRepositoryImpl();
     }
-    @Override
-    public int save(DetalleVenta beans) {
-        int resultado = 0;
-        double subtotal = 0;
-        //verificamos que  DetalleVenta no sea nulo
-        if(beans==null||beans.getVenta()==null||beans.getProducto()==null){
-            throw  new IllegalArgumentException("valores de objetos nulos ");
-        }
-        // recuperamos el producto  del detalle por su id
-       Producto p = productoService.findById(beans.getProducto().getIdProducto());
-        // validamos si el valor del detalleVenta es mayor al de stock
-        //  no puede ser mayor al stock disponible
-       if(p.getStock()>beans.getCantidad()) {
-           // calculamos el subtotal  del detalleVenta
-           subtotal=p.getPrecio()* beans.getCantidad();
-           beans.setSubtotal(subtotal);
-           int resultadoDetalleVenta= detalleVentaRepository.save(beans);
-           //si se guardo correctamente
-           if(resultadoDetalleVenta>0) {
-               //restamos al stock la cantidad del producto vendido
-               p.setStock(p.getStock()-beans.getCantidad());
-               //actualizamos la tabla productos
-               resultado= productoService.update(p);
-               if(resultado>0) {
-                   //si se guardo el detalleVenta y se actualizo la tabla producto
-                   return 1;
-               }
-               // si solo se guardo el detalle y no se actualizo la tabla productos
-               return 0;
-           }
 
-       }else{
-           throw new IllegalArgumentException("stock negativo");
-       }
-     return -1;
+    @Override
+    public int save(DetalleVenta detalleVenta) {
+        if (detalleVenta == null || detalleVenta.getVenta() == null || detalleVenta.getProducto() == null) {
+            throw new IllegalArgumentException("valores de objetos nulos ");
+        }
+
+        Producto p = productoService.findById(detalleVenta.getProducto().getIdProducto()).orElse(null);
+        if (p == null) {
+            throw new IllegalArgumentException("producto no encontrado");
+        }
+
+        if (p.getStockActual() > detalleVenta.getCantidad()) {
+            double subtotal = p.getPrecioUnidad() * detalleVenta.getCantidad();
+            detalleVenta.setSubtotal(subtotal);
+            int resultadoDetalleVenta = detalleVentaRepository.save(detalleVenta);
+            if (resultadoDetalleVenta > 0) {
+                p.setStockActual(p.getStockActual() - detalleVenta.getCantidad());
+                int resultado = productoService.update(p);
+                if (resultado > 0) {
+                    return 1;
+                }
+                return 0;
+            }
+        } else {
+            throw new IllegalArgumentException("stock insuficiente");
+        }
+        return -1;
     }
 
     @Override
     public int update(DetalleVenta beans) {
-        if(beans==null||beans.getVenta()==null||beans.getProducto()==null){
-            throw  new IllegalArgumentException("valores de objetos nulos ");
+        if (beans == null || beans.getVenta() == null || beans.getProducto() == null) {
+            throw new IllegalArgumentException("valores de objetos nulos ");
         }
-        return detalleVentaRepository.delete(beans);
+        return detalleVentaRepository.update(beans);
     }
 
     @Override
-    public int delete(Integer integer){
-        if(integer==null||integer<0) {
-            throw  new IllegalArgumentException("valores de objetos nulos ");
+    public int delete(Integer integer) {
+        if (integer == null || integer < 0) {
+            throw new IllegalArgumentException("valores de objetos nulos ");
         }
         return detalleVentaRepository.delete(integer);
     }
 
     @Override
     public Optional<DetalleVenta> findById(Integer integer) {
-        if(integer==null||integer<0) {
-            throw  new IllegalArgumentException("valores de objetos nulos ");
+        if (integer == null || integer < 0) {
+            throw new IllegalArgumentException("valores de objetos nulos ");
         }
         return detalleVentaRepository.findById(integer);
     }
 
     @Override
     public List<DetalleVenta> findAll() {
-        return detalleVentaRepository.finsAll();
-
+        return detalleVentaRepository.findAll();
     }
 
     @Override
     public int saveAndFinId(DetalleVenta beans) {
-        return 0;
+        if (beans == null) return -1;
+        return detalleVentaRepository.saveAndFinId(beans);
     }
 }
