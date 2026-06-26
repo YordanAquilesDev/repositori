@@ -10,6 +10,8 @@ public class LoteAnimal {
     private int cantidadActual;
     private double pesoPromedio;
     private String estadoLote;
+    List<ConsumoLote> consumos;
+
 
     public LoteAnimal() {
     }

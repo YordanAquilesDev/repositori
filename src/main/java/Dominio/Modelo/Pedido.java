@@ -9,6 +9,7 @@ public class Pedido {
     private Date fecha;
     private String estado;
     private double total;
+    List<DetallePedido> detalles;
 
     public Pedido() {
     }
