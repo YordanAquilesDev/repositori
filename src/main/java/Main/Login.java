@@ -38,7 +38,6 @@ public class Login extends javax.swing.JPanel {
 
         jTextField1.setBackground(new java.awt.Color(250, 239, 241));
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
         jTextField1.setBorder(null);
         jTextField1.setCaretColor(new java.awt.Color(245, 201, 201));
         jTextField1.setOpaque(true);

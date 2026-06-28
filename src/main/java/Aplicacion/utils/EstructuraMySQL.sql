@@ -132,6 +132,27 @@ CREATE TABLE detalle_venta (
                                FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT
 );
 
+CREATE TABLE empleados (
+                               id_empleado INT AUTO_INCREMENT PRIMARY KEY,
+                               nombres VARCHAR(100) NOT NULL,
+                               apellidos VARCHAR(100) NOT NULL,
+                               usuario VARCHAR(50) NOT NULL UNIQUE,
+                               contrasena VARCHAR(100) NOT NULL,
+                               rol ENUM('ADMINISTRADOR','USUARIO') NOT NULL,
+                               estado ENUM('ACTIVO','INACTIVO') DEFAULT 'ACTIVO'
+);
+INSERT INTO empleados
+(nombres, apellidos, usuario, contrasena, rol)
+VALUES
+('Juan', 'Perez', 'admin', '1234', 'ADMINISTRADOR');
+
+INSERT INTO empleados
+(nombres, apellidos, usuario, contrasena, rol)
+VALUES
+('Adrian', 'Espinoza', 'adrian', '1234', 'USUARIO');
+
+
+
 Create Table empresa(
     id_empresa int auto_increment primary key,
     nombre varchar(80),

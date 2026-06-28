@@ -12,7 +12,7 @@ public class ConexionMySQL {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/granjaerp?serverTimezone=UTC";
             String user = "root";
-            String password = "961508";
+            String password = "adrianesteban121";
              conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (ClassNotFoundException e) {
@@ -21,5 +21,9 @@ public class ConexionMySQL {
             throw new RuntimeException(e);
         }
         return conn;
+    }
+
+    public static Connection getConexion() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
