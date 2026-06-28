@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import Dominio.Modelo.Cliente;
 import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 //@Repository                                JpaRepository<T, ID>
 public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {

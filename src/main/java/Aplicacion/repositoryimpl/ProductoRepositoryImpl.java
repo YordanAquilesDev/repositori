@@ -2,7 +2,7 @@ package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.Producto;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -150,4 +150,5 @@ public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
             throw new RuntimeException(e);
         }
     }
+
 }

@@ -3,7 +3,7 @@ package Aplicacion.repositoryimpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,11 +16,11 @@ import java.util.Optional;
 
 public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Integer> {
 
-    private final LoteAnimalImpl loteAnimal;
+    private final LoteAnimalRepositoryImpl loteAnimal;
     private final ProductoRepositoryImpl producto;
 
     public ConsumoLoteRepositoryImpl() {
-        this.loteAnimal = new LoteAnimalImpl();
+        this.loteAnimal = new LoteAnimalRepositoryImpl();
         this.producto = new ProductoRepositoryImpl();
     }
 
@@ -168,7 +168,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
     private ConsumoLote mapear(ResultSet rs) throws SQLException {
         return new ConsumoLote(
                 rs.getInt("id_consumo"),
-                loteAnimal.traerPorId(rs.getInt("id_lote")),
+                loteAnimal.findById(rs.getInt("id_lote")).orElse(null),
                 rs.getDouble("cantidad"),
                 producto.findById(rs.getInt("id_producto")).orElse(null),
                 rs.getDate("fecha")

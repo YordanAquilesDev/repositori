@@ -2,7 +2,7 @@ package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.DetalleCompra;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.Date;

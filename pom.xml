@@ -16,7 +16,7 @@
 
     <dependencies>
         <!--
-
+ tokend: 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
 
         -->
         <dependency>
@@ -83,5 +83,17 @@
             <version>RELEASE300</version>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

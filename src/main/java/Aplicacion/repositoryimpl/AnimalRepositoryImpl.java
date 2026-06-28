@@ -2,7 +2,7 @@ package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.Animal;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

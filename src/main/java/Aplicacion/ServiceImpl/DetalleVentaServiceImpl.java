@@ -14,6 +14,7 @@ public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, In
     private final DetalleVentaRepositoryImpl detalleVentaRepository;
 
     public DetalleVentaServiceImpl() {
+        // esto viene de de VentaServiceImpl
         this.productoService = new ProductoServiceImpl();
         this.detalleVentaRepository = new DetalleVentaRepositoryImpl();
     }

@@ -1,6 +1,6 @@
 package TestDB;
 
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 import java.sql.Connection;
 
 public class TestMySQL {

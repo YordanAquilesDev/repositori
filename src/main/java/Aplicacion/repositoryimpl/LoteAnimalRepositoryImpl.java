@@ -2,7 +2,7 @@ package Aplicacion.repositoryimpl;
 
 import Dominio.Modelo.LoteAnimal;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class LoteAnimalImpl implements CrudGenerico<LoteAnimal, Integer> {
+public class LoteAnimalRepositoryImpl implements CrudGenerico<LoteAnimal, Integer> {
 
     private final AnimalRepositoryImpl animalRepository;
 
-    public LoteAnimalImpl() {
+    public LoteAnimalRepositoryImpl() {
         this.animalRepository = new AnimalRepositoryImpl();
     }
 

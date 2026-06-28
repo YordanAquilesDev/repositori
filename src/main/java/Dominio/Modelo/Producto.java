@@ -11,6 +11,9 @@ public class Producto {
     private double stockActual;
     List<MovimientoAlmacen> movimientos;
 
+    public Producto() {
+
+    }
     public Producto(int idProducto,
                     double stockActual,
                     String unidadMedida,

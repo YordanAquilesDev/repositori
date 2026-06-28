@@ -1,6 +1,6 @@
 package Aplicacion.ServiceImpl;
 
-import Aplicacion.repositoryimpl.LoteAnimalImpl;
+import Aplicacion.repositoryimpl.LoteAnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.LoteAnimal;
 import Dominio.Service.ServiceGenerico;
@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public class LoteAnimalServiceImpl implements ServiceGenerico<LoteAnimal, Integer> {
 
-    private final LoteAnimalImpl loteAnimalRepository;
+    private final LoteAnimalRepositoryImpl loteAnimalRepository;
 
     public LoteAnimalServiceImpl() {
-        this.loteAnimalRepository = new LoteAnimalImpl();
+        this.loteAnimalRepository = new LoteAnimalRepositoryImpl();
     }
 
     @Override

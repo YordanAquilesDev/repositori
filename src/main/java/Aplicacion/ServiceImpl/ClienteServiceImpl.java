@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class ClienteServiceImpl implements ServiceGenerico<Cliente, Integer> {
-
+   //funciona exelente
     private final ClienteRepositoryImpl clienteRepository;
-
     public ClienteServiceImpl() {
         this.clienteRepository = new ClienteRepositoryImpl();
     }
@@ -60,6 +59,7 @@ public class ClienteServiceImpl implements ServiceGenerico<Cliente, Integer> {
     }
 
     public List<Cliente> finAll() {
-        return findAll();
+
+        return clienteRepository.findAll();
     }
 }

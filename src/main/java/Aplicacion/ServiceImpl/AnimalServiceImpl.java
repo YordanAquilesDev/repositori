@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class AnimalServiceImpl implements ServiceGenerico<Animal, Integer> {
-
+//funcioan ok sin ningun problemas
     private final AnimalRepositoryImpl animalRepository;
-
     public AnimalServiceImpl() {
         this.animalRepository = new AnimalRepositoryImpl();
     }

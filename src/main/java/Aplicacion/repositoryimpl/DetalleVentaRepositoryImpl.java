@@ -1,8 +1,10 @@
 package Aplicacion.repositoryimpl;
 
+import Aplicacion.ServiceImpl.VentaServiceImpl;
 import Dominio.Modelo.DetalleVenta;
+import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
-import Presentacion.Principal.ConexionMySQL;
+import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +15,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, Integer> {
-    
-    private VentaRepositoryImpl ventaRepository = new VentaRepositoryImpl(); 
-    private ProductoRepositoryImpl productoRepository = new ProductoRepositoryImpl(); 
+     // mala inyeccion de dependencia
+    //private final VentaServiceImpl ventaService ;
 
+    private final ProductoRepositoryImpl productoService ;
+  public DetalleVentaRepositoryImpl() {
+      this.productoService=  new ProductoRepositoryImpl();
+      //this.ventaService=  new VentaServiceImpl();
+  }
     @Override
     public int save(DetalleVenta detalleVenta) {
         String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal) "
@@ -74,17 +80,16 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
     @Override
     public Optional<DetalleVenta> findById(Integer id) {
         String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
-
         try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             pstmt.setInt(1, id);
-
+           Venta venta= new Venta();
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
+                    venta.setIdVenta(rs.getInt("id_detalle"));
                     return Optional.of(new DetalleVenta(
                             rs.getInt("id_detalle"),
-                            ventaRepository.findById(rs.getInt("id_venta")).orElse(null),
-                            productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                            venta,
+                            productoService.findById(rs.getInt("id_producto")).orElse(null),
                             rs.getDouble("cantidad"),
                             rs.getDouble("subtotal")
                     ));
@@ -109,14 +114,12 @@ public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, In
                 lista.add(new DetalleVenta(
                         rs.getInt("id_detalle"),
                         null,
-                        productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                        productoService.findById(rs.getInt("id_producto")).orElse(null),
                         rs.getDouble("cantidad"),
                         rs.getDouble("subtotal")
                 ));
             }
-
             return lista;
-
         } catch (SQLException e) {
             throw new RuntimeException("Error al listar detalles de venta", e);
         }

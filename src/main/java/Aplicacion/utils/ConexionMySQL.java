@@ -1,4 +1,4 @@
-package Presentacion.Principal;
+package Aplicacion.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,7 @@ public class ConexionMySQL {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/granjaerp?serverTimezone=UTC";
             String user = "root";
-            String password = "mysql";
+            String password = "961508";
              conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (ClassNotFoundException e) {
