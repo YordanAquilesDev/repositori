@@ -1,5 +1,7 @@
 package Dominio.Modelo;
 
+import java.util.List;
+
 public class Producto {
     private int idProducto;
     private String nombre;
