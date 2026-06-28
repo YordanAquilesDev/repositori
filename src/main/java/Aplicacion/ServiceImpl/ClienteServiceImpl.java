@@ -59,6 +59,7 @@ public class ClienteServiceImpl implements ServiceGenerico<Cliente, Integer> {
     }
 
     public List<Cliente> finAll() {
-        return findAll();
+
+        return clienteRepository.findAll();
     }
 }

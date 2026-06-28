@@ -46,26 +46,33 @@ public class Main extends javax.swing.JFrame {
         return new javax.swing.ImageIcon(imgEscalada);
     }
 
-    public Main() {
-        initComponents();
-        int anchoIcono = 24;
-        int altoIcono = 24;
-          Home home = new Home();
-        cambiarPantalla(home);
-        btnMonitPedidos.setIcon(escalarIcono("/recursos/auriculares.png", anchoIcono, altoIcono));
-        btnClientes.setIcon(escalarIcono("/recursos/usuarios.png", anchoIcono, altoIcono));
-        btnProveedores.setIcon(escalarIcono("/recursos/avatar.png", anchoIcono, altoIcono));
-        btnAlmacen.setIcon(escalarIcono("/recursos/capas.png", anchoIcono, altoIcono));
-        btnHistCompras.setIcon(escalarIcono("/icon/carro-de-la-compra.png", anchoIcono, altoIcono));
-        btnHistMovimientos.setIcon(escalarIcono("/recursos/biblioteca.png", anchoIcono, altoIcono));
-        btnHistVentas.setIcon(escalarIcono("/recursos/dinero.png", anchoIcono, altoIcono));
-        btnMonitGranja.setIcon(escalarIcono("/recursos/archivo.png", anchoIcono, altoIcono));
-        btnMonitLote.setIcon(escalarIcono("/recursos/capas.png", anchoIcono, altoIcono));
-        btnSalir.setIcon(escalarIcono("/recursos/cerrar-sesion.png", anchoIcono, altoIcono));
-        btnHome.setIcon(escalarIcono("/recursos/hogar.png", anchoIcono, altoIcono));
-        btnCargaDatos.setIcon(escalarIcono("/recursos/subir.png", anchoIcono, altoIcono));
+  public Main() {
+    initComponents();
+    int anchoIcono = 24;
+    int altoIcono = 24;
 
-    }
+    // 1. OCULTAMOS temporalmente el menú y la cabecera vieja
+    PanelNavegacion.setVisible(false);
+    PanelCabecera.setVisible(false);
+
+    // 2. Cargamos tu nuevo Login en el contenedor principal
+    Login login = new Login(this);
+    cambiarPantalla(login);
+
+    // Dejamos la carga de iconos abajo por si acaso, no afectará en nada
+    btnMonitPedidos.setIcon(escalarIcono("/recursos/auriculares.png", anchoIcono, altoIcono));
+    btnClientes.setIcon(escalarIcono("/recursos/usuarios.png", anchoIcono, altoIcono));
+    btnProveedores.setIcon(escalarIcono("/recursos/avatar.png", anchoIcono, altoIcono));
+    btnAlmacen.setIcon(escalarIcono("/recursos/capas.png", anchoIcono, altoIcono));
+    btnHistCompras.setIcon(escalarIcono("/icon/carro-de-la-compra.png", anchoIcono, altoIcono));
+    btnHistMovimientos.setIcon(escalarIcono("/recursos/biblioteca.png", anchoIcono, altoIcono));
+    btnHistVentas.setIcon(escalarIcono("/recursos/dinero.png", anchoIcono, altoIcono));
+    btnMonitGranja.setIcon(escalarIcono("/recursos/archivo.png", anchoIcono, altoIcono));
+    btnMonitLote.setIcon(escalarIcono("/recursos/capas.png", anchoIcono, altoIcono));
+    btnSalir.setIcon(escalarIcono("/recursos/cerrar-sesion.png", anchoIcono, altoIcono));
+    btnHome.setIcon(escalarIcono("/recursos/hogar.png", anchoIcono, altoIcono));
+    btnCargaDatos.setIcon(escalarIcono("/recursos/subir.png", anchoIcono, altoIcono));
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -267,6 +274,16 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnHomeActionPerformed
 
+    
+    public void mostrarMenuPrincipal() {
+    // 1. Volvemos a hacer visibles la navegación y la cabecera
+    PanelNavegacion.setVisible(true);
+    PanelCabecera.setVisible(true);
+    
+    // 2. Cargamos la pantalla inicial (Home)
+    Home home = new Home();
+    cambiarPantalla(home);
+} 
     private void btnHomeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHomeMouseEntered
         // TODO add your handling code here:
         if (!btnClientes.isContentAreaFilled()) { // Si no está seleccionado fijo

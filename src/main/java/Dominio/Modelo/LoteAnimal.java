@@ -1,6 +1,8 @@
 package Dominio.Modelo;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoteAnimal {
     private int idLote;
@@ -10,12 +12,11 @@ public class LoteAnimal {
     private int cantidadActual;
     private double pesoPromedio;
     private String estadoLote;
-    List<ConsumoLote> consumos;
 
+    List<ConsumoLote> consumos= new  ArrayList<>();
 
     public LoteAnimal() {
     }
-
     public LoteAnimal(int idLote, Animal animal,
                       Date fechaInicio,
                       int cantidadInicio,
@@ -85,5 +86,14 @@ public class LoteAnimal {
 
     public void setEstadoLote(String estadoLote) {
         this.estadoLote = estadoLote;
+    }
+    public void addConsumos(ConsumoLote consumos) {
+        this.consumos.add(consumos);
+    }
+
+    @Override
+    public String toString() {
+
+        return animal.getRaza() +"  " +animal.getEspecie();
     }
 }

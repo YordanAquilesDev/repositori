@@ -68,11 +68,10 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
 
     @Override
     public Optional<Proveedor> findById(Integer id) {
-        String sql = "SELECT * FROM proveedor WHERE id_proveedor = ?";
+        String sql = "SELECT * FROM proveedor WHERE id_proveedor = ?;";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {

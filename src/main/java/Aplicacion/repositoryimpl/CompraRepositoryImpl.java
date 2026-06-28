@@ -28,7 +28,7 @@ public class CompraRepositoryImpl implements CrudGenerico<Compra, Integer> {
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+            System.out.println(beans.getProveedor());
             pstmt.setInt(1, beans.getProveedor().getIdProveedor());
             pstmt.setDate(2, beans.getFecha());
             pstmt.setDouble(3, beans.getTotal());

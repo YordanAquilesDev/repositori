@@ -1,6 +1,7 @@
 package Dominio.Modelo;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Compra {
@@ -21,7 +22,12 @@ public class Compra {
         this.fecha = fecha;
         this.proveedor = proveedor;
         this.total = total;
+        detalles = new ArrayList<>();
     }
+    public void addDetalleCompra(DetalleCompra detalleCompra) {
+        this.detalles.add(detalleCompra);
+    }
+
 
     public int getIdCompra() {
         return idCompra;

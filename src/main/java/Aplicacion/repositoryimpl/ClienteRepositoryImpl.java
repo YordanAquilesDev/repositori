@@ -107,7 +107,6 @@ public class ClienteRepositoryImpl implements CrudGenerico<Cliente, Integer> {
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
-
             while (rs.next()) {
                 list.add(new Cliente(
                         rs.getInt("id_cliente"),

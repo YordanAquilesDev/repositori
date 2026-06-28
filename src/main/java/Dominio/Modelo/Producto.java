@@ -1,5 +1,7 @@
 package Dominio.Modelo;
 
+import java.util.List;
+
 public class Producto {
     private int idProducto;
     private String nombre;
@@ -9,6 +11,9 @@ public class Producto {
     private double stockActual;
     List<MovimientoAlmacen> movimientos;
 
+    public Producto() {
+
+    }
     public Producto(int idProducto,
                     double stockActual,
                     String unidadMedida,

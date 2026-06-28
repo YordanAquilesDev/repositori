@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class LoteAnimalImpl implements CrudGenerico<LoteAnimal, Integer> {
+public class LoteAnimalRepositoryImpl implements CrudGenerico<LoteAnimal, Integer> {
 
     private final AnimalRepositoryImpl animalRepository;
 
-    public LoteAnimalImpl() {
+    public LoteAnimalRepositoryImpl() {
         this.animalRepository = new AnimalRepositoryImpl();
     }
 

@@ -1,11 +1,14 @@
 package Dominio.Modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Animal {
 
     private int idAnimal;
     private String especie;
     private String raza;
-    List<LoteAnimal> lotes;
+    List<LoteAnimal> lotes=new ArrayList<>();
 
     public Animal(int idAnimal, String especie, String raza) {
         this.idAnimal = idAnimal;
@@ -43,5 +46,13 @@ public class Animal {
 
     public void setRaza(String raza) {
         this.raza = raza;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "raza='" + raza + '\'' +
+                ", especie='" + especie + '\'' +
+                '}';
     }
 }

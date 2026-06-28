@@ -1,6 +1,8 @@
 package Dominio.Modelo;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Pedido {
 
@@ -9,9 +11,17 @@ public class Pedido {
     private Date fecha;
     private String estado;
     private double total;
-    List<DetallePedido> detalles;
+    List<DetallePedido> detalles= new ArrayList<>();
 
     public Pedido() {
+    }
+
+    public List<DetallePedido> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
     }
 
     public Pedido(Date fecha, Cliente cliente, String estado, double total) {
@@ -74,4 +84,9 @@ public class Pedido {
         this.total = total;
     }
 
+
+    public void addDetallePedido(DetallePedido detalle) {
+        this.detalles.add(detalle);
+
+    }
 }
