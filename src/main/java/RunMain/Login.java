@@ -72,7 +72,7 @@ public class Login extends javax.swing.JPanel {
             Image imagen = new ImageIcon(imgUrl).getImage();
             g2d.drawImage(imagen, 0, 0, this.getWidth(), this.getHeight(), this);
         }
-
+   //hhjupoupoubhiogiu pcccccccc it7u lt7ugy
         // 2. Calcular proporciones para las cajas (Mismo cálculo matemático tuyo)
         double escalaX = (double) this.getWidth() / 1410.0;
         double escalaY = (double) this.getHeight() / 770.0;
