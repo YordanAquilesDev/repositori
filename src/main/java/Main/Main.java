@@ -15,7 +15,7 @@ import Presentacion.HistorialVentas;
 import Presentacion.Home;
 import Presentacion.MonitoreoGranja;
 import Presentacion.MonitoreoLote;
-import Presentacion.MonitoreoPedidos;
+//import Presentacion.MonitoreoPedidos;
 import Presentacion.PanelClientes;
 import Presentacion.PanelProveedor;
 import Presentacion.Stock;
@@ -359,8 +359,8 @@ public class Main extends javax.swing.JFrame {
     private void btnMonitPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMonitPedidosActionPerformed
         // TODO add your handling code here:
            seleccionarBoton(btnMonitPedidos);
-        MonitoreoPedidos carga = new MonitoreoPedidos();
-        cambiarPantalla(carga);
+   //     MonitoreoPedidos carga = new MonitoreoPedidos();
+   //     cambiarPantalla(carga);
         
     }//GEN-LAST:event_btnMonitPedidosActionPerformed
 

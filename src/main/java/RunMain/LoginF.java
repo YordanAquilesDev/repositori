@@ -6,8 +6,8 @@ package RunMain;
 
 import Presentacion.GuiAdmin.HomeAdmin;
 import Presentacion.GuiUsuario.HomeUsuario;
+
 import java.awt.GridBagLayout;
-import javax.swing.JPanel;
 
 /**
  *
