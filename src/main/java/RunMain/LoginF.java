@@ -83,7 +83,7 @@ public class LoginF extends javax.swing.JPanel {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/login.png"))); // NOI18N
         contenedorLogin.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1410, 780));
 
-        btnIniciarSesion.setText("Iniciar Sesión");
+        btnIniciarSesion.setText("jButton1");
         btnIniciarSesion.addActionListener(this::btnIniciarSesionActionPerformed);
         contenedorLogin.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 533, 360, 30));
 
