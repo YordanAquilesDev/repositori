@@ -8,9 +8,9 @@ import java.util.Optional;
 import Aplicacion.repositoryimpl.VentaRepositoryImpl;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
-public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
+public class VentaServiceImpl  implements CrudGenerico<Venta,Integer> {
    private final VentaRepositoryImpl ventaRepository;
    private  final DetalleVentaServiceImpl detalleVentaService;
    public VentaServiceImpl() {
@@ -25,7 +25,7 @@ public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
        int filasAfectadas = 0;
        double total = 0;
 
-        if(beans.getCliente()==null||beans.getFecha()==null||beans.getTotal()<0.0){
+        if(beans.getUsuario()==null||beans.getFecha()==null||beans.getTotal()<0.0){
             throw  new IllegalArgumentException("valores de la venta  tiene algunos problemas ");
         }
 
@@ -36,14 +36,14 @@ public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
 
         beans.setTotal(total);
         // guardamos la venta primero  debido a que
-        // DetalleVenta depende del id_venta
-        guardarYgenerarId = saveAndFinId(beans);
+        // DetalleVenta depende del idVenta
+        guardarYgenerarId = saveAndFindId(beans);
         if(guardarYgenerarId>0){
-            int id_venta = guardarYgenerarId;
-            //cargamos el id_venta a todos los detalles
+            int idVenta = guardarYgenerarId;
+            //cargamos el idVenta a todos los detalles
             beans.getDetalleVentas()
                     .forEach(bean -> {
-                        bean.getVenta().setIdVenta(id_venta);
+                        bean.getVenta().setIdVenta(idVenta);
                     });
 
             //ahora guardamos detalleVenta en la db
@@ -77,9 +77,9 @@ public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
         return ventaRepository.findAll();
     }
     @Override
-    public int saveAndFinId(Venta beans) {
+    public int saveAndFindId(Venta beans) {
         // 1. Validaciones estructurales básicas
-        if (beans == null || beans.getCliente() == null) {
+        if (beans == null || beans.getUsuario() == null) {
             throw new IllegalArgumentException("La venta o el cliente no pueden ser nulos.");
         }
 
@@ -96,7 +96,7 @@ public class VentaServiceImpl  implements ServiceGenerico<Venta,Integer> {
 
         // 4. Regla de negocio avanzada: Verificar y descontar stock aquí si fuera necesario
         // productoService.descontarStock(beans.getDetalleVentas());
-        return ventaRepository.saveAndFinId(beans);
+        return ventaRepository.saveAndFindId(beans);
     }
 
     @Override

@@ -114,7 +114,7 @@ public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen,
     }
 
     @Override
-    public int saveAndFinId(MovimientoAlmacen beans) {
+    public int saveAndFindId(MovimientoAlmacen beans) {
         String sql = "INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto) "
                 + "VALUES (?, ?, ?, ?, ?)";
 

@@ -3,12 +3,12 @@ package Aplicacion.ServiceImpl;
 import Aplicacion.repositoryimpl.ConsumoLoteRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ConsumoServiceImpl implements ServiceGenerico<ConsumoLote, Integer> {
+public class ConsumoServiceImpl implements CrudGenerico<ConsumoLote, Integer> {
 
       // Repositorio encargado de realizar las operaciones CRUD del consumo de lotes.
     private final ConsumoLoteRepositoryImpl consumoLoteRepository;
@@ -85,11 +85,11 @@ public class ConsumoServiceImpl implements ServiceGenerico<ConsumoLote, Integer>
      * @return ID generado o -1 si el objeto es inválido.
      */
     @Override
-    public int saveAndFinId(ConsumoLote beans) {
+    public int saveAndFindId(ConsumoLote beans) {
         //verifica que el objecto exista
         if (beans == null) return -1;
         // Guarda el registro y devuelve el ID generado.
-        return consumoLoteRepository.saveAndFinId(beans);
+        return consumoLoteRepository.saveAndFindId(beans);
     }
 
      /**

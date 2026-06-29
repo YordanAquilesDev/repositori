@@ -3,12 +3,12 @@ package Aplicacion.ServiceImpl;
 import Aplicacion.repositoryimpl.DetalleVentaRepositoryImpl;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Producto;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, Integer> {
+public class DetalleVentaServiceImpl implements CrudGenerico<DetalleVenta, Integer> {
 
     private final ProductoServiceImpl productoService;
     private final DetalleVentaRepositoryImpl detalleVentaRepository;
@@ -78,8 +78,8 @@ public class DetalleVentaServiceImpl implements ServiceGenerico<DetalleVenta, In
     }
 
     @Override
-    public int saveAndFinId(DetalleVenta beans) {
+    public int saveAndFindId(DetalleVenta beans) {
         if (beans == null) return -1;
-        return detalleVentaRepository.saveAndFinId(beans);
+        return detalleVentaRepository.saveAndFindId(beans);
     }
 }

@@ -1,11 +1,11 @@
 package TestDB;
 
 import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
-import Aplicacion.repositoryimpl.ClienteRepositoryImpl;
+import Aplicacion.repositoryimpl.UsuarioRepositoryImpl;
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
 import Aplicacion.repositoryimpl.ProveedorRepositoryImpl;
 import Dominio.Modelo.Animal;
-import Dominio.Modelo.Cliente;
+import Dominio.Modelo.Usuario;
 import Dominio.Modelo.Producto;
 import Dominio.Modelo.Proveedor;
 
@@ -37,11 +37,13 @@ public class TestInsercion {
 
     static void testCliente() {
         System.out.println(SEP);
-        System.out.println("Insertando clientes...");
-        ClienteRepositoryImpl repo = new ClienteRepositoryImpl();
+        System.out.println("Insertando usuarios...");
+        UsuarioRepositoryImpl repo = new UsuarioRepositoryImpl();
 
-        Cliente c1 = new Cliente(0, "Juan", "Pérez", "12345678", "999111222", "Av. Siempre Viva 123");
-        Cliente c2 = new Cliente(0, "María", "López", "87654321", "988333444", "Jr. Las Flores 456");
+        Usuario c1 = new Usuario(0, "juan", "1234", "juan@email.com", "CLIENTE",
+                "Juan", "Pérez", "12345678", "999111222", "Av. Siempre Viva 123", null, "ACTIVO");
+        Usuario c2 = new Usuario(0, "maria", "1234", "maria@email.com", "CLIENTE",
+                "María", "López", "87654321", "988333444", "Jr. Las Flores 456", null, "ACTIVO");
 
         System.out.println("  Juan   -> " + (repo.save(c1) > 0 ? "OK" : "FAIL"));
         System.out.println("  María  -> " + (repo.save(c2) > 0 ? "OK" : "FAIL"));
@@ -83,9 +85,9 @@ public class TestInsercion {
             System.out.println("  [" + p.getIdProducto() + "] " + p.getNombre()
                     + " | $" + p.getPrecioUnidad() + " | stock: " + p.getStockActual() + " " + p.getUnidadMedida()));
 
-        System.out.println("\n-- Clientes --");
-        new ClienteRepositoryImpl().findAll().forEach(c ->
-            System.out.println("  [" + c.getIdCliente() + "] " + c.getNombre() + " " + c.getApellido()
+        System.out.println("\n-- Usuarios --");
+        new UsuarioRepositoryImpl().findAll().forEach(c ->
+            System.out.println("  [" + c.getIdUsuario() + "] " + c.getNombre() + " " + c.getApellido()
                     + " | DNI: " + c.getDni() + " | Cel: " + c.getCelular()));
 
         System.out.println("\n-- Animales --");

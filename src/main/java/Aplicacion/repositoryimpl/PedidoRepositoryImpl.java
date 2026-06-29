@@ -15,20 +15,20 @@ import java.util.Optional;
 
 public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
-    private final ClienteRepositoryImpl clienteRepository;
+    private final UsuarioRepositoryImpl usuarioRepository;
 
     public PedidoRepositoryImpl() {
-        this.clienteRepository = new ClienteRepositoryImpl();
+        this.usuarioRepository = new UsuarioRepositoryImpl();
     }
 
     @Override
     public int save(Pedido beans) {
-        String sql = "INSERT INTO pedido (id_cliente, fecha, estado, total) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO pedido (id_usuario, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
             pstmt.setDate(2, beans.getFecha());
             pstmt.setString(3, beans.getEstado());
             pstmt.setDouble(4, beans.getTotal());
@@ -41,12 +41,12 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
     @Override
     public int update(Pedido beans) {
-        String sql = "UPDATE pedido SET id_cliente = ?, fecha = ?, estado = ?, total = ? WHERE id_pedido = ?";
+        String sql = "UPDATE pedido SET id_usuario = ?, fecha = ?, estado = ?, total = ? WHERE id_pedido = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
             pstmt.setDate(2, beans.getFecha());
             pstmt.setString(3, beans.getEstado());
             pstmt.setDouble(4, beans.getTotal());
@@ -113,13 +113,13 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
     }
 
     @Override
-    public int saveAndFinId(Pedido beans) {
-        String sql = "INSERT INTO pedido (id_cliente, fecha, estado, total) VALUES (?, ?, ?, ?)";
+    public int saveAndFindId(Pedido beans) {
+        String sql = "INSERT INTO pedido (id_usuario, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, beans.getCliente().getIdCliente());
+            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
             pstmt.setDate(2, beans.getFecha());
             pstmt.setString(3, beans.getEstado());
             pstmt.setDouble(4, beans.getTotal());
@@ -141,7 +141,7 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
         return new Pedido(
                 rs.getInt("id_pedido"),
                 rs.getDate("fecha"),
-                clienteRepository.findById(rs.getInt("id_cliente")).orElse(null),
+                usuarioRepository.findById(rs.getInt("id_usuario")).orElse(null),
                 rs.getString("estado"),
                 rs.getDouble("total")
         );

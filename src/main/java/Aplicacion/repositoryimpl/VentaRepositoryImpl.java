@@ -9,28 +9,22 @@ import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
-//@Repository                                JpaRepository<T, ID>
 public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
-    // inyectamos al ClienteRepositoryImpl para aser uso
-    // de su metod finById en la linea 114 y 149
-    // devido a que la clase  Venta tiene un objeto
-    // cliente dentro, el finById trae ese objeto por si id
-    // supongo que el encargado de hacer ClienteRepositoryImpl ya debe haber implementado
-    // el metodo finById
-  private ClienteRepositoryImpl clienteRepository = new ClienteRepositoryImpl();
-  // si su parte nesecita de otro repository inyectenlo  y agan uso del repository ya echo por su
-    // otro colega como este caso es de ClienteRepositoryImpl
-    // puede ser PedidoRepositoryImpl u otro
+    private final UsuarioRepositoryImpl usuarioRepository;
+
+    public VentaRepositoryImpl() {
+        this.usuarioRepository = new UsuarioRepositoryImpl();
+    }
     @Override
     public int save(Venta beans) {
         Connection conn= null;
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
+            String sql= "INSERT INTO venta(id_usuario, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
+            pstmt.setInt(1,beans.getUsuario().getIdUsuario());
             pstmt.setDate(2,beans.getFecha()); // fecha
             pstmt.setDouble(3,beans.getTotal());// total
             respuesta = pstmt.executeUpdate();
@@ -53,10 +47,10 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
         PreparedStatement pstmt = null;
         int respuesta = -1;
         try{
-            String sql= "UPDATE venta SET id_cliente = ?, fecha = ?, total = ? WHERE id_venta = ?";
+            String sql= "UPDATE venta SET id_usuario = ?, fecha = ?, total = ? WHERE id_venta = ?";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,beans.getCliente().getIdCliente());
+            pstmt.setInt(1,beans.getUsuario().getIdUsuario());
             pstmt.setDate(2,beans.getFecha());
             pstmt.setDouble(3,beans.getTotal());
             pstmt.setInt(4,beans.getIdVenta());
@@ -112,8 +106,8 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
            rs=pstmt.executeQuery();
            if(rs.next()){
                return Optional.of(new Venta(
-                       rs.getInt(1),
-                       clienteRepository.findById(rs.getInt(2)).orElse(null),
+                        rs.getInt(1),
+                        usuarioRepository.findById(rs.getInt(2)).orElse(null),
                        rs.getDate(3),
                        rs.getDouble(4)
                ));
@@ -147,7 +141,7 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
            while(rs.next()){
                list.add( new Venta(
                         rs.getInt(1),
-                        clienteRepository.findById(rs.getInt(2)).orElse(null),
+                        usuarioRepository.findById(rs.getInt(2)).orElse(null),
                         rs.getDate(3),
                         rs.getDouble(4)
                 )
@@ -168,15 +162,15 @@ public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
     }
 
     @Override
-    public int saveAndFinId(Venta beans) {
+    public int saveAndFindId(Venta beans) {
         Connection conn= null;
         PreparedStatement pstmt = null;
         int idGenerado = 0;
         try{
-            String sql= "INSERT INTO venta(id_cliente, fecha, total) VALUES(?, ?, ?)";
+            String sql= "INSERT INTO venta(id_usuario, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1,beans.getCliente().getIdCliente());// id_cliente
+            pstmt.setInt(1,beans.getUsuario().getIdUsuario());
             pstmt.setDate(2,beans.getFecha()); // fecha
             pstmt.setDouble(3,beans.getTotal());
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Venta {
     private int idVenta;
-    private Cliente cliente;
+    private Usuario usuario;
     private Date fecha;
     private double total;
     private List<DetalleVenta> detalleVentas= new ArrayList<>();
@@ -22,19 +22,19 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(int idVenta, Cliente cliente, Date fecha, double total) {
+    public Venta(int idVenta, Usuario usuario, Date fecha, double total) {
         this.idVenta = idVenta;
-        this.cliente = cliente;
+        this.usuario = usuario;
         this.fecha = fecha;
         this.total = total;
 
     }
-    public Cliente getCliente() {
-        return cliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public int getIdVenta() {

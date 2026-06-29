@@ -2,7 +2,7 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.DetalleCompraRepositoryImpl;
 import Dominio.Modelo.DetalleCompra;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio de los detalles de compra.
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
-public class DetalleCompraServiceImpl implements ServiceGenerico<DetalleCompra, Integer> {
+public class DetalleCompraServiceImpl implements CrudGenerico<DetalleCompra, Integer> {
 
     private final DetalleCompraRepositoryImpl detalleCompraRepository;
 
@@ -87,10 +87,10 @@ public class DetalleCompraServiceImpl implements ServiceGenerico<DetalleCompra, 
      * @return ID generado o -1 si el objeto es nulo.
      */
     @Override
-    public int saveAndFinId(DetalleCompra beans) {
+    public int saveAndFindId(DetalleCompra beans) {
          // Verifica que el objeto exista.
         if (beans == null) return -1;
         // Guarda el detalle de compra y devuelve el ID generado.
-        return detalleCompraRepository.saveAndFinId(beans);
+        return detalleCompraRepository.saveAndFindId(beans);
     }
 }

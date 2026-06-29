@@ -118,7 +118,7 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public int saveAndFinId(Proveedor beans) {
+    public int saveAndFindId(Proveedor beans) {
         String sql = "INSERT INTO proveedor (nombre, apellido, dni, telefono) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();

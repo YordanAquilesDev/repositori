@@ -112,7 +112,7 @@ public class CompraRepositoryImpl implements CrudGenerico<Compra, Integer> {
     }
 
     @Override
-    public int saveAndFinId(Compra beans) {
+    public int saveAndFindId(Compra beans) {
         String sql = "INSERT INTO compra (id_proveedor, fecha, total) VALUES (?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();

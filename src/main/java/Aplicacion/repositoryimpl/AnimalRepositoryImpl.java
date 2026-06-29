@@ -111,7 +111,7 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
     }
 
     @Override
-    public int saveAndFinId(Animal beans) {
+    public int saveAndFindId(Animal beans) {
         String sql = "INSERT INTO animal (especie, raza) VALUES (?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
@@ -133,7 +133,7 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
         }
     }
 
-    public List<Animal> finAllConsumer() {
+    public List<Animal> findAllConsumer() {
         List<Animal> animales = new ArrayList<>();
         String sql = "SELECT a.id_animal, a.especie, a.raza "
                 + "FROM animal a "

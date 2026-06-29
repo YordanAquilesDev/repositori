@@ -2,12 +2,12 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.ProveedorRepositoryImpl;
 import Dominio.Modelo.Proveedor;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ProveedorServiceImpl implements ServiceGenerico<Proveedor, Integer> {
+public class ProveedorServiceImpl implements CrudGenerico<Proveedor, Integer> {
 
     private final ProveedorRepositoryImpl proveedorRepository;
 
@@ -45,8 +45,8 @@ public class ProveedorServiceImpl implements ServiceGenerico<Proveedor, Integer>
     }
 
     @Override
-    public int saveAndFinId(Proveedor beans) {
+    public int saveAndFindId(Proveedor beans) {
         if (beans == null) return -1;
-        return proveedorRepository.saveAndFinId(beans);
+        return proveedorRepository.saveAndFindId(beans);
     }
 }

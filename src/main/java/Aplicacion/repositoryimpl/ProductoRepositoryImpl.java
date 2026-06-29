@@ -125,7 +125,7 @@ public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
     }
 
     @Override
-    public int saveAndFinId(Producto beans) {
+    public int saveAndFindId(Producto beans) {
         String sql = "INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual) "
                 + "VALUES (?, ?, ?, ?, ?)";
 

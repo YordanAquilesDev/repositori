@@ -1,4 +1,4 @@
-package Test;
+package testAplication;
 
 import Aplicacion.ServiceImpl.*;
 import Aplicacion.utils.ConexionMySQL;
@@ -62,8 +62,8 @@ public class AplicacionTest {
                 System.out.println("Error eliminando");
             }
             System.out.println();
-            //finById
-            if (animalService.finById(2) != null) {
+            //findById
+            if (animalService.findById(2) != null) {
                 System.out.println("animal encontrado exitosamente");
             } else {
                 System.out.println("Error encontrando");
@@ -72,7 +72,7 @@ public class AplicacionTest {
             //findAll
             animalService.findAll().forEach(System.out::println);
             System.out.println();
-            //saveAndFinId
+            //saveAndFindId
             if (animalService.save(new Animal("NuevaEspecie33","NuevaRaza")) > 0) {
                 System.out.println("Animal guardado exitosamente");
             } else {
@@ -85,7 +85,7 @@ public class AplicacionTest {
     }
 
     public  static void testearCliente(){
-        ClienteServiceImpl clienteService= new ClienteServiceImpl();
+        UsuarioServiceImpl usuarioService= new UsuarioServiceImpl();
         Connection conexion=null;
         try {
             conexion=  ConexionMySQL.getConexionMySQL();
@@ -97,62 +97,58 @@ public class AplicacionTest {
             }
 
             //save
-            if(clienteService.save(new Cliente(
-                    0,"N",
-                    "A","D",
-                    "C","Dir"))>0){
-                System.out.println("\t\t\tCliente guardado exitosamente");
+            if(usuarioService.save(new Usuario(
+                    0,"N","A",null,"CLIENTE",
+                    "N","A","D","C","Dir",null,"ACTIVO"))>0){
+                System.out.println("\t\t\tUsuario guardado exitosamente");
 
             }else{
                 System.out.println("Error guardando");
             }
             //save
-            if(clienteService.save(new Cliente(
-                    0,"N",
-                    "A","D",
-                    "C","Dir"))>0){
-                System.out.println("\t\t\tCliente guardado exitosamente");
+            if(usuarioService.save(new Usuario(
+                    0,"N","A",null,"CLIENTE",
+                    "N","A","D","C","Dir",null,"ACTIVO"))>0){
+                System.out.println("\t\t\tUsuario guardado exitosamente");
 
             }else{
                 System.out.println("Error guardando");
             }
             //update
-            if(clienteService.update(new Cliente(1,"ONN",
-                    "ABVKH","DHIj",
-                    "C","Dir"))>0){
-                System.out.println("\t\t\tCliente actualizado exitosamente");
+            if(usuarioService.update(new Usuario(1,"ONN","ABVKH",null,"CLIENTE",
+                    "ONN","ABVKH","DHIj","C","Dir",null,"ACTIVO"))>0){
+                System.out.println("\t\t\tUsuario actualizado exitosamente");
             }else{
                 System.out.println("Error actualizando");
             }
 
             //delete
-            if(clienteService.delete(1)>0){
+            if(usuarioService.delete(1)>0){
                 System.out.println("\t\t\tCliente eliminado exitosamente");
             }else{
                 System.out.println("\t\t\tError eliminando");
             }
 
-            //finById
-            if(clienteService.finById(2)!=null){
+            //findById
+            if(usuarioService.findById(2)!=null){
                 System.out.println("\t\t\tCliente buscando exitosamente");
             }else{
                 System.out.println("Error buscando");
             }
 
-            //finAll
-             if(clienteService.finAll()!=null) {
-                clienteService.findAll().forEach(System.out::println);
+            //findAll
+             if(usuarioService.findAll()!=null) {
+                usuarioService.findAll().forEach(System.out::println);
 
              }else{
                  System.out.println("Error buscando");
              }
 
 
-            //saveAndFinId
-            if(clienteService.save(new Cliente( 0,"N",
-                    "A","D",
-                    "C","Dir"))>0){
-                System.out.println("\t\t\t Cliente guardado exitosamente");
+            //saveAndFindId
+            if(usuarioService.save(new Usuario( 0,"N","A",null,"CLIENTE",
+                    "N","A","D","C","Dir",null,"ACTIVO"))>0){
+                System.out.println("\t\t\t Usuario guardado exitosamente");
             }else{
                 System.out.println("Error guardando");
             }
@@ -219,21 +215,21 @@ public class AplicacionTest {
                 System.out.println("\t\t\tError eliminando");
             }
 
-            //finById
+            //findById
             if(compraService.findById(2).isPresent()){
                 System.out.println("\t\t\tCliente buscando exitosamente");
             }else{
                 System.out.println("Error buscando");
             }
 
-            //finAll
+            //findAll
             if(compraService.findAll()!=null) {
                 compraService.findAll().forEach(System.out::println);
             }else{
                 System.out.println("Error listando");
             }
 
-            //saveAndFinId
+            //saveAndFindId
             if(compraService.save(new Compra(0,
                     new Date(20,16,03),
                     proveedorService.findById(23).orElse(null),120))>0){
@@ -290,7 +286,7 @@ public class AplicacionTest {
     public static void testearPeidos(){
         PedidoServiceImpl pedidoService= new PedidoServiceImpl();
         ProductoServiceImpl productoService= new ProductoServiceImpl();
-        ClienteServiceImpl clienteService= new ClienteServiceImpl();
+        UsuarioServiceImpl usuarioService= new UsuarioServiceImpl();
         Connection conn=null;
         try{
             conn=ConexionMySQL.getConexionMySQL();
@@ -301,9 +297,9 @@ public class AplicacionTest {
             }
 
             //save
-            Cliente cliente= clienteService.findById(2).orElse(null);
+            Usuario usuario= usuarioService.findById(2).orElse(null);
             Pedido pedido = new Pedido();
-            pedido.setCliente(cliente);
+            pedido.setUsuario(usuario);
             pedido.setEstado("Entregado");
             pedido.setFecha(Date.valueOf(LocalDate.now()));
 
@@ -329,7 +325,7 @@ public class AplicacionTest {
     public static void testearVentas(){
         VentaServiceImpl ventaService= new VentaServiceImpl();
 
-        ClienteServiceImpl clienteService= new ClienteServiceImpl();
+        UsuarioServiceImpl usuarioService= new UsuarioServiceImpl();
         ProductoServiceImpl productoService= new ProductoServiceImpl();
         DetalleVentaServiceImpl detalleVentaService= new DetalleVentaServiceImpl();
         Connection conn=null;
@@ -342,12 +338,12 @@ public class AplicacionTest {
                 System.out.println("\t\t\tConexion establecida");
             }
             // save
-            Cliente cliente= clienteService.findById(10).orElse(null);
+            Usuario usuario= usuarioService.findById(10).orElse(null);
             Producto producto=productoService.findById(49).orElse(null);
 
 
             Venta venta= new Venta();
-            venta.setCliente(cliente);
+            venta.setUsuario(usuario);
             venta.setFecha(Date.valueOf(LocalDate.now()));
 
             DetalleVenta detalleVenta= new DetalleVenta();
@@ -417,7 +413,7 @@ public class AplicacionTest {
                System.out.println("Error actualizando");
            }
 
-           //finAll
+           //findAll
             loteAnimalService.findAll().forEach(
                     loteAnimal -> {
                         System.out.println("\t\t "+ loteAnimal);

@@ -2,7 +2,7 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
 import Dominio.Modelo.Producto;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio relacionada con los productos.
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
-public class ProductoServiceImpl implements ServiceGenerico<Producto, Integer> {
+public class ProductoServiceImpl implements CrudGenerico<Producto, Integer> {
 
     private final ProductoRepositoryImpl productoRepository;
 
@@ -86,10 +86,10 @@ public class ProductoServiceImpl implements ServiceGenerico<Producto, Integer> {
      * @return ID generado o -1 si el objeto es nulo.
      */
     @Override
-    public int saveAndFinId(Producto beans) {
+    public int saveAndFindId(Producto beans) {
         // Verifica que el objeto exista.
         if (beans == null) return -1;
         // Guarda el producto y devuelve el ID generado.
-        return productoRepository.saveAndFinId(beans);
+        return productoRepository.saveAndFindId(beans);
     }
 }

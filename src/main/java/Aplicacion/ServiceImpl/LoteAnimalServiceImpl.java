@@ -3,12 +3,12 @@ package Aplicacion.ServiceImpl;
 import Aplicacion.repositoryimpl.LoteAnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.LoteAnimal;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
 
-public class LoteAnimalServiceImpl implements ServiceGenerico<LoteAnimal, Integer> {
+public class LoteAnimalServiceImpl implements CrudGenerico<LoteAnimal, Integer> {
 
     private final LoteAnimalRepositoryImpl loteAnimalRepository;
 
@@ -46,9 +46,9 @@ public class LoteAnimalServiceImpl implements ServiceGenerico<LoteAnimal, Intege
     }
 
     @Override
-    public int saveAndFinId(LoteAnimal beans) {
+    public int saveAndFindId(LoteAnimal beans) {
         if (beans == null) return -1;
-        return loteAnimalRepository.saveAndFinId(beans);
+        return loteAnimalRepository.saveAndFindId(beans);
     }
 
     public LoteAnimal guardarUnLote(LoteAnimal lote) {

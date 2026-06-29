@@ -7,7 +7,7 @@ import java.util.List;
 public class Pedido {
 
     private int idPedido;
-    private Cliente cliente;
+    private Usuario usuario;
     private Date fecha;
     private String estado;
     private double total;
@@ -24,21 +24,21 @@ public class Pedido {
         this.detalles = detalles;
     }
 
-    public Pedido(Date fecha, Cliente cliente, String estado, double total) {
+    public Pedido(Date fecha, Usuario usuario, String estado, double total) {
         this.fecha = fecha;
-        this.cliente = cliente;
+        this.usuario = usuario;
         this.estado = estado;
         this.total = total;
     }
 
     public Pedido(int id,
             Date fecha,
-            Cliente cliente,
+            Usuario usuario,
             String estado,
             double total) {
         this.fecha = fecha;
         this.idPedido = id;
-        this.cliente = cliente;
+        this.usuario = usuario;
         this.estado = estado;
         this.total = total;
 
@@ -60,12 +60,12 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public String getEstado() {

@@ -112,7 +112,7 @@ public class ConsumoLoteRepositoryImpl implements CrudGenerico<ConsumoLote, Inte
     }
 
     @Override
-    public int saveAndFinId(ConsumoLote beans) {
+    public int saveAndFindId(ConsumoLote beans) {
         String sql = "INSERT INTO consumo_lote (id_lote, id_producto, cantidad, fecha) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

@@ -5,7 +5,8 @@
 CREATE TABLE animal (
                         id_animal INT AUTO_INCREMENT PRIMARY KEY,
                         especie VARCHAR(60),
-                        raza VARCHAR(60)
+                        raza VARCHAR(60),
+                        descripcion TEXT
 );
 
 CREATE TABLE producto (
@@ -14,7 +15,8 @@ CREATE TABLE producto (
                           tipo_producto VARCHAR(60),
                           unidad_medida VARCHAR(30),
                           precio_unidad DECIMAL(10,2),
-                          stock_actual DECIMAL(10,2)
+                          stock_actual DECIMAL(10,2),
+                          descripcion TEXT
 );
 
 CREATE TABLE proveedor (
@@ -25,13 +27,19 @@ CREATE TABLE proveedor (
                            telefono VARCHAR(9)
 );
 
-CREATE TABLE cliente (
-                         id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-                         nombre VARCHAR(50),
-                         apellido VARCHAR(60),
-                         dni VARCHAR(8),
-                         celular VARCHAR(9),
-                         direccion TEXT
+CREATE TABLE usuarios (
+                           id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+                           username VARCHAR(50) NOT NULL UNIQUE,
+                           password VARCHAR(100) NOT NULL,
+                           email VARCHAR(100) UNIQUE,
+                           rol ENUM('ADMIN','CLIENTE') NOT NULL,
+                           nombre VARCHAR(50) NOT NULL,
+                           apellido VARCHAR(60) NOT NULL,
+                           dni VARCHAR(8) UNIQUE,
+                           celular VARCHAR(9),
+                           direccion TEXT,
+                           fecha_registro DATE DEFAULT (CURRENT_DATE),
+                           estado ENUM('ACTIVO','INACTIVO') DEFAULT 'ACTIVO'
 );
 
 -- =========================================
@@ -76,6 +84,7 @@ CREATE TABLE detalle_compra (
                                 id_compra INT,
                                 id_producto INT,
                                 cantidad DECIMAL(10,2),
+                                precio_unitario DECIMAL(10,2),
                                 subtotal DECIMAL(10,2),
                                 FOREIGN KEY (id_compra) REFERENCES compra(id_compra) ON DELETE CASCADE,
                                 FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT
@@ -97,11 +106,11 @@ CREATE TABLE movimiento_almacen (
 
 CREATE TABLE pedido (
                         id_pedido INT AUTO_INCREMENT PRIMARY KEY,
-                        id_cliente INT,
+                        id_usuario INT,
                         fecha DATE DEFAULT (CURRENT_DATE),
                         estado VARCHAR(60),
                         total DECIMAL(10,2),
-                        FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE RESTRICT
+                        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT
 );
 
 CREATE TABLE detalle_pedido (
@@ -109,6 +118,7 @@ CREATE TABLE detalle_pedido (
                                 id_pedido INT,
                                 id_producto INT,
                                 cantidad DECIMAL(10,2),
+                                precio_unitario DECIMAL(10,2),
                                 subtotal DECIMAL(10,2),
                                 FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido) ON DELETE CASCADE,
                                 FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT
@@ -116,47 +126,35 @@ CREATE TABLE detalle_pedido (
 
 CREATE TABLE venta (
                        id_venta INT AUTO_INCREMENT PRIMARY KEY,
-                       id_cliente INT,
+                       id_usuario INT,
                        fecha DATE DEFAULT (CURRENT_DATE),
                        total DECIMAL(10,2),
-                       FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE RESTRICT
+                       FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT
 );
 
 CREATE TABLE detalle_venta (
-                               id_detalle INT AUTO_INCREMENT PRIMARY KEY,
-                               id_venta INT,
-                               id_producto INT,
-                               cantidad DECIMAL(10,2),
-                               subtotal DECIMAL(10,2),
-                               FOREIGN KEY (id_venta) REFERENCES venta(id_venta) ON DELETE CASCADE,
-                               FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT
+                                id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+                                id_venta INT,
+                                id_producto INT,
+                                cantidad DECIMAL(10,2),
+                                precio_unitario DECIMAL(10,2),
+                                subtotal DECIMAL(10,2),
+                                FOREIGN KEY (id_venta) REFERENCES venta(id_venta) ON DELETE CASCADE,
+                                FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT
 );
 
-CREATE TABLE empleados (
-                               id_empleado INT AUTO_INCREMENT PRIMARY KEY,
-                               nombres VARCHAR(100) NOT NULL,
-                               apellidos VARCHAR(100) NOT NULL,
-                               usuario VARCHAR(50) NOT NULL UNIQUE,
-                               contrasena VARCHAR(100) NOT NULL,
-                               rol ENUM('ADMINISTRADOR','USUARIO') NOT NULL,
-                               estado ENUM('ACTIVO','INACTIVO') DEFAULT 'ACTIVO'
+-- =========================================
+--  CONFIGURACIÓN DE LA EMPRESA
+-- =========================================
+
+CREATE TABLE empresa(
+    id_empresa INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(80),
+    razon_social VARCHAR(90),
+    ruc VARCHAR(11)
 );
-INSERT INTO empleados
-(nombres, apellidos, usuario, contrasena, rol)
+
+INSERT INTO usuarios (username, password, email, rol, nombre, apellido, dni, celular, direccion)
 VALUES
-('Juan', 'Perez', 'admin', '1234', 'ADMINISTRADOR');
-
-INSERT INTO empleados
-(nombres, apellidos, usuario, contrasena, rol)
-VALUES
-('Adrian', 'Espinoza', 'adrian', '1234', 'USUARIO');
-
-
-
-Create Table empresa(
-    id_empresa int auto_increment primary key,
-    nombre varchar(80),
-    razon_social varchar(90),
-    ruc varchar(11),
-
-)
+('admin', '1234', 'admin@terracorp.com', 'ADMIN', 'Juan', 'Perez', '12345678', '999888777', 'Av. Principal 123'),
+('adrian', '1234', 'adrian@email.com', 'CLIENTE', 'Adrian', 'Espinoza', '87654321', '999111222', 'Jr. Las Flores 456');

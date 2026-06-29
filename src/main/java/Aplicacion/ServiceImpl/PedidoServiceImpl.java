@@ -3,12 +3,12 @@ package Aplicacion.ServiceImpl;
 import Aplicacion.repositoryimpl.PedidoRepositoryImpl;
 import Dominio.Modelo.DetallePedido;
 import Dominio.Modelo.Pedido;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
 
-public class PedidoServiceImpl implements ServiceGenerico<Pedido, Integer> {
+public class PedidoServiceImpl implements CrudGenerico<Pedido, Integer> {
 
     private final PedidoRepositoryImpl pedidoRepository;
     private final DetallePedidoServiceImpl detallePedidoServiceImpl;
@@ -20,13 +20,13 @@ public class PedidoServiceImpl implements ServiceGenerico<Pedido, Integer> {
 //prueba
     @Override
     public int save(Pedido beans) {
-        if (beans == null || beans.getCliente() == null) return -1;
+        if (beans == null || beans.getUsuario() == null) return -1;
         double total=0;
         total=beans.getDetalles().stream()
                 .mapToDouble(DetallePedido::getSubtotal)
                 .sum();
         beans.setTotal(total);
-        int idGenerado=pedidoRepository.saveAndFinId(beans);
+        int idGenerado=pedidoRepository.saveAndFindId(beans);
         if(idGenerado>0){
             beans.getDetalles().forEach(p->p.getPedido().setIdPedido(idGenerado));
          int filasAfectadas=   beans.getDetalles().stream()
@@ -65,9 +65,9 @@ public class PedidoServiceImpl implements ServiceGenerico<Pedido, Integer> {
     }
 
     @Override
-    public int saveAndFinId(Pedido beans) {
-        if (beans == null || beans.getCliente() == null) return -1;
-        return pedidoRepository.saveAndFinId(beans);
+    public int saveAndFindId(Pedido beans) {
+        if (beans == null || beans.getUsuario() == null) return -1;
+        return pedidoRepository.saveAndFindId(beans);
     }
 
     public Pedido obtenerUnPedidoPorId(Long id) {

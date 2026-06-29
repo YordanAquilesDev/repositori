@@ -121,7 +121,7 @@ public class LoteAnimalRepositoryImpl implements CrudGenerico<LoteAnimal, Intege
     }
 
     @Override
-    public int saveAndFinId(LoteAnimal beans) {
+    public int saveAndFindId(LoteAnimal beans) {
         String sql = "INSERT INTO lote_animal (id_animal, fecha_inicio, cantidad_inicio, cantidad_actual, peso_promedio, estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -153,7 +153,7 @@ public class LoteAnimalRepositoryImpl implements CrudGenerico<LoteAnimal, Intege
     }
 
     public LoteAnimal guardarLoteAnimal(LoteAnimal loteAnimal) {
-        int id = saveAndFinId(loteAnimal);
+        int id = saveAndFindId(loteAnimal);
         if (id != -1) {
             loteAnimal.setIdLote(id);
         }

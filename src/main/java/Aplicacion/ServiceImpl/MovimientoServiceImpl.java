@@ -2,12 +2,12 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.MovimientoRepositoryImpl;
 import Dominio.Modelo.MovimientoAlmacen;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
 
-public class MovimientoServiceImpl implements ServiceGenerico<MovimientoAlmacen, Integer> {
+public class MovimientoServiceImpl implements CrudGenerico<MovimientoAlmacen, Integer> {
 
     private final MovimientoRepositoryImpl movimientoRepository;
 
@@ -45,8 +45,8 @@ public class MovimientoServiceImpl implements ServiceGenerico<MovimientoAlmacen,
     }
 
     @Override
-    public int saveAndFinId(MovimientoAlmacen beans) {
+    public int saveAndFindId(MovimientoAlmacen beans) {
         if (beans == null) return -1;
-        return movimientoRepository.saveAndFinId(beans);
+        return movimientoRepository.saveAndFindId(beans);
     }
 }

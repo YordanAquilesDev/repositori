@@ -3,7 +3,7 @@ package Aplicacion.ServiceImpl;
 import Aplicacion.repositoryimpl.CompraRepositoryImpl;
 import Dominio.Modelo.Compra;
 import Dominio.Modelo.DetalleCompra;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.sql.Date;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio de las compras.
  * Realiza validaciones antes de enviar la información al repositorio.
  */
-public class CompraServiceImpl implements ServiceGenerico<Compra, Integer> {
+public class CompraServiceImpl implements CrudGenerico<Compra, Integer> {
 
     // Repositorio encargado de realizar las operaciones CRUD de Compra en la base de datos.
     private final CompraRepositoryImpl compraRepository;
@@ -56,7 +56,7 @@ public class CompraServiceImpl implements ServiceGenerico<Compra, Integer> {
         beans.setTotal(total);
         
         // Guarda la compra y obtiene el ID generado automáticamente.   
-        int idCompra = saveAndFinId(beans);
+        int idCompra = saveAndFindId(beans);
         
          // Si la compra fue registrada correctamente.
         if (idCompra > 0) {
@@ -132,11 +132,11 @@ public class CompraServiceImpl implements ServiceGenerico<Compra, Integer> {
      * @return ID generado o -1 si los datos son inválidos.
      */
     @Override
-    public int saveAndFinId(Compra beans) {
+    public int saveAndFindId(Compra beans) {
          // Verifica que la compra y el proveedor existan.
         if (beans == null || beans.getProveedor() == null) return -1;
         // Guarda la compra y devuelve el ID generado.
-        return compraRepository.saveAndFinId(beans);
+        return compraRepository.saveAndFindId(beans);
     }
 
      /**

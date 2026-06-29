@@ -16,5 +16,5 @@ public interface CrudGenerico<T, ID> {
 
     List<T> findAll();
 
-    int saveAndFinId(T beans);
+    int saveAndFindId(T beans);
 }

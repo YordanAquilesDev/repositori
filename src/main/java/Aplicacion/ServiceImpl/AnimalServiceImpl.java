@@ -2,7 +2,7 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
-import Dominio.Service.ServiceGenerico;
+import Dominio.repository.CrudGenerico;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio relacionada con los animales.
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
-public class AnimalServiceImpl implements ServiceGenerico<Animal, Integer> {
+public class AnimalServiceImpl implements CrudGenerico<Animal, Integer> {
 //funcioan ok sin ningun problemas
     private final AnimalRepositoryImpl animalRepository;
     
@@ -93,41 +93,21 @@ public class AnimalServiceImpl implements ServiceGenerico<Animal, Integer> {
      * @return ID generado o -1 si los datos son inválidos.
      */
     @Override
-    public int saveAndFinId(Animal beans) {
+    public int saveAndFindId(Animal beans) {
         // Verifica que el objeto exista y tenga los datos obligatorios
         if (beans == null || beans.getRaza() == null || beans.getEspecie() == null) {
             return -1;
         }
         //guarda el animal y regresa el id generado
-        return animalRepository.saveAndFinId(beans);
+        return animalRepository.saveAndFindId(beans);
     }
 
     /**
-     * Busca un animal por su ID.
-     * @param id Identificador del animal.
-     * @return Objeto Animal encontrado o null si no existe.
-     */
-    public Animal finById(Integer id) {
-          // Convierte el Optional en un objeto Animal.
-        // Si no encuentra el registro devuelve null.
-        return findById(id).orElse(null);
-    }
-
-    /**
-     * Obtiene todos los animales registrados.
-     * @return Lista completa de animales.
-     */
-    public List<Animal> finAll() {
-        // Devuelve la lista completa de animales.
-        return findAll();
-    }
-
-        /**
      * Obtiene la lista de animales destinada al módulo de consumo.
      * @return Lista de animales obtenida desde el repositorio.
      */
-    public List<Animal> finAllConsumer() {
+    public List<Animal> findAllConsumer() {
         // Recupera los animales mediante una consulta específica del repositorio.
-        return animalRepository.finAllConsumer();
+        return animalRepository.findAllConsumer();
     }
 }

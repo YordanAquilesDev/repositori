@@ -116,7 +116,7 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
     }
 
     @Override
-    public int saveAndFinId(DetallePedido detallePedido) {
+    public int saveAndFindId(DetallePedido detallePedido) {
         String sql = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, subtotal) "
                 + "VALUES (?, ?, ?, ?)";
 
