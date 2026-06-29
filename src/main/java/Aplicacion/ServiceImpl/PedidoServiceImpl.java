@@ -17,7 +17,7 @@ public class PedidoServiceImpl implements ServiceGenerico<Pedido, Integer> {
         this.pedidoRepository = new PedidoRepositoryImpl();
         this.detallePedidoServiceImpl = new DetallePedidoServiceImpl();
     }
-
+//prueba
     @Override
     public int save(Pedido beans) {
         if (beans == null || beans.getCliente() == null) return -1;
