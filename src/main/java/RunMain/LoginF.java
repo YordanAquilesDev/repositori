@@ -4,6 +4,8 @@
  */
 package RunMain;
 
+import Aplicacion.ServiceImpl.UsuarioServiceImpl;
+import Dominio.Modelo.Usuario;
 import Presentacion.GuiAdmin.HomeAdmin;
 import Presentacion.GuiUsuario.HomeUsuario;
 
@@ -89,7 +91,7 @@ public class LoginF extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
+        btnIniciarSesion.doClick();
     }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
@@ -97,39 +99,38 @@ public class LoginF extends javax.swing.JPanel {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        // TODO add your handling code here:
-        // 1. Aquí capturas lo que el usuario escribió (Simulación de tu consulta)
     String username = txtUsuario.getText();
     String password = txtPassword.getText();
     
-    // 2. Supongamos que tu base de datos o lógica te devuelve el rol en una variable string (ej: "ADMIN" o "CLIENTE")
-    // (Por ahora simulamos que si escribe 'admin' le da el rol ADMIN)
-    String rolUsuario = username.equalsIgnoreCase("admin") ? "ADMIN" : "CLIENTE"; 
+    UsuarioServiceImpl usuarioService = new UsuarioServiceImpl();
+    Usuario usuario = usuarioService.login(username, password);
     
-    // 3. Buscamos el JFrame Main que está sosteniendo visualmente a este panel
+    if (usuario == null) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Usuario o contraseña incorrectos.",
+                "Error de inicio de sesión",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
     java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
     
     if (comp instanceof Main) {
         Main ventanaPrincipal = (Main) comp;
         
-        // 4. Evaluamos el rol y mandamos el JPanel correcto al método del Main
-        if (rolUsuario.equals("ADMIN")) {
-            // Instanciamos la pantalla del Administrador
-            HomeAdmin panelAdmin = new HomeAdmin();
+        if ("ADMIN".equals(usuario.getRol())) {
+            HomeAdmin panelAdmin = new HomeAdmin(usuario);
             ventanaPrincipal.cambiarPantalla(panelAdmin);
-            
         } else {
-            // Instanciamos la pantalla del Usuario/Cliente común
-            HomeUsuario panelUsuario = new HomeUsuario();
+            HomeUsuario panelUsuario = new HomeUsuario(usuario);
             ventanaPrincipal.cambiarPantalla(panelUsuario);
         }
-        
     } else {
-        javax.swing.JOptionPane.showMessageDialog(this, "Error crítico: No se encontró la ventana principal.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Error crítico: No se encontró la ventana principal.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
     }
-        
-        
-        
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
 

@@ -4,16 +4,21 @@
  */
 package Presentacion.GuiAdmin;
 
+import Dominio.Modelo.Usuario;
+
 /**
  *
  * @author yordan
  */
 public class HomeAdmin extends javax.swing.JPanel {
 
+    private Usuario usuarioLogueado;
+
     /**
      * Creates new form HomeAdmin
      */
-    public HomeAdmin() {
+    public HomeAdmin(Usuario usuario) {
+        this.usuarioLogueado = usuario;
         initComponents();
     }
 
