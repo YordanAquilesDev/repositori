@@ -112,6 +112,19 @@ private void configurarResponsivo() {
         java.awt.EventQueue.invokeLater(() -> new Main().setVisible(true));
     }
 
+        // Reemplaza o agrega este método dentro de tu Main.java
+    public void cambiarPantalla(javax.swing.JPanel nuevaPantalla) {
+        // 1. Limpiamos el contenedor actual del Login
+        contenedorLogin.removeAll();
+
+        // 2. Insertamos el panel correspondiente (ya sea HomeAdmin o HomeUsuario)
+        // Gracias al BorderLayout, heredará de inmediato el tamaño completo
+        contenedorLogin.add(nuevaPantalla, java.awt.BorderLayout.CENTER);
+
+        // 3. Forzamos a Swing a refrescar los gráficos en pantalla
+        contenedorLogin.revalidate();
+        contenedorLogin.repaint();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contenedorLogin;
     private RunMain.LoginF loginF1;

@@ -4,6 +4,8 @@
  */
 package RunMain;
 
+import Presentacion.GuiAdmin.HomeAdmin;
+import Presentacion.GuiUsuario.HomeUsuario;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 
@@ -31,16 +33,16 @@ public class LoginF extends javax.swing.JPanel {
         this.setLayout(new GridBagLayout());
         
         // 2. Quitamos el JLayeredPane de donde lo puso NetBeans originalmente
-        this.remove(jLayeredPane1);
+        this.remove(contenedorLogin);
         
         // 3. Forzamos al JLayeredPane a mantener su tamaño original de tarjeta de diseño
-        jLayeredPane1.setMinimumSize(new java.awt.Dimension(1410, 770));
-        jLayeredPane1.setPreferredSize(new java.awt.Dimension(1410, 770));
-        jLayeredPane1.setMaximumSize(new java.awt.Dimension(1410, 770));
+        contenedorLogin.setMinimumSize(new java.awt.Dimension(1410, 770));
+        contenedorLogin.setPreferredSize(new java.awt.Dimension(1410, 770));
+        contenedorLogin.setMaximumSize(new java.awt.Dimension(1410, 770));
         
         // 4. Volvemos a insertar el JLayeredPane. Al estar la raíz en GridBagLayout,
         // la tarjeta se quedará flotando en el CENTRO exacto de cualquier monitor.
-        this.add(jLayeredPane1, new java.awt.GridBagConstraints());
+        this.add(contenedorLogin, new java.awt.GridBagConstraints());
         
         // 5. Pequeño truco estético: le ponemos un color de fondo gris claro/crema a la raíz
         // para que combine con el diseño de TerraCrop en lugar del fucsia o gris oscuro.
@@ -56,34 +58,34 @@ public class LoginF extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLayeredPane1 = new javax.swing.JLayeredPane();
+        contenedorLogin = new javax.swing.JLayeredPane();
         txtUsuario = new javax.swing.JTextField();
         txtPasword = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         btnIniciarSesion = new javax.swing.JButton();
 
-        setLayout(new java.awt.GridLayout());
+        setLayout(new java.awt.GridLayout(1, 0));
 
-        jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        contenedorLogin.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtUsuario.setBackground(new java.awt.Color(253, 242, 248));
         txtUsuario.setBorder(null);
         txtUsuario.addActionListener(this::txtUsuarioActionPerformed);
-        jLayeredPane1.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 370, 250, 30));
+        contenedorLogin.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 370, 250, 30));
 
         txtPasword.setBackground(new java.awt.Color(253, 243, 250));
         txtPasword.setBorder(null);
         txtPasword.addActionListener(this::txtPaswordActionPerformed);
-        jLayeredPane1.add(txtPasword, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 280, 30));
+        contenedorLogin.add(txtPasword, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 280, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/login.png"))); // NOI18N
-        jLayeredPane1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1410, 780));
+        contenedorLogin.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1410, 780));
 
         btnIniciarSesion.setText("jButton1");
         btnIniciarSesion.addActionListener(this::btnIniciarSesionActionPerformed);
-        jLayeredPane1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 533, 360, 30));
+        contenedorLogin.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 533, 360, 30));
 
-        add(jLayeredPane1);
+        add(contenedorLogin);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtPaswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaswordActionPerformed
@@ -96,17 +98,45 @@ public class LoginF extends javax.swing.JPanel {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
+        // 1. Aquí capturas lo que el usuario escribió (Simulación de tu consulta)
+    String username = txtUsuario.getText();
+    String password = txtPasword.getText();
+    
+    // 2. Supongamos que tu base de datos o lógica te devuelve el rol en una variable string (ej: "ADMIN" o "CLIENTE")
+    // (Por ahora simulamos que si escribe 'admin' le da el rol ADMIN)
+    String rolUsuario = username.equalsIgnoreCase("admin") ? "ADMIN" : "CLIENTE"; 
+    
+    // 3. Buscamos el JFrame Main que está sosteniendo visualmente a este panel
+    java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
+    
+    if (comp instanceof Main) {
+        Main ventanaPrincipal = (Main) comp;
+        
+        // 4. Evaluamos el rol y mandamos el JPanel correcto al método del Main
+        if (rolUsuario.equals("ADMIN")) {
+            // Instanciamos la pantalla del Administrador
+            HomeAdmin panelAdmin = new HomeAdmin();
+            ventanaPrincipal.cambiarPantalla(panelAdmin);
+            
+        } else {
+            // Instanciamos la pantalla del Usuario/Cliente común
+            HomeUsuario panelUsuario = new HomeUsuario();
+            ventanaPrincipal.cambiarPantalla(panelUsuario);
+        }
+        
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error crítico: No se encontró la ventana principal.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+        
+        
         
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
-    private void cambiarPantalla(JPanel panel){
-        
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JLayeredPane contenedorLogin;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JTextField txtPasword;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
