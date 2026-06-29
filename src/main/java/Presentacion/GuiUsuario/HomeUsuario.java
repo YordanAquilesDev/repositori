@@ -4,16 +4,21 @@
  */
 package Presentacion.GuiUsuario;
 
+import Dominio.Modelo.Usuario;
+
 /**
  *
  * @author yordan
  */
 public class HomeUsuario extends javax.swing.JPanel {
 
+    private Usuario usuarioLogueado;
+
     /**
      * Creates new form HomeUsuario
      */
-    public HomeUsuario() {
+    public HomeUsuario(Usuario usuario) {
+        this.usuarioLogueado = usuario;
         initComponents();
     }
 
