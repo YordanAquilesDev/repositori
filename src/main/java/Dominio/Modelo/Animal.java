@@ -16,6 +16,7 @@ public class Animal {
         this.raza = raza;
     }
 
+    // bgougoihpiohjnpolñjb giutgyiouyhopijp
     public Animal(String especie, String raza) {
         this.especie = especie;
         this.raza = raza;
