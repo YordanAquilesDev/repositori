@@ -15,6 +15,9 @@ public class Pedido {
 
     public Pedido() {
     }
+    public Pedido(int id){
+        this.idPedido=id;
+    }
 
     public List<DetallePedido> getDetalles() {
         return detalles;

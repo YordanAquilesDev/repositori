@@ -1,6 +1,8 @@
 package Aplicacion.repositoryimpl;
 
+import Aplicacion.ServiceImpl.PedidoServiceImpl;
 import Dominio.Modelo.DetallePedido;
+import Dominio.Modelo.Pedido;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -17,8 +19,10 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     private final ProductoRepositoryImpl productoRepository;
 
+
     public DetallePedidoRepositoryImpl() {
         this.productoRepository = new ProductoRepositoryImpl();
+
     }
 
     @Override
@@ -77,7 +81,7 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
 
     @Override
     public Optional<DetallePedido> findById(Integer id) {
-        String sql = "SELECT * FROM detalle_pedido WHERE id_detalle = ?";
+        String sql = "SELECT * FROM detalle_pedido WHERE id_pedido = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -167,9 +171,10 @@ public class DetallePedidoRepositoryImpl implements CrudGenerico<DetallePedido, 
     }
 
     private DetallePedido mapearDetallePedido(ResultSet rs) throws SQLException {
+       Pedido pedido= new Pedido(rs.getInt("id_pedido"));
         return new DetallePedido(
                 rs.getInt("id_detalle"),
-                null,
+                pedido,
                 productoRepository.findById(rs.getInt("id_producto")).orElse(null),
                 rs.getDouble("cantidad"),
                 rs.getDouble("subtotal")

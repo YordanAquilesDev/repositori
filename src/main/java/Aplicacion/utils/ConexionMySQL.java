@@ -10,9 +10,9 @@ public class ConexionMySQL {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/granjaerp?serverTimezone=UTC";
+            String url = "jdbc:mysql://localhost:3306/granjaerpfinal?serverTimezone=UTC";
             String user = "root";
-            String password = "mysql";
+            String password = "961508";
              conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (ClassNotFoundException e) {

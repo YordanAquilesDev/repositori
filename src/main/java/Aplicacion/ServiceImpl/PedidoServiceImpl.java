@@ -11,13 +11,13 @@ import java.util.Optional;
 public class PedidoServiceImpl implements CrudGenerico<Pedido, Integer> {
 
     private final PedidoRepositoryImpl pedidoRepository;
-    private final DetallePedidoServiceImpl detallePedidoServiceImpl;
+    private final DetallePedidoServiceImpl detallePedidoService;
 
     public PedidoServiceImpl() {
         this.pedidoRepository = new PedidoRepositoryImpl();
-        this.detallePedidoServiceImpl = new DetallePedidoServiceImpl();
+        this.detallePedidoService = new DetallePedidoServiceImpl();
     }
-//prueba
+   //prueba
     @Override
     public int save(Pedido beans) {
         if (beans == null || beans.getUsuario() == null) return -1;
@@ -30,7 +30,7 @@ public class PedidoServiceImpl implements CrudGenerico<Pedido, Integer> {
         if(idGenerado>0){
             beans.getDetalles().forEach(p->p.getPedido().setIdPedido(idGenerado));
          int filasAfectadas=   beans.getDetalles().stream()
-                    .mapToInt(detallePedidoServiceImpl::save).
+                    .mapToInt(detallePedidoService::save).
                     sum();
 
          if(filasAfectadas>0){

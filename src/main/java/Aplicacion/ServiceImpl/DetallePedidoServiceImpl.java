@@ -2,6 +2,7 @@ package Aplicacion.ServiceImpl;
 
 import Aplicacion.repositoryimpl.DetallePedidoRepositoryImpl;
 import Dominio.Modelo.DetallePedido;
+import Dominio.Modelo.Pedido;
 import Dominio.repository.CrudGenerico;
 
 import java.util.List;
@@ -14,9 +15,13 @@ import java.util.Optional;
 public class DetallePedidoServiceImpl implements CrudGenerico<DetallePedido, Integer> {
 
     private final DetallePedidoRepositoryImpl detallePedidoRepository;
+    private final PedidoServiceImpl pedidoService;
+ 
 
     public DetallePedidoServiceImpl() {
         this.detallePedidoRepository = new DetallePedidoRepositoryImpl();
+        this.pedidoService = new PedidoServiceImpl();
+
     }
 
     /**
@@ -76,10 +81,22 @@ public class DetallePedidoServiceImpl implements CrudGenerico<DetallePedido, Int
      * Obtiene todos los detalles de pedido registrados.
      * @return Lista con todos los detalles de pedido almacenados.
      */
-    @Override
-    public List<DetallePedido> findAll() {
-        return detallePedidoRepository.findAll();
-    }
+     @Override
+     public List<DetallePedido> findAll() {
+         // Almacenamos la lista mapeada y modificada en memoria
+         List<DetallePedido> detallesModificados = detallePedidoRepository.findAll().stream()
+                 .map(detallePedido -> {
+                     if (detallePedido.getPedido() != null) {
+                         detallePedido.setPedido(
+                                 pedidoService.findById(detallePedido.getPedido().getIdPedido()).orElse(null)
+                         );
+                     }
+                     return detallePedido;
+                 }).toList();
+
+         // Retornamos la lista que ya tiene los cambios en memoria
+         return detallesModificados;
+     }
 
      /**
      * Guarda un detalle de pedido y devuelve el ID generado automáticamente.
