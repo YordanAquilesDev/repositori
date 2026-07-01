@@ -1,4 +1,4 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
 import Dominio.Modelo.LoteAnimal;
 import Dominio.repository.CrudGenerico;

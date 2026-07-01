@@ -1,4 +1,4 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
 import Aplicacion.ServiceImpl.PedidoServiceImpl;
 import Dominio.Modelo.DetallePedido;

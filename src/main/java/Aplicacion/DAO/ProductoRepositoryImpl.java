@@ -1,6 +1,6 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
-import Dominio.Modelo.Proveedor;
+import Dominio.Modelo.Producto;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -13,19 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer> {
+public class ProductoRepositoryImpl implements CrudGenerico<Producto, Integer> {
 
     @Override
-    public int save(Proveedor beans) {
-        String sql = "INSERT INTO proveedor (nombre, apellido, dni, telefono) VALUES (?, ?, ?, ?)";
+    public int save(Producto beans) {
+        String sql = "INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, beans.getNombre());
-            pstmt.setString(2, beans.getApellido());
-            pstmt.setString(3, beans.getDni());
-            pstmt.setString(4, beans.getTelefono());
+            pstmt.setString(2, beans.getTipoProducto());
+            pstmt.setString(3, beans.getUnidadMedida());
+            pstmt.setDouble(4, beans.getPrecioUnidad());
+            pstmt.setDouble(5, beans.getStockActual());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -34,17 +36,19 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public int update(Proveedor beans) {
-        String sql = "UPDATE proveedor SET nombre = ?, apellido = ?, dni = ?, telefono = ? WHERE id_proveedor = ?";
+    public int update(Producto beans) {
+        String sql = "UPDATE producto SET nombre = ?, tipo_producto = ?, unidad_medida = ?, "
+                + "precio_unidad = ?, stock_actual = ? WHERE id_producto = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, beans.getNombre());
-            pstmt.setString(2, beans.getApellido());
-            pstmt.setString(3, beans.getDni());
-            pstmt.setString(4, beans.getTelefono());
-            pstmt.setInt(5, beans.getIdProveedor());
+            pstmt.setString(2, beans.getTipoProducto());
+            pstmt.setString(3, beans.getUnidadMedida());
+            pstmt.setDouble(4, beans.getPrecioUnidad());
+            pstmt.setDouble(5, beans.getStockActual());
+            pstmt.setInt(6, beans.getIdProducto());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -54,7 +58,7 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
 
     @Override
     public int delete(Integer id) {
-        String sql = "DELETE FROM proveedor WHERE id_proveedor = ?";
+        String sql = "DELETE FROM producto WHERE id_producto = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -67,21 +71,23 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public Optional<Proveedor> findById(Integer id) {
-        String sql = "SELECT * FROM proveedor WHERE id_proveedor = ?;";
+    public Optional<Producto> findById(Integer id) {
+        String sql = "SELECT * FROM producto WHERE id_producto = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(new Proveedor(
-                            rs.getInt("id_proveedor"),
+                    return Optional.of(new Producto(
+                            rs.getInt("id_producto"),
+                            rs.getDouble("stock_actual"),
+                            rs.getString("unidad_medida"),
                             rs.getString("nombre"),
-                            rs.getString("apellido"),
-                            rs.getString("dni"),
-                            rs.getString("telefono")
+                            rs.getString("tipo_producto"),
+                            rs.getDouble("precio_unidad")
                     ));
                 }
             }
@@ -93,21 +99,22 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public List<Proveedor> findAll() {
-        List<Proveedor> list = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor";
+    public List<Producto> findAll() {
+        List<Producto> list = new ArrayList<>();
+        String sql = "SELECT * FROM producto";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                list.add(new Proveedor(
-                        rs.getInt("id_proveedor"),
+                list.add(new Producto(
+                        rs.getInt("id_producto"),
+                        rs.getDouble("stock_actual"),
+                        rs.getString("unidad_medida"),
                         rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("dni"),
-                        rs.getString("telefono")
+                        rs.getString("tipo_producto"),
+                        rs.getDouble("precio_unidad")
                 ));
             }
 
@@ -118,16 +125,18 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public int saveAndFindId(Proveedor beans) {
-        String sql = "INSERT INTO proveedor (nombre, apellido, dni, telefono) VALUES (?, ?, ?, ?)";
+    public int saveAndFindId(Producto beans) {
+        String sql = "INSERT INTO producto (nombre, tipo_producto, unidad_medida, precio_unidad, stock_actual) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, beans.getNombre());
-            pstmt.setString(2, beans.getApellido());
-            pstmt.setString(3, beans.getDni());
-            pstmt.setString(4, beans.getTelefono());
+            pstmt.setString(2, beans.getTipoProducto());
+            pstmt.setString(3, beans.getUnidadMedida());
+            pstmt.setDouble(4, beans.getPrecioUnidad());
+            pstmt.setDouble(5, beans.getStockActual());
 
             int filas = pstmt.executeUpdate();
             if (filas == 0) return -1;
@@ -142,11 +151,4 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
         }
     }
 
-    public Proveedor buscarPorId(long id) {
-        return findById((int) id).orElse(null);
-    }
-
-    public List<Proveedor> listarProveedores() {
-        return findAll();
-    }
 }

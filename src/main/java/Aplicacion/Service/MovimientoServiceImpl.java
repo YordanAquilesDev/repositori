@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.repositoryimpl.MovimientoRepositoryImpl;
+import Aplicacion.DAO.MovimientoRepositoryImpl;
 import Dominio.Modelo.MovimientoAlmacen;
 import Dominio.repository.CrudGenerico;
 

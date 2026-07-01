@@ -1,4 +1,4 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
 import java.sql.*;
 import java.util.ArrayList;

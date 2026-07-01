@@ -1,9 +1,9 @@
 package TestDB;
 
-import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
-import Aplicacion.repositoryimpl.UsuarioRepositoryImpl;
-import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
-import Aplicacion.repositoryimpl.ProveedorRepositoryImpl;
+import Aplicacion.DAO.AnimalRepositoryImpl;
+import Aplicacion.DAO.UsuarioRepositoryImpl;
+import Aplicacion.DAO.ProductoRepositoryImpl;
+import Aplicacion.DAO.ProveedorRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.Usuario;
 import Dominio.Modelo.Producto;

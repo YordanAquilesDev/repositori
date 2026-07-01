@@ -1,6 +1,6 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
-import Dominio.Modelo.Pedido;
+import Dominio.Modelo.MovimientoAlmacen;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -13,25 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
+public class MovimientoRepositoryImpl implements CrudGenerico<MovimientoAlmacen, Integer> {
 
-    private final UsuarioRepositoryImpl usuarioRepository;
-
-    public PedidoRepositoryImpl() {
-        this.usuarioRepository = new UsuarioRepositoryImpl();
-    }
+    private final ProductoRepositoryImpl productoRepository = new ProductoRepositoryImpl();
 
     @Override
-    public int save(Pedido beans) {
-        String sql = "INSERT INTO pedido (id_usuario, fecha, estado, total) VALUES (?, ?, ?, ?)";
+    public int save(MovimientoAlmacen beans) {
+        String sql = "INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
-            pstmt.setDate(2, beans.getFecha());
-            pstmt.setString(3, beans.getEstado());
-            pstmt.setDouble(4, beans.getTotal());
+            pstmt.setInt(1, beans.getProducto().getIdProducto());
+            pstmt.setString(2, beans.getTipoMovimiento());
+            pstmt.setDouble(3, beans.getCantidad());
+            pstmt.setDate(4, beans.getFecha());
+            pstmt.setString(5, beans.getContexto());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -40,17 +38,20 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
     }
 
     @Override
-    public int update(Pedido beans) {
-        String sql = "UPDATE pedido SET id_usuario = ?, fecha = ?, estado = ?, total = ? WHERE id_pedido = ?";
+    public int update(MovimientoAlmacen beans) {
+        String sql = "UPDATE movimiento_almacen "
+                + "SET id_producto = ?, tipo_movimiento = ?, cantidad = ?, fecha = ?, contexto = ? "
+                + "WHERE id_movimiento = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
-            pstmt.setDate(2, beans.getFecha());
-            pstmt.setString(3, beans.getEstado());
-            pstmt.setDouble(4, beans.getTotal());
-            pstmt.setInt(5, beans.getIdPedido());
+            pstmt.setInt(1, beans.getProducto().getIdProducto());
+            pstmt.setString(2, beans.getTipoMovimiento());
+            pstmt.setDouble(3, beans.getCantidad());
+            pstmt.setDate(4, beans.getFecha());
+            pstmt.setString(5, beans.getContexto());
+            pstmt.setInt(6, beans.getIdMovimiento());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -60,7 +61,7 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
 
     @Override
     public int delete(Integer id) {
-        String sql = "DELETE FROM pedido WHERE id_pedido = ?";
+        String sql = "DELETE FROM movimiento_almacen WHERE id_movimiento = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -73,8 +74,8 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
     }
 
     @Override
-    public Optional<Pedido> findById(Integer id) {
-        String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
+    public Optional<MovimientoAlmacen> findById(Integer id) {
+        String sql = "SELECT * FROM movimiento_almacen WHERE id_movimiento = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -94,35 +95,37 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
     }
 
     @Override
-    public List<Pedido> findAll() {
-        List<Pedido> list = new ArrayList<>();
-        String sql = "SELECT * FROM pedido";
+    public List<MovimientoAlmacen> findAll() {
+        List<MovimientoAlmacen> lista = new ArrayList<>();
+        String sql = "SELECT * FROM movimiento_almacen";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                list.add(mapear(rs));
+                lista.add(mapear(rs));
             }
 
-            return list;
+            return lista;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public int saveAndFindId(Pedido beans) {
-        String sql = "INSERT INTO pedido (id_usuario, fecha, estado, total) VALUES (?, ?, ?, ?)";
+    public int saveAndFindId(MovimientoAlmacen beans) {
+        String sql = "INSERT INTO movimiento_almacen (id_producto, tipo_movimiento, cantidad, fecha, contexto) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
-            pstmt.setDate(2, beans.getFecha());
-            pstmt.setString(3, beans.getEstado());
-            pstmt.setDouble(4, beans.getTotal());
+            pstmt.setInt(1, beans.getProducto().getIdProducto());
+            pstmt.setString(2, beans.getTipoMovimiento());
+            pstmt.setDouble(3, beans.getCantidad());
+            pstmt.setDate(4, beans.getFecha());
+            pstmt.setString(5, beans.getContexto());
 
             int filas = pstmt.executeUpdate();
             if (filas == 0) return -1;
@@ -137,13 +140,14 @@ public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
         }
     }
 
-    private Pedido mapear(ResultSet rs) throws SQLException {
-        return new Pedido(
-                rs.getInt("id_pedido"),
+    private MovimientoAlmacen mapear(ResultSet rs) throws SQLException {
+        return new MovimientoAlmacen(
+                rs.getInt("id_movimiento"),
+                productoRepository.findById(rs.getInt("id_producto")).orElse(null),
+                rs.getString("tipo_movimiento"),
+                rs.getDouble("cantidad"),
                 rs.getDate("fecha"),
-                usuarioRepository.findById(rs.getInt("id_usuario")).orElse(null),
-                rs.getString("estado"),
-                rs.getDouble("total")
+                rs.getString("contexto")
         );
     }
 }

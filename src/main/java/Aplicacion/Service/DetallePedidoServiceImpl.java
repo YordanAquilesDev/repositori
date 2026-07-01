@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.repositoryimpl.DetallePedidoRepositoryImpl;
+import Aplicacion.DAO.DetallePedidoRepositoryImpl;
 import Dominio.Modelo.DetallePedido;
 import Dominio.Modelo.Pedido;
 import Dominio.repository.CrudGenerico;

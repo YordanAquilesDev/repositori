@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.repositoryimpl.LoteAnimalRepositoryImpl;
+import Aplicacion.DAO.LoteAnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.LoteAnimal;
 import Dominio.repository.CrudGenerico;

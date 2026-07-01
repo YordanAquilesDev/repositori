@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import Aplicacion.repositoryimpl.VentaRepositoryImpl;
+import Aplicacion.DAO.VentaRepositoryImpl;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;

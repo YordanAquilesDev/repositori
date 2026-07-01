@@ -1,4 +1,4 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
 import Dominio.Modelo.Compra;
 import Dominio.repository.CrudGenerico;

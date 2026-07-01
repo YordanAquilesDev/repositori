@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.repositoryimpl.ConsumoLoteRepositoryImpl;
+import Aplicacion.DAO.ConsumoLoteRepositoryImpl;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.ConsumoLote;
 import Dominio.repository.CrudGenerico;
