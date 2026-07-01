@@ -10,7 +10,7 @@ public class ConexionMySQL {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/granjaerpfinal?serverTimezone=UTC";
+            String url = "jdbc:mysql://localhost:3306/granja?serverTimezone=UTC";
             String user = "root";
             String password = "961508";
              conn = DriverManager.getConnection(url, user, password);

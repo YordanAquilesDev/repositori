@@ -99,9 +99,15 @@ public class LoginF extends javax.swing.JPanel {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-    String username = txtUsuario.getText();
+    java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
+    Main ventanaPrincipal= (Main) comp;
+        if(true){
+              HomeAdmin panelAdmin = new HomeAdmin();
+            ventanaPrincipal.cambiarPantalla(panelAdmin);
+        }
+        /*  String username = txtUsuario.getText();
     String password = txtPassword.getText();
-        System.out.println("LLego la paticion aca ");
+      System.out.println("LLego la paticion aca ");
     
     UsuarioServiceImpl usuarioService = new UsuarioServiceImpl();
     Usuario usuario = usuarioService.login(username, password);
@@ -131,7 +137,7 @@ public class LoginF extends javax.swing.JPanel {
                 "Error crítico: No se encontró la ventana principal.",
                 "Error",
                 javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+    }*/
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
 

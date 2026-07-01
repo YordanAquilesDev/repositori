@@ -15,7 +15,7 @@ public class HomeAdmin extends javax.swing.JPanel {
     /**
      * Creates new form HomeAdmin
      */
-    public HomeAdmin(Usuario usuario) {
+    public HomeAdmin() {
         initComponents();
     }
 
