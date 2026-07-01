@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.DAO.UsuarioRepositoryImpl;
+import Aplicacion.DAO.UsuarioRepository;
 import Dominio.Modelo.Usuario;
 import Dominio.repository.CrudGenerico;
 
@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public class UsuarioServiceImpl implements CrudGenerico<Usuario, Integer> {
 
-    private final UsuarioRepositoryImpl usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioServiceImpl() {
-        this.usuarioRepository = new UsuarioRepositoryImpl();
+        this.usuarioRepository = new UsuarioRepository();
     }
 
     @Override

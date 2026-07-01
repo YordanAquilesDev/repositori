@@ -4,26 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Animal {
-
+    
     private int idAnimal;
-    private String especie;
-    private String raza;
-    List<LoteAnimal> lotes=new ArrayList<>();
+    private int idRaza;
+    private String nombre;
+    private String sexo;
+    private int edad;
+    private double precio;
+    private int stock;
+    private String estado;
 
-    public Animal(int idAnimal, String especie, String raza) {
+    public Animal(int idAnimal, int idRaza, String nombre, String sexo, int edad, double precio, int stock, String estado) {
         this.idAnimal = idAnimal;
-        this.especie = especie;
-        this.raza = raza;
+        this.idRaza = idRaza;
+        this.nombre = nombre;
+        this.sexo = sexo;
+        this.edad = edad;
+        this.precio = precio;
+        this.stock = stock;
+        this.estado = estado;
     }
 
-    // bgougoihpiohjnpolñjb giutgyiouyhopijp
-    public Animal(String especie, String raza) {
-        this.especie = especie;
-        this.raza = raza;
-    }
     public Animal() {
-
     }
+    
 
     public int getIdAnimal() {
         return idAnimal;
@@ -33,27 +37,60 @@ public class Animal {
         this.idAnimal = idAnimal;
     }
 
-    public String getEspecie() {
-        return especie;
+    public int getIdRaza() {
+        return idRaza;
     }
 
-    public void setEspecie(String especie) {
-        this.especie = especie;
+    public void setIdRaza(int idRaza) {
+        this.idRaza = idRaza;
     }
 
-    public String getRaza() {
-        return raza;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setRaza(String raza) {
-        this.raza = raza;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        return "Animal{" +
-                "raza='" + raza + '\'' +
-                ", especie='" + especie + '\'' +
-                '}';
+    public String getSexo() {
+        return sexo;
     }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
 }

@@ -62,7 +62,7 @@ public class LoginF extends javax.swing.JPanel {
 
         contenedorLogin = new javax.swing.JLayeredPane();
         txtUsuario = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JTextField();
+        txtPasword = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         btnIniciarSesion = new javax.swing.JButton();
 
@@ -75,10 +75,10 @@ public class LoginF extends javax.swing.JPanel {
         txtUsuario.addActionListener(this::txtUsuarioActionPerformed);
         contenedorLogin.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 370, 250, 30));
 
-        txtPassword.setBackground(new java.awt.Color(253, 243, 250));
-        txtPassword.setBorder(null);
-        txtPassword.addActionListener(this::txtPasswordActionPerformed);
-        contenedorLogin.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 280, 30));
+        txtPasword.setBackground(new java.awt.Color(253, 243, 250));
+        txtPasword.setBorder(null);
+        txtPasword.addActionListener(this::txtPaswordActionPerformed);
+        contenedorLogin.add(txtPasword, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 280, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/login.png"))); // NOI18N
         contenedorLogin.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1410, 780));
@@ -138,7 +138,7 @@ public class LoginF extends javax.swing.JPanel {
     private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JLayeredPane contenedorLogin;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JTextField txtPasword;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

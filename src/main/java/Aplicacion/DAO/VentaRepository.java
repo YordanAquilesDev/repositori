@@ -9,11 +9,11 @@ import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
-public class VentaRepositoryImpl implements CrudGenerico<Venta, Integer> {
-    private final UsuarioRepositoryImpl usuarioRepository;
+public class VentaRepository implements CrudGenerico<Venta, Integer> {
+    private final UsuarioRepository usuarioRepository;
 
-    public VentaRepositoryImpl() {
-        this.usuarioRepository = new UsuarioRepositoryImpl();
+    public VentaRepository() {
+        this.usuarioRepository = new UsuarioRepository();
     }
     @Override
     public int save(Venta beans) {
