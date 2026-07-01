@@ -101,6 +101,7 @@ public class LoginF extends javax.swing.JPanel {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
     String username = txtUsuario.getText();
     String password = txtPassword.getText();
+        System.out.println("LLego la paticion aca ");
     
     UsuarioServiceImpl usuarioService = new UsuarioServiceImpl();
     Usuario usuario = usuarioService.login(username, password);
