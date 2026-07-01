@@ -1,4 +1,4 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
 import Aplicacion.Service.VentaServiceImpl;
 import Dominio.Modelo.DetalleVenta;

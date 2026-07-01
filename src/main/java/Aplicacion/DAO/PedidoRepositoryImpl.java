@@ -1,6 +1,6 @@
-package Aplicacion.repositoryimpl;
+package Aplicacion.DAO;
 
-import Dominio.Modelo.Animal;
+import Dominio.Modelo.Pedido;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -13,17 +13,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
+public class PedidoRepositoryImpl implements CrudGenerico<Pedido, Integer> {
+
+    private final UsuarioRepositoryImpl usuarioRepository;
+
+    public PedidoRepositoryImpl() {
+        this.usuarioRepository = new UsuarioRepositoryImpl();
+    }
 
     @Override
-    public int save(Animal beans) {
-        String sql = "INSERT INTO animal (especie, raza) VALUES (?, ?)";
+    public int save(Pedido beans) {
+        String sql = "INSERT INTO pedido (id_usuario, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, beans.getEspecie());
-            pstmt.setString(2, beans.getRaza());
+            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -32,15 +40,17 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
     }
 
     @Override
-    public int update(Animal beans) {
-        String sql = "UPDATE animal SET especie = ?, raza = ? WHERE id_animal = ?";
+    public int update(Pedido beans) {
+        String sql = "UPDATE pedido SET id_usuario = ?, fecha = ?, estado = ?, total = ? WHERE id_pedido = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, beans.getEspecie());
-            pstmt.setString(2, beans.getRaza());
-            pstmt.setInt(3, beans.getIdAnimal());
+            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
+            pstmt.setInt(5, beans.getIdPedido());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -50,7 +60,7 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
 
     @Override
     public int delete(Integer id) {
-        String sql = "DELETE FROM animal WHERE id_animal = ?";
+        String sql = "DELETE FROM pedido WHERE id_pedido = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -63,8 +73,8 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
     }
 
     @Override
-    public Optional<Animal> findById(Integer id) {
-        String sql = "SELECT * FROM animal WHERE id_animal = ?";
+    public Optional<Pedido> findById(Integer id) {
+        String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -73,11 +83,7 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(new Animal(
-                            rs.getInt("id_animal"),
-                            rs.getString("especie"),
-                            rs.getString("raza")
-                    ));
+                    return Optional.of(mapear(rs));
                 }
             }
 
@@ -88,20 +94,16 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
     }
 
     @Override
-    public List<Animal> findAll() {
-        List<Animal> list = new ArrayList<>();
-        String sql = "SELECT * FROM animal";
+    public List<Pedido> findAll() {
+        List<Pedido> list = new ArrayList<>();
+        String sql = "SELECT * FROM pedido";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                list.add(new Animal(
-                        rs.getInt("id_animal"),
-                        rs.getString("especie"),
-                        rs.getString("raza")
-                ));
+                list.add(mapear(rs));
             }
 
             return list;
@@ -111,14 +113,16 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
     }
 
     @Override
-    public int saveAndFindId(Animal beans) {
-        String sql = "INSERT INTO animal (especie, raza) VALUES (?, ?)";
+    public int saveAndFindId(Pedido beans) {
+        String sql = "INSERT INTO pedido (id_usuario, fecha, estado, total) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, beans.getEspecie());
-            pstmt.setString(2, beans.getRaza());
+            pstmt.setInt(1, beans.getUsuario().getIdUsuario());
+            pstmt.setDate(2, beans.getFecha());
+            pstmt.setString(3, beans.getEstado());
+            pstmt.setDouble(4, beans.getTotal());
 
             int filas = pstmt.executeUpdate();
             if (filas == 0) return -1;
@@ -133,30 +137,13 @@ public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
         }
     }
 
-    public List<Animal> findAllConsumer() {
-        List<Animal> animales = new ArrayList<>();
-        String sql = "SELECT a.id_animal, a.especie, a.raza "
-                + "FROM animal a "
-                + "JOIN lote_animal l ON a.id_animal = l.id_animal "
-                + "JOIN consumo_lote c ON l.id_lote = c.id_lote "
-                + "ORDER BY c.cantidad DESC "
-                + "LIMIT 3";
-
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-                animales.add(new Animal(
-                        rs.getInt("id_animal"),
-                        rs.getString("especie"),
-                        rs.getString("raza")
-                ));
-            }
-
-            return animales;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    private Pedido mapear(ResultSet rs) throws SQLException {
+        return new Pedido(
+                rs.getInt("id_pedido"),
+                rs.getDate("fecha"),
+                usuarioRepository.findById(rs.getInt("id_usuario")).orElse(null),
+                rs.getString("estado"),
+                rs.getDouble("total")
+        );
     }
 }
