@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public class AnimalRepositoryImpl implements CrudGenerico<Animal, Integer> {
 
+    
     @Override
     public int save(Animal beans) {
         String sql = "INSERT INTO animal (especie, raza) VALUES (?, ?)";
