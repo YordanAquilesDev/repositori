@@ -1,4 +1,4 @@
-package Aplicacion.ServiceImpl;
+package Aplicacion.Service;
 
 import Aplicacion.repositoryimpl.ProductoRepositoryImpl;
 import Dominio.Modelo.Producto;

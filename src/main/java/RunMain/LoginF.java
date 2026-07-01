@@ -4,7 +4,7 @@
  */
 package RunMain;
 
-import Aplicacion.ServiceImpl.UsuarioServiceImpl;
+import Aplicacion.Service.UsuarioServiceImpl;
 import Dominio.Modelo.Usuario;
 import Presentacion.GuiAdmin.HomeAdmin;
 import Presentacion.GuiUsuario.HomeUsuario;

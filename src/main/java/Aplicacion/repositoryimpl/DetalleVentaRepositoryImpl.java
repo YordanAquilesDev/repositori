@@ -1,6 +1,6 @@
 package Aplicacion.repositoryimpl;
 
-import Aplicacion.ServiceImpl.VentaServiceImpl;
+import Aplicacion.Service.VentaServiceImpl;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;

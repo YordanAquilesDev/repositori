@@ -1,4 +1,4 @@
-package Aplicacion.ServiceImpl;
+package Aplicacion.Service;
 
 import Aplicacion.repositoryimpl.AnimalRepositoryImpl;
 import Dominio.Modelo.Animal;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio relacionada con los animales.
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
-public class AnimalServiceImpl implements CrudGenerico<Animal, Integer> {
+public class AnimalService implements CrudGenerico<Animal, Integer> {
 //funcioan ok sin ningun problemas
     private final AnimalRepositoryImpl animalRepository;
     
@@ -19,7 +19,7 @@ public class AnimalServiceImpl implements CrudGenerico<Animal, Integer> {
      * Constructor de la clase.
      * Inicializa el repositorio de animales.
      */
-    public AnimalServiceImpl() {
+    public AnimalService() {
         this.animalRepository = new AnimalRepositoryImpl();
     }
 

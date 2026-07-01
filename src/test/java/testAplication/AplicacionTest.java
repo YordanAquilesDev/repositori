@@ -1,6 +1,16 @@
 package testAplication;
 
-import Aplicacion.ServiceImpl.*;
+import Aplicacion.Service.ProductoServiceImpl;
+import Aplicacion.Service.AnimalService;
+import Aplicacion.Service.DetalleVentaServiceImpl;
+import Aplicacion.Service.PedidoServiceImpl;
+import Aplicacion.Service.ConsumoServiceImpl;
+import Aplicacion.Service.LoteAnimalServiceImpl;
+import Aplicacion.Service.VentaServiceImpl;
+import Aplicacion.Service.MovimientoServiceImpl;
+import Aplicacion.Service.UsuarioServiceImpl;
+import Aplicacion.Service.ProveedorServiceImpl;
+import Aplicacion.Service.CompraServiceImpl;
 import Aplicacion.utils.ConexionMySQL;
 import Dominio.Modelo.*;
 
@@ -26,7 +36,7 @@ public class AplicacionTest {
     }
 
     public static void  testearAnimalService(){
-        AnimalServiceImpl animalService= new AnimalServiceImpl();
+        AnimalService animalService= new AnimalService();
         Connection conexion=null;
         try {
            conexion=  ConexionMySQL.getConexionMySQL();
@@ -245,7 +255,7 @@ public class AplicacionTest {
     }
 
     public static void testearConsumoLote(){
-        AnimalServiceImpl animalService= new AnimalServiceImpl();
+        AnimalService animalService= new AnimalService();
         LoteAnimalServiceImpl loteService= new LoteAnimalServiceImpl();
         ProductoServiceImpl productoService= new ProductoServiceImpl();
         ConsumoServiceImpl consumoService= new ConsumoServiceImpl();
@@ -375,7 +385,7 @@ public class AplicacionTest {
     }
 
     public static void testearLoteAnimal(){
-        AnimalServiceImpl animalService= new AnimalServiceImpl();
+        AnimalService animalService= new AnimalService();
         LoteAnimalServiceImpl loteAnimalService= new LoteAnimalServiceImpl();
 
         Connection conn=null;
