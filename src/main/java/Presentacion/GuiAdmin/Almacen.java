@@ -4,6 +4,7 @@
  */
 package Presentacion.GuiAdmin;
 
+import Aplicacion.Service.AnimalService;
 import Aplicacion.utils.ConexionMySQL;
 import Dominio.Modelo.Animal;
 import Dominio.repository.CrudGenerico;
@@ -299,13 +300,7 @@ public class Almacen extends javax.swing.JPanel {
         animalService.findAll().forEach(a->{
             modelo.addRow(new Object[]{
                 a.getIdAnimal(),
-                a.getIdRaza(),
-                a.getNombre(),
-                a.getSexo(),
-                a.getEdad(),
-                a.getPrecio(),
-                a.getStock(),
-                a.getEstado()
+
             });
             
         
@@ -344,134 +339,134 @@ public class Almacen extends javax.swing.JPanel {
     private javax.swing.JTextField txtStock;
     // End of variables declaration//GEN-END:variables
 }
-class AnimalService implements CrudGenerico<Animal1,Integer>{
-
-    @Override
-    public int save(Animal1 beans) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int update(Animal1 beans) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Optional<Animal1> findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<Animal1> findAll() {
-        List<Animal1> list = new ArrayList<>();
-        String sql = "SELECT idAnimal, idRaza, nombre, sexo, edad, precio, stock, estado FROM Animal";
-
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-                // Instanciamos el objeto usando el constructor vacío o setters
-                Animal1 animal = new Animal1();
-
-                // Mapeamos cada columna de la base de datos a los atributos de tu clase Animal1
-                animal.setIdAnimal(rs.getInt("idAnimal"));
-                animal.setIdRaza(rs.getString("idRaza")); // Convierte el idRaza numérico a String
-                animal.setNombre(rs.getString("nombre"));
-                animal.setSexo(rs.getString("sexo"));
-                animal.setEdad(rs.getString("edad"));
-                animal.setPrecio(BigDecimal.valueOf(rs.getDouble("precio")));
-                animal.setStock(rs.getString("stock"));
-                animal.setEstado(rs.getString("estado"));
-
-                // Agregamos el objeto ya cargado a la lista
-                list.add(animal);
-            }
-
-            return list;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al listar los animales de la base de datos", e);
-        }
-    }
-
-    @Override
-    public int saveAndFindId(Animal1 beans) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-}
-
-class Animal1 {
-    private int idAnimal;
-    private String idRaza;
-    private String nombre;
-    private String sexo; // Puedes usar String o un Enum en Java
-    private String edad;
-    private BigDecimal precio;
-    private String stock;
-    private String estado;
-
-    // Constructor vacío
-    public Animal1() {}
-
-    // Constructor completo
-    public Animal1(int idAnimal, String idRaza, String nombre, String sexo, String edad, BigDecimal precio, String stock, String estado) {
-        this.idAnimal = idAnimal;
-        this.idRaza = idRaza;
-        this.nombre = nombre;
-        this.sexo = sexo;
-        this.edad = edad;
-        this.precio = precio;
-        this.stock = stock;
-        this.estado = estado;
-    }
-
-    // Getters y Setters
-    public int getIdAnimal() { return idAnimal; }
-    public void setIdAnimal(int idAnimal) { this.idAnimal = idAnimal; }
-
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getSexo() { return sexo; }
-    public void setSexo(String sexo) { this.sexo = sexo; }
-
-
-    public BigDecimal getPrecio() { return precio; }
-    public void setPrecio(BigDecimal precio) { this.precio = precio; }
-
-    public String getIdRaza() {
-        return idRaza;
-    }
-
-    public void setIdRaza(String idRaza) {
-        this.idRaza = idRaza;
-    }
-
-    public String getEdad() {
-        return edad;
-    }
-
-    public void setEdad(String edad) {
-        this.edad = edad;
-    }
-
-    public String getStock() {
-        return stock;
-    }
-
-    public void setStock(String stock) {
-        this.stock = stock;
-    }
-
-
-
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-}
+//
+//class AnimalService implements CrudGenerico<Animal1,Integer>{
+//
+//    @Override
+//    public int save(Animal1 beans) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//
+//    @Override
+//    public int update(Animal1 beans) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//
+//    @Override
+//    public int delete(Integer id) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//
+//    @Override
+//    public Optional<Animal1> findById(Integer id) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//
+//    @Override
+//    public List<Animal> findAll() {
+//        List<Animal> list = new ArrayList<>();
+//        String sql = "SELECT idAnimal, idRaza, nombre, sexo, edad, precio, stock, estado FROM Animal";
+//
+//        try (Connection conn = ConexionMySQL.getConexionMySQL();
+//             PreparedStatement pstmt = conn.prepareStatement(sql);
+//             ResultSet rs = pstmt.executeQuery()) {
+//
+//            while (rs.next()) {
+//                // Instanciamos el objeto usando el constructor vacío o setters
+//                Animal1 animal = new Animal1();
+//
+//                // Mapeamos cada columna de la base de datos a los atributos de tu clase Animal1
+//                animal.setIdAnimal(rs.getInt("idAnimal"));
+//                animal.setIdRaza(rs.getString("idRaza")); // Convierte el idRaza numérico a String
+//                animal.setNombre(rs.getString("nombre"));
+//                animal.setSexo(rs.getString("sexo"));
+//                animal.setEdad(rs.getString("edad"));
+//                animal.setPrecio(BigDecimal.valueOf(rs.getDouble("precio")));
+//                animal.setStock(rs.getString("stock"));
+//                animal.setEstado(rs.getString("estado"));
+//
+//                // Agregamos el objeto ya cargado a la lista
+//                list.add(animal);
+//            }
+//
+//            return list;
+//        } catch (SQLException e) {
+//            throw new RuntimeException("Error al listar los animales de la base de datos", e);
+//        }
+//    }
+//
+//    @Override
+//    public int saveAndFindId(Animal1 beans) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//
+//}
+//
+//class Animal1 {
+//    private int idAnimal;
+//    private String idRaza;
+//    private String nombre;
+//    private String sexo; // Puedes usar String o un Enum en Java
+//    private String edad;
+//    private BigDecimal precio;
+//    private String stock;
+//    private String estado;
+//
+//    // Constructor vacío
+//    public Animal1() {}
+//
+//    // Constructor completo
+//    public Animal1(int idAnimal, String idRaza, String nombre, String sexo, String edad, BigDecimal precio, String stock, String estado) {
+//        this.idAnimal = idAnimal;
+//        this.idRaza = idRaza;
+//        this.nombre = nombre;
+//        this.sexo = sexo;
+//        this.edad = edad;
+//        this.precio = precio;
+//        this.stock = stock;
+//        this.estado = estado;
+//    }
+//
+//    // Getters y Setters
+//    public int getIdAnimal() { return idAnimal; }
+//    public void setIdAnimal(int idAnimal) { this.idAnimal = idAnimal; }
+//
+//
+//    public String getNombre() { return nombre; }
+//    public void setNombre(String nombre) { this.nombre = nombre; }
+//
+//    public String getSexo() { return sexo; }
+//    public void setSexo(String sexo) { this.sexo = sexo; }
+//
+//
+//    public BigDecimal getPrecio() { return precio; }
+//    public void setPrecio(BigDecimal precio) { this.precio = precio; }
+//
+//    public String getIdRaza() {
+//        return idRaza;
+//    }
+//
+//    public void setIdRaza(String idRaza) {
+//        this.idRaza = idRaza;
+//    }
+//
+//    public String getEdad() {
+//        return edad;
+//    }
+//
+//    public void setEdad(String edad) {
+//        this.edad = edad;
+//    }
+//
+//    public String getStock() {
+//        return stock;
+//    }
+//
+//    public void setStock(String stock) {
+//        this.stock = stock;
+//    }
+//
+//
+//
+//    public String getEstado() { return estado; }
+//    public void setEstado(String estado) { this.estado = estado; }
