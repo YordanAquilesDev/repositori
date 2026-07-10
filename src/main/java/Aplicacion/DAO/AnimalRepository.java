@@ -1,6 +1,6 @@
 package Aplicacion.DAO;
 
-import Dominio.Modelo.Proveedor;
+import Dominio.Modelo.Animal;
 import Dominio.repository.CrudGenerico;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -13,19 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer> {
+public class AnimalRepository implements CrudGenerico<Animal, Integer> {
 
+    
     @Override
-    public int save(Proveedor beans) {
-        String sql = "INSERT INTO proveedor (nombre, apellido, dni, telefono) VALUES (?, ?, ?, ?)";
+    public int save(Animal beans) {
+        String sql = "INSERT INTO animal (especie, raza) VALUES (?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, beans.getNombre());
-            pstmt.setString(2, beans.getApellido());
-            pstmt.setString(3, beans.getDni());
-            pstmt.setString(4, beans.getTelefono());
+            pstmt.setString(1, beans.getEspecie());
+            pstmt.setString(2, beans.getRaza());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -34,17 +33,15 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public int update(Proveedor beans) {
-        String sql = "UPDATE proveedor SET nombre = ?, apellido = ?, dni = ?, telefono = ? WHERE id_proveedor = ?";
+    public int update(Animal beans) {
+        String sql = "UPDATE animal SET especie = ?, raza = ? WHERE id_animal = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, beans.getNombre());
-            pstmt.setString(2, beans.getApellido());
-            pstmt.setString(3, beans.getDni());
-            pstmt.setString(4, beans.getTelefono());
-            pstmt.setInt(5, beans.getIdProveedor());
+            pstmt.setString(1, beans.getEspecie());
+            pstmt.setString(2, beans.getRaza());
+            pstmt.setInt(3, beans.getIdAnimal());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -54,7 +51,7 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
 
     @Override
     public int delete(Integer id) {
-        String sql = "DELETE FROM proveedor WHERE id_proveedor = ?";
+        String sql = "DELETE FROM animal WHERE id_animal = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -67,21 +64,20 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public Optional<Proveedor> findById(Integer id) {
-        String sql = "SELECT * FROM proveedor WHERE id_proveedor = ?;";
+    public Optional<Animal> findById(Integer id) {
+        String sql = "SELECT * FROM animal WHERE id_animal = ?";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(new Proveedor(
-                            rs.getInt("id_proveedor"),
-                            rs.getString("nombre"),
-                            rs.getString("apellido"),
-                            rs.getString("dni"),
-                            rs.getString("telefono")
+                    return Optional.of(new Animal(
+                            rs.getInt("id_animal"),
+                            rs.getString("especie"),
+                            rs.getString("raza")
                     ));
                 }
             }
@@ -93,21 +89,19 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public List<Proveedor> findAll() {
-        List<Proveedor> list = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor";
+    public List<Animal> findAll() {
+        List<Animal> list = new ArrayList<>();
+        String sql = "SELECT * FROM animal";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                list.add(new Proveedor(
-                        rs.getInt("id_proveedor"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("dni"),
-                        rs.getString("telefono")
+                list.add(new Animal(
+                        rs.getInt("id_animal"),
+                        rs.getString("especie"),
+                        rs.getString("raza")
                 ));
             }
 
@@ -118,16 +112,14 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
     }
 
     @Override
-    public int saveAndFindId(Proveedor beans) {
-        String sql = "INSERT INTO proveedor (nombre, apellido, dni, telefono) VALUES (?, ?, ?, ?)";
+    public int saveAndFindId(Animal beans) {
+        String sql = "INSERT INTO animal (especie, raza) VALUES (?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, beans.getNombre());
-            pstmt.setString(2, beans.getApellido());
-            pstmt.setString(3, beans.getDni());
-            pstmt.setString(4, beans.getTelefono());
+            pstmt.setString(1, beans.getEspecie());
+            pstmt.setString(2, beans.getRaza());
 
             int filas = pstmt.executeUpdate();
             if (filas == 0) return -1;
@@ -142,11 +134,30 @@ public class ProveedorRepositoryImpl implements CrudGenerico<Proveedor, Integer>
         }
     }
 
-    public Proveedor buscarPorId(long id) {
-        return findById((int) id).orElse(null);
-    }
+    public List<Animal> findAllConsumer() {
+        List<Animal> animales = new ArrayList<>();
+        String sql = "SELECT a.id_animal, a.especie, a.raza "
+                + "FROM animal a "
+                + "JOIN lote_animal l ON a.id_animal = l.id_animal "
+                + "JOIN consumo_lote c ON l.id_lote = c.id_lote "
+                + "ORDER BY c.cantidad DESC "
+                + "LIMIT 3";
 
-    public List<Proveedor> listarProveedores() {
-        return findAll();
+        try (Connection conn = ConexionMySQL.getConexionMySQL();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                animales.add(new Animal(
+                        rs.getInt("id_animal"),
+                        rs.getString("especie"),
+                        rs.getString("raza")
+                ));
+            }
+
+            return animales;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

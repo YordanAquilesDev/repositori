@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.DAO.DetalleVentaRepositoryImpl;
+import Aplicacion.DAO.DetalleVentaRepository;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Producto;
 import Dominio.repository.CrudGenerico;
@@ -11,12 +11,12 @@ import java.util.Optional;
 public class DetalleVentaServiceImpl implements CrudGenerico<DetalleVenta, Integer> {
 
     private final ProductoServiceImpl productoService;
-    private final DetalleVentaRepositoryImpl detalleVentaRepository;
+    private final DetalleVentaRepository detalleVentaRepository;
 
     public DetalleVentaServiceImpl() {
         // esto viene de de VentaServiceImpl
         this.productoService = new ProductoServiceImpl();
-        this.detalleVentaRepository = new DetalleVentaRepositoryImpl();
+        this.detalleVentaRepository = new DetalleVentaRepository();
     }
 
     @Override

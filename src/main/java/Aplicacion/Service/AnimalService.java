@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.DAO.AnimalRepositoryImpl;
+import Aplicacion.DAO.AnimalRepository;
 import Dominio.Modelo.Animal;
 import Dominio.repository.CrudGenerico;
 
@@ -13,14 +13,14 @@ import java.util.Optional;
  */
 public class AnimalService implements CrudGenerico<Animal, Integer> {
 //funcioan ok sin ningun problemas
-    private final AnimalRepositoryImpl animalRepository;
+    private final AnimalRepository animalRepository;
     
      /**
      * Constructor de la clase.
      * Inicializa el repositorio de animales.
      */
     public AnimalService() {
-        this.animalRepository = new AnimalRepositoryImpl();
+        this.animalRepository = new AnimalRepository();
     }
 
     /**

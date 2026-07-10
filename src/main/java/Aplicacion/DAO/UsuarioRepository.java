@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UsuarioRepositoryImpl implements CrudGenerico<Usuario, Integer> {
+public class UsuarioRepository implements CrudGenerico<Usuario, Integer> {
 
     @Override
     public int save(Usuario beans) {

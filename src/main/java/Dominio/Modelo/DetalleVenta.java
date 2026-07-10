@@ -3,20 +3,22 @@ package Dominio.Modelo;
 public class DetalleVenta {
 
     private int idDetalle;
-    private Venta venta;
-    private Producto producto;
-    private double cantidad;
+    private int idVenta;
+    private int idAnimal;
+    private int cantidad;
+    private double precio;
     private double subtotal;
 
-    public DetalleVenta() {
+    public DetalleVenta(int idDetalle, int idVenta, int idAnimal, int cantidad, double precio, double subtotal) {
+        this.idDetalle = idDetalle;
+        this.idVenta = idVenta;
+        this.idAnimal = idAnimal;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.subtotal = subtotal;
     }
 
-    public DetalleVenta(int idDetalle, Venta venta, Producto producto, double cantidad, double subtotal) {
-        this.idDetalle = idDetalle;
-        this.venta = venta;
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.subtotal = subtotal;
+    public DetalleVenta() {
     }
 
     public int getIdDetalle() {
@@ -27,28 +29,36 @@ public class DetalleVenta {
         this.idDetalle = idDetalle;
     }
 
-    public Venta getVenta() {
-        return venta;
+    public int getIdVenta() {
+        return idVenta;
     }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
+    public void setIdVenta(int idVenta) {
+        this.idVenta = idVenta;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public int getIdAnimal() {
+        return idAnimal;
     }
 
-    public void setProducto(Producto producto) {
-        this.producto = producto;
+    public void setIdAnimal(int idAnimal) {
+        this.idAnimal = idAnimal;
     }
 
-    public double getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(double cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     public double getSubtotal() {
@@ -58,4 +68,9 @@ public class DetalleVenta {
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
+    
+
+
+
+
 }

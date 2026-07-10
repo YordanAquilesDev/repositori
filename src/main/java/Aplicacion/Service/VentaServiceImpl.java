@@ -5,18 +5,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import Aplicacion.DAO.VentaRepositoryImpl;
+import Aplicacion.DAO.VentaRepository;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.repository.CrudGenerico;
 
 public class VentaServiceImpl  implements CrudGenerico<Venta,Integer> {
-   private final VentaRepositoryImpl ventaRepository;
+   private final VentaRepository ventaRepository;
    private  final DetalleVentaServiceImpl detalleVentaService;
    public VentaServiceImpl() {
   //
        this.detalleVentaService = new DetalleVentaServiceImpl();
-       this.ventaRepository =  new VentaRepositoryImpl();
+       this.ventaRepository =  new VentaRepository();
    }
 
     @Override

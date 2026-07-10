@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Venta {
+
     private int idVenta;
-    private Usuario usuario;
-    private Date fecha;
+    private int idCliente;
+    private String fecha;
     private double total;
     private List<DetalleVenta> detalleVentas= new ArrayList<>();
 
@@ -22,19 +23,11 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(int idVenta, Usuario usuario, Date fecha, double total) {
+    public Venta(int idVenta, int idCliente, String fecha, double total) {
         this.idVenta = idVenta;
-        this.usuario = usuario;
+        this.idCliente = idCliente;
         this.fecha = fecha;
         this.total = total;
-
-    }
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public int getIdVenta() {
@@ -45,11 +38,19 @@ public class Venta {
         this.idVenta = idVenta;
     }
 
-    public Date getFecha() {
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -61,7 +62,5 @@ public class Venta {
         this.total = total;
     }
 
-    public void addDetalleVenta(DetalleVenta detalleVenta) {
-        this.detalleVentas.add(detalleVenta);
-    }
+    
 }

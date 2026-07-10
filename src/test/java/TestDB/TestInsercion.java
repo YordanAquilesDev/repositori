@@ -1,7 +1,7 @@
 package TestDB;
 
-import Aplicacion.DAO.AnimalRepositoryImpl;
-import Aplicacion.DAO.UsuarioRepositoryImpl;
+import Aplicacion.DAO.AnimalRepository;
+import Aplicacion.DAO.UsuarioRepository;
 import Aplicacion.DAO.ProductoRepositoryImpl;
 import Aplicacion.DAO.ProveedorRepositoryImpl;
 import Dominio.Modelo.Animal;
@@ -38,7 +38,7 @@ public class TestInsercion {
     static void testCliente() {
         System.out.println(SEP);
         System.out.println("Insertando usuarios...");
-        UsuarioRepositoryImpl repo = new UsuarioRepositoryImpl();
+        UsuarioRepository repo = new UsuarioRepository();
 
         Usuario c1 = new Usuario(0, "juan", "1234", "juan@email.com", "CLIENTE",
                 "Juan", "Pérez", "12345678", "999111222", "Av. Siempre Viva 123", null, "ACTIVO");
@@ -52,7 +52,7 @@ public class TestInsercion {
     static void testAnimal() {
         System.out.println(SEP);
         System.out.println("Insertando animales...");
-        AnimalRepositoryImpl repo = new AnimalRepositoryImpl();
+        AnimalRepository repo = new AnimalRepository();
 
         Animal a1 = new Animal(0, "Vacuno", "Angus");
         Animal a2 = new Animal(0, "Porcino", "Yorkshire");
@@ -86,12 +86,12 @@ public class TestInsercion {
                     + " | $" + p.getPrecioUnidad() + " | stock: " + p.getStockActual() + " " + p.getUnidadMedida()));
 
         System.out.println("\n-- Usuarios --");
-        new UsuarioRepositoryImpl().findAll().forEach(c ->
+        new UsuarioRepository().findAll().forEach(c ->
             System.out.println("  [" + c.getIdUsuario() + "] " + c.getNombre() + " " + c.getApellido()
                     + " | DNI: " + c.getDni() + " | Cel: " + c.getCelular()));
 
         System.out.println("\n-- Animales --");
-        new AnimalRepositoryImpl().findAll().forEach(a ->
+        new AnimalRepository().findAll().forEach(a ->
             System.out.println("  [" + a.getIdAnimal() + "] " + a.getEspecie() + " - " + a.getRaza()));
 
         System.out.println("\n-- Proveedores --");

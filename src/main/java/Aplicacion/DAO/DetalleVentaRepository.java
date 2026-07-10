@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaRepositoryImpl implements CrudGenerico<DetalleVenta, Integer> {
+public class DetalleVentaRepository implements CrudGenerico<DetalleVenta, Integer> {
      // mala inyeccion de dependencia
     //private final VentaServiceImpl ventaService ;
 
     private final ProductoRepositoryImpl productoService ;
-  public DetalleVentaRepositoryImpl() {
+  public DetalleVentaRepository() {
       this.productoService=  new ProductoRepositoryImpl();
       //this.ventaService=  new VentaServiceImpl();
   }
