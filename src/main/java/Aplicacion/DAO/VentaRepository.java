@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 import Dominio.Modelo.Venta;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 import Aplicacion.utils.ConexionMySQL;
 
-public class VentaRepository implements CrudGenerico<Venta, Integer> {
+public class VentaRepository implements ICRUD<Venta, Integer> {
     private final UsuarioRepository usuarioRepository;
 
     public VentaRepository() {

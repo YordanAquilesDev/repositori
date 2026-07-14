@@ -3,7 +3,7 @@ package Aplicacion.Service;
 import Aplicacion.DAO.DetallePedidoRepositoryImpl;
 import Dominio.Modelo.DetallePedido;
 import Dominio.Modelo.Pedido;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio de los detalles de pedido.
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
-public class DetallePedidoServiceImpl implements CrudGenerico<DetallePedido, Integer> {
+public class DetallePedidoServiceImpl implements ICRUD<DetallePedido, Integer> {
 
     private final DetallePedidoRepositoryImpl detallePedidoRepository;
     private final PedidoServiceImpl pedidoService;

@@ -2,7 +2,7 @@ package Aplicacion.Service;
 
 import Aplicacion.DAO.AnimalRepository;
 import Dominio.Modelo.Animal;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Clase encargada de gestionar la lógica de negocio relacionada con los animales.
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
-public class AnimalService implements CrudGenerico<Animal, Integer> {
+public class AnimalService implements ICRUD<Animal, Integer> {
 //funcioan ok sin ningun problemas
     private final AnimalRepository animalRepository;
     
@@ -20,6 +20,7 @@ public class AnimalService implements CrudGenerico<Animal, Integer> {
      * Inicializa el repositorio de animales.
      */
     public AnimalService() {
+
         this.animalRepository = new AnimalRepository();
     }
 
@@ -30,10 +31,6 @@ public class AnimalService implements CrudGenerico<Animal, Integer> {
      */
     @Override
     public int save(Animal beans) {
-        // Verifica que el objeto Animal exista y que los campos obligatorios no sean nulos.
-        if (beans == null || beans.getRaza() == null || beans.getEspecie() == null) {
-            return -1;
-        }
         // Guarda el animal en la base de datos.
         return animalRepository.save(beans);
     }
@@ -94,10 +91,7 @@ public class AnimalService implements CrudGenerico<Animal, Integer> {
      */
     @Override
     public int saveAndFindId(Animal beans) {
-        // Verifica que el objeto exista y tenga los datos obligatorios
-        if (beans == null || beans.getRaza() == null || beans.getEspecie() == null) {
-            return -1;
-        }
+
         //guarda el animal y regresa el id generado
         return animalRepository.saveAndFindId(beans);
     }
@@ -106,8 +100,5 @@ public class AnimalService implements CrudGenerico<Animal, Integer> {
      * Obtiene la lista de animales destinada al módulo de consumo.
      * @return Lista de animales obtenida desde el repositorio.
      */
-    public List<Animal> findAllConsumer() {
-        // Recupera los animales mediante una consulta específica del repositorio.
-        return animalRepository.findAllConsumer();
-    }
+
 }

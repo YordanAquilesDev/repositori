@@ -3,12 +3,12 @@ package Aplicacion.Service;
 import Aplicacion.DAO.DetalleVentaRepository;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Producto;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaServiceImpl implements CrudGenerico<DetalleVenta, Integer> {
+public class DetalleVentaServiceImpl implements ICRUD<DetalleVenta, Integer> {
 
     private final ProductoServiceImpl productoService;
     private final DetalleVentaRepository detalleVentaRepository;

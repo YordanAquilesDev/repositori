@@ -1,7 +1,7 @@
 package Aplicacion.DAO;
 
 import Dominio.Modelo.Usuario;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 import Aplicacion.utils.ConexionMySQL;
 
 import java.sql.*;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UsuarioRepository implements CrudGenerico<Usuario, Integer> {
+public class UsuarioRepository implements ICRUD<Usuario, Integer> {
 
     @Override
     public int save(Usuario beans) {

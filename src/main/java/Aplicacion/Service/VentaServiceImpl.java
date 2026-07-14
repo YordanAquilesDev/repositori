@@ -1,6 +1,5 @@
 package Aplicacion.Service;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -8,9 +7,9 @@ import java.util.Optional;
 import Aplicacion.DAO.VentaRepository;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 
-public class VentaServiceImpl  implements CrudGenerico<Venta,Integer> {
+public class VentaServiceImpl  implements ICRUD<Venta,Integer> {
    private final VentaRepository ventaRepository;
    private  final DetalleVentaServiceImpl detalleVentaService;
    public VentaServiceImpl() {

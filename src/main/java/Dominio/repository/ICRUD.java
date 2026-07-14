@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 //              JpaRepository<T,ID>
-public interface CrudGenerico<T, ID> {
+public interface ICRUD<T, ID> {
 
     int save(T beans);
 

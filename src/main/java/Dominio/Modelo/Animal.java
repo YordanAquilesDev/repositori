@@ -6,6 +6,7 @@ import java.util.List;
 public class Animal {
     
     private int idAnimal;
+    private Raza raza;
     private int idRaza;
     private String nombre;
     private String sexo;
@@ -14,7 +15,14 @@ public class Animal {
     private int stock;
     private String estado;
 
-    public Animal(int idAnimal, int idRaza, String nombre, String sexo, int edad, double precio, int stock, String estado) {
+    public Animal(int idAnimal,
+                  int idRaza,
+                  String nombre,
+                  String sexo,
+                  int edad,
+                  double precio,
+                  int stock,
+                  String estado) {
         this.idAnimal = idAnimal;
         this.idRaza = idRaza;
         this.nombre = nombre;

@@ -2,12 +2,12 @@ package Aplicacion.Service;
 
 import Aplicacion.DAO.UsuarioRepository;
 import Dominio.Modelo.Usuario;
-import Dominio.repository.CrudGenerico;
+import Dominio.repository.ICRUD;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UsuarioServiceImpl implements CrudGenerico<Usuario, Integer> {
+public class UsuarioServiceImpl implements ICRUD<Usuario, Integer> {
 
     private final UsuarioRepository usuarioRepository;
 
