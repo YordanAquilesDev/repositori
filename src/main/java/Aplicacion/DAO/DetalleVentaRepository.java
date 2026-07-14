@@ -87,59 +87,62 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
     @Override
     public Optional<DetalleVenta> findById(Integer id) {
-      Connection conexion = null;
-      PreparedStatement pstmt = null;
-      ResultSet rs = null;
-        String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-           Venta venta= new Venta();
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    venta.setIdVenta(rs.getInt("id_detalle"));
-                    return Optional.of(
-                            new DetalleVenta(
-                            rs.getInt("id_detalle"),
-                            rs.getInt("id_venta"),
-                            rs.getInt("id_producto"),
-                            rs.getInt("cantidad"),
-                            rs.getDouble("cantidad"),
-                            rs.getDouble("subtotal")
-                    ));
-                }
+    String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
+
+    try (Connection conn = ConexionMySQL.getConexionMySQL();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setInt(1, id);
+
+        try (ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                DetalleVenta detalle = new DetalleVenta(
+                        rs.getInt("id_detalle"),
+                        rs.getInt("id_venta"),
+                        rs.getInt("id_producto"),
+                        rs.getInt("cantidad"),
+                        rs.getDouble("precio_unitario"), // Cambia por el nombre correcto
+                        rs.getDouble("subtotal")
+                );
+
+                return Optional.of(detalle);
             }
-
-            return Optional.empty();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al buscar detalle de venta", e);
         }
+
+        return Optional.empty();
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Error al buscar detalle de venta", e);
     }
+}
+
 
     @Override
-    public List<DetalleVenta> findAll() {
-      Connection conexion = null;
-      PreparedStatement pstmt = null;
-      ResultSet rs = null;
-        List<DetalleVenta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM detalle_venta";
+public List<DetalleVenta> findAll() {
+    List<DetalleVenta> lista = new ArrayList<>();
+    String sql = "SELECT * FROM detalle_venta";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+    try (Connection conn = ConexionMySQL.getConexionMySQL();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery()) {
 
-            while (rs.next()) {
-                lista.add(new DetalleVenta(
-                        rs.getInt("id_detalle"),
-                        null,
-                        productoService.findById(rs.getInt("id_producto")).orElse(null),
-                        rs.getDouble("cantidad"),
-                        rs.getDouble("subtotal")
-                ));
-            }
-            return lista;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al listar detalles de venta", e);
+        while (rs.next()) {
+            lista.add(new DetalleVenta(
+                    rs.getInt("id_detalle"),
+                    rs.getInt("id_venta"),
+                    rs.getInt("id_producto"),
+                    rs.getInt("id_animal"),
+                    rs.getInt("cantidad"),
+                    rs.getDouble("precio")));
         }
+
+        return lista;
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Error al listar detalles de venta", e);
     }
+}
 
     @Override
     public int saveAndFindId(DetalleVenta detalleVenta) {
@@ -147,8 +150,8 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
         try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, detalleVenta.getVenta().getIdVenta());
-            pstmt.setInt(2, detalleVenta.getProducto().getIdProducto());
+            pstmt.setInt(1, detalleVenta.getIdVenta());
+            pstmt.setInt(2, detalleVenta.getIdProducto());
             pstmt.setDouble(3, detalleVenta.getCantidad());
             pstmt.setDouble(4, detalleVenta.getSubtotal());
 

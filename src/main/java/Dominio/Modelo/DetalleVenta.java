@@ -25,6 +25,7 @@ public class DetalleVenta {
         this.cantidad = cantidad;
         this.precio = precio;
         this.subtotal = subtotal;
+        this.idProducto = idProducto;
     }
 
     public DetalleVenta() {
@@ -77,7 +78,7 @@ public class DetalleVenta {
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
-    
+
 
 
 
