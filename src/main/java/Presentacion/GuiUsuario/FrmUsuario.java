@@ -17,7 +17,7 @@ public class FrmUsuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmUsuario.class.getName());
   private final VentaService ventaService;
-  private Venta venta= null;
+  private static  Venta venta= null;
     /**
      * Creates new form GuiUsuario
      */
@@ -110,6 +110,8 @@ public class FrmUsuario extends javax.swing.JFrame {
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
       
         txtCarrito.setText("");
+    int resuesta=    ventaService.save(venta);
+    
         
     }//GEN-LAST:event_btnComprarActionPerformed
   private void  iniciar(){
@@ -141,17 +143,17 @@ public class FrmUsuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmUsuario().setVisible(true));
     }
-    
-    public void  añadirCarrito(Animal animal){
+    static DetalleVenta  detalle= new DetalleVenta();
+    public static void añadirCarrito(Animal animal){
         txtCarrito.append(animal.getNombre()+"\n");
         int cantidad=1;
-        DetalleVenta  detalle= new DetalleVenta();
         detalle.setIdAnimal(animal.getIdAnimal());
         detalle.setCantidad(cantidad);
         detalle.setPrecio(animal.getPrecio());
         detalle.setSubtotal(cantidad* animal.getPrecio());
+        venta= new Venta();
         venta.addDetalle(detalle);
-        
+      
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -80,8 +80,8 @@ public class LoginF extends javax.swing.JPanel {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
     java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
     Main ventanaPrincipal= (Main) comp;
-    
-        if(false){
+
+        if( txtUsuario.getText().equals("123")){
             FrmAdmind  guiAdmin = new FrmAdmind();
             guiAdmin.setVisible(true);
           /*  HomeAdmin panelAdmin = new HomeAdmin();

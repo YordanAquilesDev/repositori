@@ -75,7 +75,7 @@ public class Tienda extends JPanel {
                 // Creamos una tarjeta para cada animal de la lista y la añadimos
                 for (Animal animal : listaAnimales) {
                     CardProducto tarjetaProducto=  new CardProducto(animal);
-                    TarjetaAnimal tarjeta = new TarjetaAnimal(animal);
+                  //  TarjetaAnimal tarjeta = new TarjetaAnimal(animal);
                     contenedorTarjetas.add(tarjetaProducto);
                     System.out.println(contenedorTarjetas);
                 }
