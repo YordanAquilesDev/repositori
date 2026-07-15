@@ -10,49 +10,23 @@ import java.util.Optional;
 
 public class DetalleVentaServiceImpl implements ICRUD<DetalleVenta, Integer> {
 
-    private final ProductoServiceImpl productoService;
+    private final ProductoService productoService;
     private final DetalleVentaRepository detalleVentaRepository;
 
     public DetalleVentaServiceImpl() {
         // esto viene de de VentaServiceImpl
-        this.productoService = new ProductoServiceImpl();
+        this.productoService = new ProductoService();
         this.detalleVentaRepository = new DetalleVentaRepository();
     }
 
     @Override
     public int save(DetalleVenta detalleVenta) {
-        if (detalleVenta == null || detalleVenta.getVenta() == null || detalleVenta.getProducto() == null) {
-            throw new IllegalArgumentException("valores de objetos nulos ");
-        }
 
-        Producto p = productoService.findById(detalleVenta.getProducto().getIdProducto()).orElse(null);
-        if (p == null) {
-            throw new IllegalArgumentException("producto no encontrado");
-        }
-
-        if (p.getStockActual() > detalleVenta.getCantidad()) {
-            double subtotal = p.getPrecioUnidad() * detalleVenta.getCantidad();
-            detalleVenta.setSubtotal(subtotal);
-            int resultadoDetalleVenta = detalleVentaRepository.save(detalleVenta);
-            if (resultadoDetalleVenta > 0) {
-                p.setStockActual(p.getStockActual() - detalleVenta.getCantidad());
-                int resultado = productoService.update(p);
-                if (resultado > 0) {
-                    return 1;
-                }
-                return 0;
-            }
-        } else {
-            throw new IllegalArgumentException("stock insuficiente");
-        }
         return -1;
     }
 
     @Override
     public int update(DetalleVenta beans) {
-        if (beans == null || beans.getVenta() == null || beans.getProducto() == null) {
-            throw new IllegalArgumentException("valores de objetos nulos ");
-        }
         return detalleVentaRepository.update(beans);
     }
 

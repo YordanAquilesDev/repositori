@@ -6,56 +6,25 @@ package RunMain;
 
 /**
  *
- * @author yordan
+ * @author yordan aquiles andres quiroz
  */
 public class Main extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
 
-    /**
-     * Creates new form Main
-     */
+
 public Main() {
     initComponents();
-    
-    // 1. Pantalla completa automática
+
     this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-    
-    // 2. Limpieza estándar para asegurar expansión total del contenedor
     contenedorLogin.removeAll();
     contenedorLogin.setLayout(new java.awt.BorderLayout());
-    
-    // 3. Agregamos tu LoginF corregido
     LoginF login = new LoginF();
     contenedorLogin.add(login, java.awt.BorderLayout.CENTER);
-    
     contenedorLogin.revalidate();
     contenedorLogin.repaint();
 }
 
-// 🛠️ Creamos tu método void debajo de initComponents()
-private void configurarResponsivo() {
-    // 1. Forzar pantalla completa automática
-    this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-    
-    // 2. 🌟 EL CAMBIO CLAVE: Obligamos al contenido de la ventana principal a usar BorderLayout
-    this.getContentPane().setLayout(new java.awt.BorderLayout());
-    
-    // 3. Limpiamos por completo el panel contenedor para borrar configuraciones rígidas previas
-    contenedorLogin.removeAll();
-    contenedorLogin.setLayout(new java.awt.BorderLayout());
-    
-    // 4. Instanciamos tu LoginF y le exigimos ocupar el CENTER absoluto
-    LoginF login = new LoginF();
-    contenedorLogin.add(login, java.awt.BorderLayout.CENTER);
-    
-    // 5. Añadimos el contenedor directamente al centro del JFrame principal
-    this.getContentPane().add(contenedorLogin, java.awt.BorderLayout.CENTER);
-    
-    // 6. Forzar el recálculo matemático de layouts y repintado de píxeles
-    this.revalidate();
-    this.repaint();
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,17 +40,21 @@ private void configurarResponsivo() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         contenedorLogin.setLayout(new java.awt.BorderLayout());
-        contenedorLogin.add(loginF1, java.awt.BorderLayout.PAGE_START);
+        contenedorLogin.add(loginF1, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedorLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(contenedorLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedorLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(contenedorLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -112,16 +85,9 @@ private void configurarResponsivo() {
         java.awt.EventQueue.invokeLater(() -> new Main().setVisible(true));
     }
 
-        // Reemplaza o agrega este método dentro de tu Main.java
     public void cambiarPantalla(javax.swing.JPanel nuevaPantalla) {
-        // 1. Limpiamos el contenedor actual del Login
         contenedorLogin.removeAll();
-
-        // 2. Insertamos el panel correspondiente (ya sea HomeAdmin o HomeUsuario)
-        // Gracias al BorderLayout, heredará de inmediato el tamaño completo
         contenedorLogin.add(nuevaPantalla, java.awt.BorderLayout.CENTER);
-
-        // 3. Forzamos a Swing a refrescar los gráficos en pantalla
         contenedorLogin.revalidate();
         contenedorLogin.repaint();
     }

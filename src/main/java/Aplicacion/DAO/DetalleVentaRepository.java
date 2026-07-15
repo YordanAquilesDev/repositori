@@ -1,6 +1,7 @@
 package Aplicacion.DAO;
 
 import Aplicacion.Service.ProductoService;
+import Aplicacion.Service.VentaService;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.repository.ICRUD;
@@ -15,10 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
-
+   private final VentaService ventaService;
     private final ProductoService productoService;
   public DetalleVentaRepository() {
        this.productoService = new ProductoService();
+       this.ventaService= new VentaService();
   }
     @Override
     public int save(DetalleVenta beans) {
@@ -52,6 +54,8 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
     @Override
     public int update(DetalleVenta detalleVenta) {
+        Connection conexion= null;
+        
         String sql = "UPDATE detalle_venta "
                 + "SET id_venta = ?, id_producto = ?, cantidad = ?, subtotal = ? "
                 + "WHERE id_detalle = ?";
@@ -90,13 +94,13 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
       Connection conexion = null;
       PreparedStatement pstmt = null;
       ResultSet rs = null;
-        String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+     
+        try  {
+            String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
+            conexion=  ConexionMySQL.getConexion();
+            pstmt= conexion.prepareStatement(sql);
             pstmt.setInt(1, id);
-           Venta venta= new Venta();
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    venta.setIdVenta(rs.getInt("id_detalle"));
+                if (rs.next()) {     
                     return Optional.of(
                             new DetalleVenta(
                             rs.getInt("id_detalle"),
@@ -106,7 +110,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
                             rs.getDouble("cantidad"),
                             rs.getDouble("subtotal")
                     ));
-                }
+                
             }
 
             return Optional.empty();
@@ -121,16 +125,18 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
       Connection conexion = null;
       PreparedStatement pstmt = null;
       ResultSet rs = null;
-        List<DetalleVenta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM detalle_venta";
-
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-
+      List<DetalleVenta> lista = new ArrayList<>();
+        try {
+            conexion= ConexionMySQL.getConexion();
+            String sql = "SELECT * FROM detalle_venta";
+            pstmt= conexion.prepareStatement(sql);
+            rs= pstmt.executeQuery();
             while (rs.next()) {
                 lista.add(new DetalleVenta(
                         rs.getInt("id_detalle"),
-                        null,
-                        productoService.findById(rs.getInt("id_producto")).orElse(null),
+                        rs.getInt("e"),
+                        rs.getInt("r"),
+                        rs.getInt("r"),
                         rs.getDouble("cantidad"),
                         rs.getDouble("subtotal")
                 ));
@@ -143,14 +149,12 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
     @Override
     public int saveAndFindId(DetalleVenta detalleVenta) {
-        String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal) VALUES (?, ?, ?, ?)";
+        Connection conexion = null;
+        PreparedStatement pstmt = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setInt(1, detalleVenta.getVenta().getIdVenta());
-            pstmt.setInt(2, detalleVenta.getProducto().getIdProducto());
-            pstmt.setDouble(3, detalleVenta.getCantidad());
-            pstmt.setDouble(4, detalleVenta.getSubtotal());
+        try {
+            String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal) VALUES (?, ?, ?, ?)";
 
             pstmt.executeUpdate();
 

@@ -9,10 +9,10 @@ import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.repository.ICRUD;
 
-public class VentaServiceImpl  implements ICRUD<Venta,Integer> {
+public class VentaService  implements ICRUD<Venta,Integer> {
    private final VentaRepository ventaRepository;
    private  final DetalleVentaServiceImpl detalleVentaService;
-   public VentaServiceImpl() {
+   public VentaService() {
   //
        this.detalleVentaService = new DetalleVentaServiceImpl();
        this.ventaRepository =  new VentaRepository();
@@ -24,9 +24,6 @@ public class VentaServiceImpl  implements ICRUD<Venta,Integer> {
        int filasAfectadas = 0;
        double total = 0;
 
-        if(beans.getUsuario()==null||beans.getFecha()==null||beans.getTotal()<0.0){
-            throw  new IllegalArgumentException("valores de la venta  tiene algunos problemas ");
-        }
 
         total =beans.getDetalleVentas()
                 .stream()
@@ -42,7 +39,7 @@ public class VentaServiceImpl  implements ICRUD<Venta,Integer> {
             //cargamos el idVenta a todos los detalles
             beans.getDetalleVentas()
                     .forEach(bean -> {
-                        bean.getVenta().setIdVenta(idVenta);
+
                     });
 
             //ahora guardamos detalleVenta en la db
@@ -78,9 +75,7 @@ public class VentaServiceImpl  implements ICRUD<Venta,Integer> {
     @Override
     public int saveAndFindId(Venta beans) {
         // 1. Validaciones estructurales básicas
-        if (beans == null || beans.getUsuario() == null) {
-            throw new IllegalArgumentException("La venta o el cliente no pueden ser nulos.");
-        }
+
 
         // 2. Automatizar datos: Asignar la fecha actual del sistema
         // 3. Regla de negocio: Calcular el total dinámicamente si hay detalles

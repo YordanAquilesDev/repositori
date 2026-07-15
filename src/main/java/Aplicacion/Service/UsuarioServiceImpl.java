@@ -17,10 +17,6 @@ public class UsuarioServiceImpl implements ICRUD<Usuario, Integer> {
 
     @Override
     public int save(Usuario beans) {
-        if (beans == null || beans.getUsername() == null || beans.getPassword() == null
-                || beans.getNombre() == null || beans.getApellido() == null) {
-            return -1;
-        }
         return usuarioRepository.save(beans);
     }
 
@@ -49,9 +45,7 @@ public class UsuarioServiceImpl implements ICRUD<Usuario, Integer> {
 
     @Override
     public int saveAndFindId(Usuario beans) {
-        if (beans == null || beans.getUsername() == null || beans.getPassword() == null) {
-            return -1;
-        }
+
         return usuarioRepository.saveAndFindId(beans);
     }
 

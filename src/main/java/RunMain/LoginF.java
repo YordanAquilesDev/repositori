@@ -6,6 +6,7 @@ package RunMain;
 
 import Aplicacion.Service.UsuarioServiceImpl;
 import Dominio.Modelo.Usuario;
+import Presentacion.GuiAdmin.FrmAdmind;
 import Presentacion.GuiAdmin.HomeAdmin;
 import Presentacion.GuiUsuario.HomeUsuario;
 
@@ -13,41 +14,23 @@ import java.awt.GridBagLayout;
 
 /**
  *
- * @author yordan
+ * @author yordan aquiles andres quiroz
  */
 public class LoginF extends javax.swing.JPanel {
 
-    /**
-     * Creates new form LoginF
-     */
-   /**
-     * Creates new form LoginF
-     */
     public LoginF() {
         initComponents();
-        // 🚀 Llamamos tu nuevo método justo debajo para no alterar el diseño de NetBeans
         configurarFondoResponsivo();
     }
    
-    // 🛠️ Tu método void que soluciona todo dinámicamente
+
     private void configurarFondoResponsivo() {
-        // 1. Cambiamos la raíz a GridBagLayout por código para que actúe como un imán central
         this.setLayout(new GridBagLayout());
-        
-        // 2. Quitamos el JLayeredPane de donde lo puso NetBeans originalmente
         this.remove(contenedorLogin);
-        
-        // 3. Forzamos al JLayeredPane a mantener su tamaño original de tarjeta de diseño
         contenedorLogin.setMinimumSize(new java.awt.Dimension(1410, 770));
         contenedorLogin.setPreferredSize(new java.awt.Dimension(1410, 770));
         contenedorLogin.setMaximumSize(new java.awt.Dimension(1410, 770));
-        
-        // 4. Volvemos a insertar el JLayeredPane. Al estar la raíz en GridBagLayout,
-        // la tarjeta se quedará flotando en el CENTRO exacto de cualquier monitor.
         this.add(contenedorLogin, new java.awt.GridBagConstraints());
-        
-        // 5. Pequeño truco estético: le ponemos un color de fondo gris claro/crema a la raíz
-        // para que combine con el diseño de TerraCrop en lugar del fucsia o gris oscuro.
         this.setBackground(new java.awt.Color(240, 238, 233)); 
     }
 
@@ -77,7 +60,6 @@ public class LoginF extends javax.swing.JPanel {
 
         txtPasword.setBackground(new java.awt.Color(253, 243, 250));
         txtPasword.setBorder(null);
-        txtPasword.addActionListener(this::txtPaswordActionPerformed);
         contenedorLogin.add(txtPasword, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 280, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/login.png"))); // NOI18N
@@ -101,9 +83,11 @@ public class LoginF extends javax.swing.JPanel {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
     java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
     Main ventanaPrincipal= (Main) comp;
+    FrmAdmind  guiAdmin = new FrmAdmind();
         if(true){
-              HomeAdmin panelAdmin = new HomeAdmin();
-            ventanaPrincipal.cambiarPantalla(panelAdmin);
+            guiAdmin.setVisible(true);
+          /*  HomeAdmin panelAdmin = new HomeAdmin();
+          /*  ventanaPrincipal.cambiarPantalla(panelAdmin);*/
         }
         /*  String username = txtUsuario.getText();
     String password = txtPassword.getText();

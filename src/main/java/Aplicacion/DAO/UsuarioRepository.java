@@ -19,15 +19,6 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, beans.getUsername());
-            pstmt.setString(2, beans.getPassword());
-            pstmt.setString(3, beans.getEmail());
-            pstmt.setString(4, beans.getRol());
-            pstmt.setString(5, beans.getNombre());
-            pstmt.setString(6, beans.getApellido());
-            pstmt.setString(7, beans.getDni());
-            pstmt.setString(8, beans.getCelular());
-            pstmt.setString(9, beans.getDireccion());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -44,17 +35,6 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, beans.getUsername());
-            pstmt.setString(2, beans.getPassword());
-            pstmt.setString(3, beans.getEmail());
-            pstmt.setString(4, beans.getRol());
-            pstmt.setString(5, beans.getNombre());
-            pstmt.setString(6, beans.getApellido());
-            pstmt.setString(7, beans.getDni());
-            pstmt.setString(8, beans.getCelular());
-            pstmt.setString(9, beans.getDireccion());
-            pstmt.setString(10, beans.getEstado());
-            pstmt.setInt(11, beans.getIdUsuario());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -124,15 +104,6 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
         try (Connection conn = ConexionMySQL.getConexionMySQL();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, beans.getUsername());
-            pstmt.setString(2, beans.getPassword());
-            pstmt.setString(3, beans.getEmail());
-            pstmt.setString(4, beans.getRol());
-            pstmt.setString(5, beans.getNombre());
-            pstmt.setString(6, beans.getApellido());
-            pstmt.setString(7, beans.getDni());
-            pstmt.setString(8, beans.getCelular());
-            pstmt.setString(9, beans.getDireccion());
 
             int filas = pstmt.executeUpdate();
             if (filas == 0) return -1;
@@ -169,7 +140,7 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
     }
 
     private Usuario mapear(ResultSet rs) throws SQLException {
-        return new Usuario(
+       return null; /*return new Usuario(
                 rs.getInt("id_usuario"),
                 rs.getString("username"),
                 rs.getString("password"),
@@ -182,6 +153,6 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
                 rs.getString("direccion"),
                 rs.getDate("fecha_registro"),
                 rs.getString("estado")
-        );
+        );*/
     }
 }

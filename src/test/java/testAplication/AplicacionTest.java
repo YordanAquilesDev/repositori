@@ -3,10 +3,9 @@ package testAplication;
 import Aplicacion.Service.ProductoServiceImpl;
 import Aplicacion.Service.AnimalService;
 import Aplicacion.Service.DetalleVentaServiceImpl;
-import Aplicacion.Service.PedidoServiceImpl;
 import Aplicacion.Service.ConsumoServiceImpl;
 import Aplicacion.Service.LoteAnimalServiceImpl;
-import Aplicacion.Service.VentaServiceImpl;
+import Aplicacion.Service.VentaService;
 import Aplicacion.Service.MovimientoServiceImpl;
 import Aplicacion.Service.UsuarioServiceImpl;
 import Aplicacion.Service.ProveedorServiceImpl;
@@ -333,7 +332,7 @@ public class AplicacionTest {
 
 
     public static void testearVentas(){
-        VentaServiceImpl ventaService= new VentaServiceImpl();
+        VentaService ventaService= new VentaService();
 
         UsuarioServiceImpl usuarioService= new UsuarioServiceImpl();
         ProductoServiceImpl productoService= new ProductoServiceImpl();

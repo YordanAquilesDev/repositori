@@ -4,17 +4,24 @@
  */
 package Presentacion.GuiAdmin;
 
+import Aplicacion.Service.VentaService;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author yordan
  */
 public class Ventas extends javax.swing.JPanel {
-
+    private final VentaService ventaService;
+ DefaultTableModel modelo = null;
     /**
      * Creates new form Ventas
      */
     public Ventas() {
+        this.ventaService= new VentaService();
         initComponents();
+        modelo = (DefaultTableModel) tblVentas.getModel();
+        llenarTabla();
     }
 
     /**
@@ -29,7 +36,7 @@ public class Ventas extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblVentas = new javax.swing.JTable();
 
         jPanel1.setBackground(new java.awt.Color(255, 153, 102));
 
@@ -44,7 +51,7 @@ public class Ventas extends javax.swing.JPanel {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -52,10 +59,10 @@ public class Ventas extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "Cliente", "Fecha", "Total"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblVentas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -89,12 +96,23 @@ public class Ventas extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+ 
+    private void llenarTabla(){
+        ventaService.findAll().forEach(venta->{
+            modelo.addRow(new Object[]{
+                venta.getIdVenta(),
+                venta.getIdCliente(),
+                venta.getFecha(),
+                venta.getTotal()
+            
+            });
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblVentas;
     // End of variables declaration//GEN-END:variables
 }

@@ -21,8 +21,7 @@ public class ClienteService implements ICRUD<Cliente,Integer> {
         if(beans==null){
             return -1;
         }
-        if(beans)
-        return 0;
+ return  0;
     }
 
     @Override

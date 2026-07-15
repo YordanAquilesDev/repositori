@@ -24,8 +24,6 @@ public class VentaRepository implements ICRUD<Venta, Integer> {
             String sql= "INSERT INTO venta(id_usuario, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,beans.getUsuario().getIdUsuario());
-            pstmt.setDate(2,beans.getFecha()); // fecha
             pstmt.setDouble(3,beans.getTotal());// total
             respuesta = pstmt.executeUpdate();
             return respuesta;
@@ -50,8 +48,6 @@ public class VentaRepository implements ICRUD<Venta, Integer> {
             String sql= "UPDATE venta SET id_usuario = ?, fecha = ?, total = ? WHERE id_venta = ?";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,beans.getUsuario().getIdUsuario());
-            pstmt.setDate(2,beans.getFecha());
             pstmt.setDouble(3,beans.getTotal());
             pstmt.setInt(4,beans.getIdVenta());
             respuesta = pstmt.executeUpdate();
@@ -105,12 +101,12 @@ public class VentaRepository implements ICRUD<Venta, Integer> {
             pstmt.setInt(1,id);
            rs=pstmt.executeQuery();
            if(rs.next()){
-               return Optional.of(new Venta(
+               return  null;/*Optional.of(new Venta(
                         rs.getInt(1),
                         usuarioRepository.findById(rs.getInt(2)).orElse(null),
                        rs.getDate(3),
                        rs.getDouble(4)
-               ));
+               ));*/
            }
            return Optional.empty();
         } catch (SQLException e) {
@@ -140,10 +136,6 @@ public class VentaRepository implements ICRUD<Venta, Integer> {
             rs=pstmt.executeQuery();
            while(rs.next()){
                list.add( new Venta(
-                        rs.getInt(1),
-                        usuarioRepository.findById(rs.getInt(2)).orElse(null),
-                        rs.getDate(3),
-                        rs.getDouble(4)
                 )
                 );
             }
@@ -170,8 +162,7 @@ public class VentaRepository implements ICRUD<Venta, Integer> {
             String sql= "INSERT INTO venta(id_usuario, fecha, total) VALUES(?, ?, ?)";
             conn= ConexionMySQL.getConexionMySQL();
             pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1,beans.getUsuario().getIdUsuario());
-            pstmt.setDate(2,beans.getFecha()); // fecha
+
             pstmt.setDouble(3,beans.getTotal());
 
             int filaAfectadas = pstmt.executeUpdate();
