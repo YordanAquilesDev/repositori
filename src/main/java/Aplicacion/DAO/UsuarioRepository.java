@@ -13,109 +13,262 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
 
     @Override
     public int save(Usuario beans) {
-        String sql = "INSERT INTO usuarios (username, password, email, rol, nombre, apellido, dni, celular, direccion) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         Connection conexion = null;
+    PreparedStatement ps = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    int resultado = 0;
 
+    try {
 
-            return pstmt.executeUpdate();
+        String sql = """
+                INSERT INTO Usuario(idRol, nombre, correo, password, estado)
+                VALUES(?,?,?,?,?)
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, beans.getIdRol());
+        ps.setString(2, beans.getNombre());
+        ps.setString(3, beans.getCorreo());
+        ps.setString(4, beans.getPassword());
+        ps.setBoolean(5, beans.isEstado());
+
+        resultado = ps.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    return resultado;
     }
 
     @Override
     public int update(Usuario beans) {
-        String sql = "UPDATE usuarios SET username = ?, password = ?, email = ?, rol = ?, "
-                + "nombre = ?, apellido = ?, dni = ?, celular = ?, direccion = ?, estado = ? "
-                + "WHERE id_usuario = ?";
+        Connection conexion = null;
+    PreparedStatement ps = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    int resultado = 0;
 
+    try {
 
-            return pstmt.executeUpdate();
+        String sql = """
+                UPDATE Usuario
+                SET idRol = ?, nombre = ?, correo = ?, password = ?, estado = ?
+                WHERE idUsuario = ?
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, beans.getIdRol());
+        ps.setString(2, beans.getNombre());
+        ps.setString(3, beans.getCorreo());
+        ps.setString(4, beans.getPassword());
+        ps.setBoolean(5, beans.isEstado());
+        ps.setInt(6, beans.getIdUsuario());
+
+        resultado = ps.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    return resultado;
     }
 
     @Override
     public int delete(Integer id) {
-        String sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+        Connection conexion = null;
+    PreparedStatement ps = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    int resultado = 0;
 
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate();
+    try {
+
+        String sql = """
+                DELETE FROM Usuario
+                WHERE idUsuario = ?
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, id);
+
+        resultado = ps.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    return resultado;
     }
 
     @Override
     public Optional<Usuario> findById(Integer id) {
-        String sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
+        Connection conexion = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    try {
 
-            pstmt.setInt(1, id);
+        String sql = """
+                SELECT *
+                FROM Usuario
+                WHERE idUsuario = ?
+                """;
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapear(rs));
-                }
-            }
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
 
-            return Optional.empty();
+        ps.setInt(1, id);
+
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+
+            Usuario usuario = new Usuario();
+
+            usuario.setIdUsuario(rs.getInt("idUsuario"));
+            usuario.setIdRol(rs.getInt("idRol"));
+            usuario.setNombre(rs.getString("nombre"));
+            usuario.setCorreo(rs.getString("correo"));
+            usuario.setPassword(rs.getString("password"));
+            usuario.setEstado(rs.getBoolean("estado"));
+
+            return Optional.of(usuario);
+        }
+
+        return Optional.empty();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
     }
 
     @Override
     public List<Usuario> findAll() {
-        List<Usuario> list = new ArrayList<>();
-        String sql = "SELECT * FROM usuarios";
+        Connection conexion = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+    List<Usuario> lista = new ArrayList<>();
 
-            while (rs.next()) {
-                list.add(mapear(rs));
-            }
+    try {
 
-            return list;
+        String sql = """
+                SELECT *
+                FROM Usuario
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+
+            Usuario usuario = new Usuario();
+
+            usuario.setIdUsuario(rs.getInt("idUsuario"));
+            usuario.setIdRol(rs.getInt("idRol"));
+            usuario.setNombre(rs.getString("nombre"));
+            usuario.setCorreo(rs.getString("correo"));
+            usuario.setPassword(rs.getString("password"));
+            usuario.setEstado(rs.getBoolean("estado"));
+
+            lista.add(usuario);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    return lista;
+    }
+
     @Override
     public int saveAndFindId(Usuario beans) {
-        String sql = "INSERT INTO usuarios (username, password, email, rol, nombre, apellido, dni, celular, direccion) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         Connection conexion = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    try {
 
+        String sql = """
+                INSERT INTO Usuario(idRol, nombre, correo, password, estado)
+                VALUES(?,?,?,?,?)
+                """;
 
-            int filas = pstmt.executeUpdate();
-            if (filas == 0) return -1;
+        conexion = ConexionMySQL.getConexion();
 
-            try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
-            }
+        ps = conexion.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            return -1;
+        ps.setInt(1, beans.getIdRol());
+        ps.setString(2, beans.getNombre());
+        ps.setString(3, beans.getCorreo());
+        ps.setString(4, beans.getPassword());
+        ps.setBoolean(5, beans.isEstado());
+
+        ps.executeUpdate();
+
+        rs = ps.getGeneratedKeys();
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+        return 0;
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
     }
 
     public Usuario login(String username, String password) {
@@ -140,19 +293,13 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
     }
 
     private Usuario mapear(ResultSet rs) throws SQLException {
-       return null; /*return new Usuario(
-                rs.getInt("id_usuario"),
-                rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("email"),
-                rs.getString("rol"),
-                rs.getString("nombre"),
-                rs.getString("apellido"),
-                rs.getString("dni"),
-                rs.getString("celular"),
-                rs.getString("direccion"),
-                rs.getDate("fecha_registro"),
-                rs.getString("estado")
-        );*/
+        return new Usuario(
+            rs.getInt("idUsuario"),
+            rs.getInt("idRol"),
+            rs.getString("nombre"),
+            rs.getString("correo"),
+            rs.getString("password"),
+            rs.getBoolean("estado")
+    );
     }
 }

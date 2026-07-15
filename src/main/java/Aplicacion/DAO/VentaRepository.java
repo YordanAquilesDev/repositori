@@ -17,175 +17,254 @@ public class VentaRepository implements ICRUD<Venta, Integer> {
     }
     @Override
     public int save(Venta beans) {
-        Connection conn= null;
-        PreparedStatement pstmt = null;
-        int respuesta = -1;
-        try{
-            String sql= "INSERT INTO venta(id_usuario, fecha, total) VALUES(?, ?, ?)";
-            conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql);
-            pstmt.setDouble(3,beans.getTotal());// total
-            respuesta = pstmt.executeUpdate();
-            return respuesta;
+        Connection conexion = null;
+    PreparedStatement ps = null;
+
+    int resultado = 0;
+
+    try {
+
+        String sql = """
+                INSERT INTO Venta(idCliente, fecha, total)
+                VALUES(?,?,?)
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, beans.getIdCliente());
+        ps.setString(2, beans.getFecha());
+        ps.setDouble(3, beans.getTotal());
+
+        resultado = ps.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
-           throw new RuntimeException(e);
-        }finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
-             } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            throw new RuntimeException(e);
         }
+    }
+
+    return resultado;
     }
 
     @Override
     public int update(Venta beans) {
-        Connection conn= null;
-        PreparedStatement pstmt = null;
-        int respuesta = -1;
-        try{
-            String sql= "UPDATE venta SET id_usuario = ?, fecha = ?, total = ? WHERE id_venta = ?";
-            conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql);
-            pstmt.setDouble(3,beans.getTotal());
-            pstmt.setInt(4,beans.getIdVenta());
-            respuesta = pstmt.executeUpdate();
-            return respuesta;
+        Connection conexion = null;
+    PreparedStatement ps = null;
+
+    int resultado = 0;
+
+    try {
+
+        String sql = """
+                UPDATE Venta
+                SET idCliente = ?, fecha = ?, total = ?
+                WHERE idVenta = ?
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, beans.getIdCliente());
+        ps.setString(2, beans.getFecha());
+        ps.setDouble(3, beans.getTotal());
+        ps.setInt(4, beans.getIdVenta());
+
+        resultado = ps.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+    }
+
+    return resultado;
 
     }
 
     @Override
-    public int delete(Integer integer) {
-        Connection conn= null;
-        PreparedStatement pstmt = null;
-        int respuesta = -1;
-        try{
-            String sql= "DELETE FROM venta WHERE id_venta = ?";
-            conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,integer);
-            respuesta = pstmt.executeUpdate();
-            return respuesta;
+    public int delete(Integer id) {
+         Connection conexion = null;
+    PreparedStatement ps = null;
+
+    int resultado = 0;
+
+    try {
+
+        String sql = """
+                DELETE FROM Venta
+                WHERE idVenta = ?
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, id);
+
+        resultado = ps.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+    }
+
+    return resultado;
     }
 
     @Override
     public Optional<Venta> findById(Integer id) {
-        Connection conn= null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try{
-            conn= ConexionMySQL.getConexionMySQL();
-            String sql= "SELECT * FROM venta WHERE id_venta = ?";
-            pstmt=conn.prepareStatement(sql);
-            pstmt.setInt(1,id);
-           rs=pstmt.executeQuery();
-           if(rs.next()){
-               return  null;/*Optional.of(new Venta(
-                        rs.getInt(1),
-                        usuarioRepository.findById(rs.getInt(2)).orElse(null),
-                       rs.getDate(3),
-                       rs.getDouble(4)
-               ));*/
-           }
-           return Optional.empty();
+        Connection conexion = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+
+        String sql = """
+                SELECT *
+                FROM Venta
+                WHERE idVenta = ?
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        ps.setInt(1, id);
+
+        rs = ps.executeQuery();
+
+        if (rs.next()) {
+
+            Venta venta = new Venta();
+
+            venta.setIdVenta(rs.getInt("idVenta"));
+            venta.setIdCliente(rs.getInt("idCliente"));
+            venta.setFecha(rs.getString("fecha"));
+            venta.setTotal(rs.getDouble("total"));
+
+            return Optional.of(venta);
+        }
+
+        return Optional.empty();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
-                if(rs != null) rs.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+    }
 
     }
 
     @Override
     public List<Venta> findAll() {
-        Connection conn= null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        List<Venta> list = new ArrayList<>();
-        try{
-            String sql= "SELECT * FROM venta";
-            conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql);
-            rs=pstmt.executeQuery();
-           while(rs.next()){
-               list.add( new Venta(
-                )
-                );
-            }
-             return list;
+        Connection conexion = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    List<Venta> lista = new ArrayList<>();
+
+    try {
+
+        String sql = """
+                SELECT *
+                FROM Venta
+                """;
+
+        conexion = ConexionMySQL.getConexion();
+        ps = conexion.prepareStatement(sql);
+
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+
+            Venta venta = new Venta();
+
+            venta.setIdVenta(rs.getInt("idVenta"));
+            venta.setIdCliente(rs.getInt("idCliente"));
+            venta.setFecha(rs.getString("fecha"));
+            venta.setTotal(rs.getDouble("total"));
+
+            lista.add(venta);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
-                if(rs != null) rs.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+    }
+
+    return lista;
     }
 
     @Override
     public int saveAndFindId(Venta beans) {
-        Connection conn= null;
-        PreparedStatement pstmt = null;
-        int idGenerado = 0;
-        try{
-            String sql= "INSERT INTO venta(id_usuario, fecha, total) VALUES(?, ?, ?)";
-            conn= ConexionMySQL.getConexionMySQL();
-            pstmt=conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        Connection conexion = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
-            pstmt.setDouble(3,beans.getTotal());
+    try {
 
-            int filaAfectadas = pstmt.executeUpdate();
-            if(filaAfectadas>0){
-                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        // Extraemos el ID (usualmente es la primera columna del ResultSet obtenido)
-                        idGenerado= generatedKeys.getInt(1);
+        String sql = """
+                INSERT INTO Venta(idCliente, fecha, total)
+                VALUES(?,?,?)
+                """;
 
-                    }
-                }
-            }
-            return idGenerado;
+        conexion = ConexionMySQL.getConexion();
+
+        ps = conexion.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+        ps.setInt(1, beans.getIdCliente());
+        ps.setString(2, beans.getFecha());
+        ps.setDouble(3, beans.getTotal());
+
+        ps.executeUpdate();
+
+        rs = ps.getGeneratedKeys();
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+        return 0;
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conexion != null) conexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         }
+    }
     }
 }
 
