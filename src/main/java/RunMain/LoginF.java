@@ -4,11 +4,8 @@
  */
 package RunMain;
 
-import Aplicacion.Service.UsuarioServiceImpl;
-import Dominio.Modelo.Usuario;
 import Presentacion.GuiAdmin.FrmAdmind;
-import Presentacion.GuiAdmin.HomeAdmin;
-import Presentacion.GuiUsuario.HomeUsuario;
+import Presentacion.GuiUsuario.FrmUsuario;
 
 import java.awt.GridBagLayout;
 
@@ -83,11 +80,15 @@ public class LoginF extends javax.swing.JPanel {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
     java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
     Main ventanaPrincipal= (Main) comp;
-    FrmAdmind  guiAdmin = new FrmAdmind();
+    
         if(true){
+            FrmAdmind  guiAdmin = new FrmAdmind();
             guiAdmin.setVisible(true);
           /*  HomeAdmin panelAdmin = new HomeAdmin();
           /*  ventanaPrincipal.cambiarPantalla(panelAdmin);*/
+        }else{
+            FrmUsuario guiUsuario= new FrmUsuario();
+            guiUsuario.setVisible(true);
         }
         /*  String username = txtUsuario.getText();
     String password = txtPassword.getText();

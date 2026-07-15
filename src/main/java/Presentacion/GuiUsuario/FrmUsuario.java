@@ -8,14 +8,14 @@ package Presentacion.GuiUsuario;
  *
  * @author yordan
  */
-public class GuiUsuario extends javax.swing.JFrame {
+public class FrmUsuario extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GuiUsuario.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmUsuario.class.getName());
 
     /**
      * Creates new form GuiUsuario
      */
-    public GuiUsuario() {
+    public FrmUsuario() {
         initComponents();
     }
 
@@ -66,7 +66,7 @@ public class GuiUsuario extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new GuiUsuario().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmUsuario().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

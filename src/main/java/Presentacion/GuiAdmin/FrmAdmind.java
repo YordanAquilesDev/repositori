@@ -117,8 +117,7 @@ public class FrmAdmind extends javax.swing.JFrame {
          contenedorPantallas.removeAll();
         Clientes pantallaClientes = new Clientes();
          contenedorPantallas.add(pantallaClientes);
-         contenedorPantallas.revalidate(); // Re-calcula el diseño (Layout)
-        contenedorPantallas.repaint();  
+         
          
     }//GEN-LAST:event_mnClientesMouseClicked
 
