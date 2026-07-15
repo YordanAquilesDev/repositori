@@ -116,7 +116,7 @@ public class PanelCarrito extends javax.swing.JPanel {
         }
     }
 
-    static class CarritoItem {
+    static class CarritoItem implements ArchivoPDF.PDF.CarritoItemData {
 
         final Animal animal;
         int cantidad;
@@ -126,7 +126,23 @@ public class PanelCarrito extends javax.swing.JPanel {
             this.cantidad = cantidad;
         }
 
-        double getSubtotal() {
+        @Override
+        public String getNombreAnimal() {
+            return animal.getNombre();
+        }
+
+        @Override
+        public int getCantidad() {
+            return cantidad;
+        }
+
+        @Override
+        public double getPrecioUnitario() {
+            return animal.getPrecio();
+        }
+
+        @Override
+        public double getSubtotal() {
             return animal.getPrecio() * cantidad;
         }
     }

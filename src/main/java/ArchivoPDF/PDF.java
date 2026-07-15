@@ -3,9 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ArchivoPDF;
+
 import Dominio.Modelo.Cliente;
 import Dominio.Modelo.Usuario;
-import Presentacion.GuiCliente2.CarritoPanel;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
@@ -17,15 +17,17 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.awt.Desktop;
-import java.io.File;/**
- *
+import java.io.File;
+import java.util.List;
+
+/**
  * @author user
  */
 public class PDF {
-    
+
     public static void generarBoleta(Usuario usuario,
                                      Cliente cliente,
-                                     java.util.List<CarritoPanel.CarritoItem> items,
+                                     List<? extends CarritoItemData> items,
                                      double total) {
 
         try {
@@ -62,13 +64,11 @@ public class PDF {
             tabla.addCell(crearCelda("Precio"));
             tabla.addCell(crearCelda("Subtotal"));
 
-            for (CarritoPanel.CarritoItem item : items) {
-
-                tabla.addCell(item.animal.getNombre());
-                tabla.addCell(String.valueOf(item.cantidad));
-                tabla.addCell(String.format("S/ %.2f", item.animal.getPrecio()));
+            for (CarritoItemData item : items) {
+                tabla.addCell(item.getNombreAnimal());
+                tabla.addCell(String.valueOf(item.getCantidad()));
+                tabla.addCell(String.format("S/ %.2f", item.getPrecioUnitario()));
                 tabla.addCell(String.format("S/ %.2f", item.getSubtotal()));
-
             }
 
             documento.add(tabla);
@@ -97,9 +97,14 @@ public class PDF {
         return celda;
 
     }
-    
-     
-    
-    
-            
+
+    /**
+     * Interfaz generica para que cualquier CarritoItem funcione con PDF.
+     */
+    public interface CarritoItemData {
+        String getNombreAnimal();
+        int getCantidad();
+        double getPrecioUnitario();
+        double getSubtotal();
+    }
 }
