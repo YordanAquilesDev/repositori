@@ -35,7 +35,7 @@ public class FrmAdmind extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnAlmacen = new javax.swing.JMenu();
         mnVentas = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        mnClientes = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
 
@@ -61,8 +61,13 @@ public class FrmAdmind extends javax.swing.JFrame {
         });
         jMenuBar1.add(mnVentas);
 
-        jMenu3.setText("Clientes");
-        jMenuBar1.add(jMenu3);
+        mnClientes.setText("Clientes");
+        mnClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mnClientesMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(mnClientes);
 
         jMenu4.setText("jMenu4");
         jMenuBar1.add(jMenu4);
@@ -107,6 +112,16 @@ public class FrmAdmind extends javax.swing.JFrame {
         contenedorPantallas.repaint();  
     }//GEN-LAST:event_mnVentasMouseClicked
 
+    private void mnClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnClientesMouseClicked
+        // TODO add your handling code here:
+         contenedorPantallas.removeAll();
+        Clientes pantallaClientes = new Clientes();
+         contenedorPantallas.add(pantallaClientes);
+         contenedorPantallas.revalidate(); // Re-calcula el diseño (Layout)
+        contenedorPantallas.repaint();  
+         
+    }//GEN-LAST:event_mnClientesMouseClicked
+
     private void mnAlmacenMouseClicked(java.awt.event.MouseEvent evt) {                                       
         // 1. Limpiamos lo que haya en el contenedor
         contenedorPantallas.removeAll();
@@ -150,11 +165,11 @@ public class FrmAdmind extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Presentacion.GuiAdmin.Almacen almacen1;
     private javax.swing.JPanel contenedorPantallas;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu mnAlmacen;
+    private javax.swing.JMenu mnClientes;
     private javax.swing.JMenu mnVentas;
     // End of variables declaration//GEN-END:variables
 }
