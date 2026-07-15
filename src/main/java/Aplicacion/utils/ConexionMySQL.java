@@ -12,7 +12,7 @@ public class ConexionMySQL {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/granja?serverTimezone=UTC";
             String user = "root";
-            String password = "961508";
+            String password = "adrianesteban121";
              conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (ClassNotFoundException e) {
