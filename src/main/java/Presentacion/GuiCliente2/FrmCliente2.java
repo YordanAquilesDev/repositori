@@ -1,5 +1,5 @@
 package Presentacion.GuiCliente2;
-
+import ArchivoPDF.PDF;
 import Aplicacion.Service.ClienteService;
 import Aplicacion.Service.VentaService;
 import Aplicacion.Service.UsuarioService;
@@ -9,11 +9,13 @@ import Dominio.Modelo.Usuario;
 import Dominio.Modelo.Venta;
 import RunMain.Main;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -142,80 +144,34 @@ public class FrmCliente2 extends JFrame {
             }
 
             int resultado = ventaService.save(venta);
+            
 
             if (resultado == 1) {
-                exportarBoleta();
-                carritoPanel.limpiar();
-                catalogoPanel.recargar();
-            } else {
+
+    PDF.generarBoleta(
+            usuario,
+            cliente,
+            carritoPanel.getItems(),
+            carritoPanel.getTotal()
+    );
+
+    carritoPanel.limpiar();
+    catalogoPanel.recargar();
+
+    JOptionPane.showMessageDialog(this,
+            "Compra realizada correctamente.");
+
+} else {
                 JOptionPane.showMessageDialog(this,
                         "No se pudo completar la compra. Intente de nuevo.",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(this,
                     "Error al procesar la compra: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void exportarBoleta() {
-        if (carritoPanel.getItems().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El carrito esta vacio.");
-            return;
-        }
-
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Guardar Boleta");
-        chooser.setSelectedFile(new File("boleta_" + System.currentTimeMillis() + ".txt"));
-        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Archivos de texto", "txt"));
-
-        int resultado = chooser.showSaveDialog(this);
-        if (resultado != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-
-        File archivo = chooser.getSelectedFile();
-        if (!archivo.getName().endsWith(".txt")) {
-            archivo = new File(archivo.getAbsolutePath() + ".txt");
-        }
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(archivo))) {
-            pw.println("========================================");
-            pw.println("           GRANJA - BOLETA DE COMPRA");
-            pw.println("========================================");
-            pw.println();
-            pw.println("Cliente: " + usuario.getNombre());
-            pw.println("DNI: " + cliente.getDni());
-            pw.println("Direccion: " + cliente.getDireccion());
-            pw.println("Fecha: " + java.time.LocalDateTime.now().format(
-                    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-            pw.println();
-            pw.println("----------------------------------------");
-            pw.println("  DETALLE DE COMPRA");
-            pw.println("----------------------------------------");
-
-            int num = 1;
-            for (CarritoPanel.CarritoItem item : carritoPanel.getItems()) {
-                pw.printf("%d. %s%n", num++, item.animal.getNombre());
-                pw.printf("   Precio: S/ %.2f x %d = S/ %.2f%n",
-                        item.animal.getPrecio(), item.cantidad, item.getSubtotal());
-            }
-
-            pw.println("----------------------------------------");
-            pw.printf("  TOTAL: S/ %.2f%n", carritoPanel.getTotal());
-            pw.println("========================================");
-            pw.println("       Gracias por su compra!");
-            pw.println("========================================");
-
-            JOptionPane.showMessageDialog(this,
-                    "Boleta exportada en:\n" + archivo.getAbsolutePath(),
-                    "Boleta Exportada", JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al exportar boleta: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    
 }

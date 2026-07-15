@@ -10,7 +10,6 @@ INSERT INTO Rol (nombre) VALUES
 INSERT INTO Usuario (idRol, nombre, correo, password, estado) VALUES
 (1, 'Admin',     'admin',    'admin', TRUE),
 (1, 'Juan Perez',     'juan@gmail.com',    '123456', TRUE),
-(2, 'Juan Mariños',     'juan2@gmail.com',    '123456', TRUE),
 (2, 'Maria Garcia',   'maria@gmail.com',   '123456', TRUE),
 (1, 'Carlos Lopez',   'carlos@gmail.com',  '123456', TRUE),
 (2, 'Ana Torres',     'ana@gmail.com',     '123456', TRUE),
