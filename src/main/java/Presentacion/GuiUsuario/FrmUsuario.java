@@ -4,6 +4,11 @@
  */
 package Presentacion.GuiUsuario;
 
+import Aplicacion.Service.VentaService;
+import Dominio.Modelo.Animal;
+import Dominio.Modelo.DetalleVenta;
+import Dominio.Modelo.Venta;
+
 /**
  *
  * @author yordan
@@ -11,12 +16,16 @@ package Presentacion.GuiUsuario;
 public class FrmUsuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmUsuario.class.getName());
-
+  private final VentaService ventaService;
+  private Venta venta= null;
     /**
      * Creates new form GuiUsuario
      */
     public FrmUsuario() {
         initComponents();
+        ventaService= new VentaService();
+        iniciar();
+        
     }
 
     /**
@@ -28,22 +37,86 @@ public class FrmUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tienda1 = new Presentacion.GuiUsuario.Tienda();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtCarrito = new javax.swing.JTextArea();
+        btnComprar = new javax.swing.JButton();
+        panelTienda = new javax.swing.JPanel();
+        tienda2 = new Presentacion.GuiUsuario.Tienda();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        txtCarrito.setColumns(20);
+        txtCarrito.setRows(5);
+        jScrollPane1.setViewportView(txtCarrito);
+
+        btnComprar.setText("Comprar");
+        btnComprar.addActionListener(this::btnComprarActionPerformed);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(btnComprar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnComprar)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelTiendaLayout = new javax.swing.GroupLayout(panelTienda);
+        panelTienda.setLayout(panelTiendaLayout);
+        panelTiendaLayout.setHorizontalGroup(
+            panelTiendaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTiendaLayout.createSequentialGroup()
+                .addComponent(tienda2, javax.swing.GroupLayout.PREFERRED_SIZE, 1093, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelTiendaLayout.setVerticalGroup(
+            panelTiendaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tienda2, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelTienda, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelTienda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
+      
+        txtCarrito.setText("");
+        
+    }//GEN-LAST:event_btnComprarActionPerformed
+  private void  iniciar(){
+      Tienda tienda= new Tienda();
+      panelTienda.add(tienda);
+      txtCarrito.setText("CARRITO DE PRODUCTOS A COMPRAR");
+  }
     /**
      * @param args the command line arguments
      */
@@ -68,7 +141,26 @@ public class FrmUsuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmUsuario().setVisible(true));
     }
+    
+    public void  añadirCarrito(Animal animal){
+        txtCarrito.append(animal.getNombre()+"\n");
+        int cantidad=1;
+        DetalleVenta  detalle= new DetalleVenta();
+        detalle.setIdAnimal(animal.getIdAnimal());
+        detalle.setCantidad(cantidad);
+        detalle.setPrecio(animal.getPrecio());
+        detalle.setSubtotal(cantidad* animal.getPrecio());
+        venta.addDetalle(detalle);
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnComprar;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel panelTienda;
+    private Presentacion.GuiUsuario.Tienda tienda1;
+    private Presentacion.GuiUsuario.Tienda tienda2;
+    private static javax.swing.JTextArea txtCarrito;
     // End of variables declaration//GEN-END:variables
 }

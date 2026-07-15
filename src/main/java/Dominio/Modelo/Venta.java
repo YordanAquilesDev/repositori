@@ -61,6 +61,9 @@ public class Venta {
     public void setTotal(double total) {
         this.total = total;
     }
+    public  void addDetalle(DetalleVenta detalle){
+        detalleVentas.add(detalle);
+    }
 
     
 }

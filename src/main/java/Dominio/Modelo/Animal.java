@@ -101,4 +101,8 @@ public class Animal {
         this.estado = estado;
     }
 
+    public Object getRaza() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }
