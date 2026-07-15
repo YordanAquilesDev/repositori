@@ -3,7 +3,7 @@ package RunMain;
 import Aplicacion.Service.UsuarioService;
 import Dominio.Modelo.Usuario;
 import Presentacion.GuiAdmin2.FrmAdmin2;
-import Presentacion.GuiCliente2.FrmCliente2;
+import Presentacion.GuiCliente3.FrmCliente3;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -209,7 +209,7 @@ public class LoginF2 extends JPanel {
             new FrmAdmin2(usuario).setVisible(true);
             cerrarVentanaActual();
         } else if (usuario.getIdRol() == 2) {
-            new FrmCliente2(usuario).setVisible(true);
+            new FrmCliente3(usuario).setVisible(true);
             cerrarVentanaActual();
         } else {
             JOptionPane.showMessageDialog(this, "Rol no reconocido.");
