@@ -81,7 +81,7 @@ public class LoginF extends javax.swing.JPanel {
     java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
     Main ventanaPrincipal= (Main) comp;
     
-        if(true){
+        if(false){
             FrmAdmind  guiAdmin = new FrmAdmind();
             guiAdmin.setVisible(true);
           /*  HomeAdmin panelAdmin = new HomeAdmin();
