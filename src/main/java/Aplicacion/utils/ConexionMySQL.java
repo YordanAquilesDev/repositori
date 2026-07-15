@@ -6,14 +6,14 @@ import java.sql.SQLException;
 
 public class ConexionMySQL {
 
-    public static Connection getConexionMySQL() {
+    public static Connection getConexion() {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/granja?serverTimezone=UTC";
             String user = "root";
-            String password = "adrianesteban121";
-             conn = DriverManager.getConnection(url, user, password);
+            String password = "mysql";
+            conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -21,22 +21,5 @@ public class ConexionMySQL {
             throw new RuntimeException(e);
         }
         return conn;
-    }
-
-    public static Connection getConexion() {
-        Connection conn = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/granja?serverTimezone=UTC";
-            String user = "root";
-            String password = "961508";
-             conn = DriverManager.getConnection(url, user, password);
-            return conn;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return conn; // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -16,36 +16,43 @@ import java.util.List;
 import java.util.Optional;
 
 public class AnimalRepository implements ICRUD<Animal, Integer> {
- private  final RazaService razaService;
- public AnimalRepository() {
-     this.razaService = new RazaService();
- }
+
+    private final RazaService razaService;
+
+    public AnimalRepository() {
+        this.razaService = new RazaService();
+    }
+
     @Override
     public int save(Animal beans) {
         Connection conexion = null;
         PreparedStatement ps = null;
-        int resultado=0;
+        int resultado = 0;
         try {
-            String sql= """
+            String sql = """
                     INSERT INTO animal VALUES (?,?,?,?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
             ps.setInt(1, beans.getIdRaza());
             ps.setString(2, beans.getNombre());
-            ps.setString(3,beans.getSexo());
+            ps.setString(3, beans.getSexo());
             ps.setInt(4, beans.getEdad());
-            ps.setDouble(5,beans.getPrecio());
-            ps.setInt(6,beans.getStock());
-            ps.setString(7,beans.getEstado());
-            resultado=ps.executeUpdate();
-            return  resultado;
+            ps.setDouble(5, beans.getPrecio());
+            ps.setInt(6, beans.getStock());
+            ps.setString(7, beans.getEstado());
+            resultado = ps.executeUpdate();
+            return resultado;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try{
-                if (ps != null) ps.close();
-                if(conexion!= null) conexion.close();
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -56,7 +63,7 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
     public int update(Animal beans) {
         Connection conexion = null;
         PreparedStatement ps = null;
-        int resultado=-1;
+        int resultado = -1;
         String sql = """ 
  UPDATE animal SET 
  nombre = ?,
@@ -65,7 +72,7 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
     stock =?,
     estado =?,
 """;
-        try  {
+        try {
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
             ps.setString(1, beans.getNombre());
@@ -73,18 +80,21 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
             ps.setDouble(3, beans.getPrecio());
             ps.setInt(4, beans.getStock());
             ps.setString(5, beans.getEstado());
-            resultado=ps.executeUpdate();
-            return  resultado;
+            resultado = ps.executeUpdate();
+            return resultado;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try{
-                if (ps != null) ps.close();
-                if(conexion!= null) conexion.close();
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
 
         }
     }
@@ -93,25 +103,28 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
     public int delete(Integer id) {
         Connection conexion = null;
         PreparedStatement ps = null;
-        int resultado=-1;
+        int resultado = -1;
         String sql = "DELETE FROM animal WHERE id_animal = ?";
 
-        try  {
+        try {
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
             ps.setInt(1, id);
-             resultado=ps.executeUpdate();
-             return  resultado;
+            resultado = ps.executeUpdate();
+            return resultado;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try{
-                if (ps != null) ps.close();
-                if(conexion!= null) conexion.close();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
 
         }
 
@@ -122,29 +135,33 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try  {
-            String sql= "SELECT * FROM animal WHERE id_animal = ?";
-          conexion = ConexionMySQL.getConexion();
-          ps = conexion.prepareStatement(sql);
-          ps.setInt(1, id);
-          rs = ps.executeQuery();
-          if(rs.next()) {
-              return Optional.of(new Animal(rs.getInt(1),
-                      rs.getInt(2),
-                      rs.getString(3),
-                      rs.getString(4),
-                      rs.getInt(5),
-                      rs.getDouble(6),
-                      rs.getInt(7),
-                      rs.getString(8)
-              ));
-          }
+        try {
+            String sql = "SELECT * FROM animal WHERE id_animal = ?";
+            conexion = ConexionMySQL.getConexion();
+            ps = conexion.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return Optional.of(new Animal(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getString(8)
+                ));
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try{
-                if (ps != null) ps.close();
-                if(conexion!= null) conexion.close();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -159,12 +176,12 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         ResultSet rs = null;
         List<Animal> list = new ArrayList<>();
         try {
-            String sql= "SELECT * FROM animal";
+            String sql = "SELECT * FROM animal";
             conn = ConexionMySQL.getConexion();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 list.add(new Animal(rs.getInt(1), // id genera
                         rs.getInt(2),
                         rs.getString(3),
@@ -178,10 +195,14 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
             return list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
-            try{
-                if (pstmt != null) pstmt.close();
-                if(conn!= null) conn.close();
+        } finally {
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -192,31 +213,35 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
     public int saveAndFindId(Animal beans) {
         Connection conexion = null;
         PreparedStatement ps = null;
-        ResultSet rs=null;
-        int idGeneradoPorLaBaseDeDatos=0;
+        ResultSet rs = null;
+        int idGeneradoPorLaBaseDeDatos = 0;
         try {
-            String sql= """
+            String sql = """
                     INSERT INTO animal VALUES (?,?,?,?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, beans.getIdRaza());
             ps.setString(2, beans.getNombre());
-            ps.setString(3,beans.getSexo());
+            ps.setString(3, beans.getSexo());
             ps.setInt(4, beans.getEdad());
-            ps.setDouble(5,beans.getPrecio());
-            ps.setInt(6,beans.getStock());
-            ps.setString(7,beans.getEstado());
+            ps.setDouble(5, beans.getPrecio());
+            ps.setInt(6, beans.getStock());
+            ps.setString(7, beans.getEstado());
             rs = ps.getGeneratedKeys();
             rs.next();
             idGeneradoPorLaBaseDeDatos = rs.getInt(1);
-            return  idGeneradoPorLaBaseDeDatos;
+            return idGeneradoPorLaBaseDeDatos;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try{
-                if (ps != null) ps.close();
-                if(conexion!= null) conexion.close();
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conexion != null) {
+                    conexion.close();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

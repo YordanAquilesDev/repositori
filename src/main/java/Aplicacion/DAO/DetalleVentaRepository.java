@@ -56,7 +56,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
                 + "SET id_venta = ?, id_producto = ?, cantidad = ?, subtotal = ? "
                 + "WHERE id_detalle = ?";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, detalleVenta.getIdVenta());
             pstmt.setInt(2, detalleVenta.getIdProducto());
@@ -75,7 +75,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
     public int delete(Integer id) {
         String sql = "DELETE FROM detalle_venta WHERE id_detalle = ?";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionMySQL.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             return pstmt.executeUpdate();
@@ -89,7 +89,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
     public Optional<DetalleVenta> findById(Integer id) {
     String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
 
-    try (Connection conn = ConexionMySQL.getConexionMySQL();
+    try (Connection conn = ConexionMySQL.getConexion();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
         pstmt.setInt(1, id);
@@ -123,7 +123,7 @@ public List<DetalleVenta> findAll() {
     List<DetalleVenta> lista = new ArrayList<>();
     String sql = "SELECT * FROM detalle_venta";
 
-    try (Connection conn = ConexionMySQL.getConexionMySQL();
+    try (Connection conn = ConexionMySQL.getConexion();
          PreparedStatement pstmt = conn.prepareStatement(sql);
          ResultSet rs = pstmt.executeQuery()) {
 
@@ -148,7 +148,7 @@ public List<DetalleVenta> findAll() {
     public int saveAndFindId(DetalleVenta detalleVenta) {
         String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConexionMySQL.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, detalleVenta.getIdVenta());
             pstmt.setInt(2, detalleVenta.getIdProducto());

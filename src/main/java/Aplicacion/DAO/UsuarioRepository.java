@@ -274,7 +274,7 @@ public class UsuarioRepository implements ICRUD<Usuario, Integer> {
     public Usuario login(String username, String password) {
         String sql = "SELECT * FROM usuarios WHERE username = ? AND password = ? AND estado = 'ACTIVO'";
 
-        try (Connection conn = ConexionMySQL.getConexionMySQL();
+        try (Connection conn = ConexionMySQL.getConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
