@@ -49,8 +49,8 @@ public class UsuarioServiceImpl implements ICRUD<Usuario, Integer> {
         return usuarioRepository.saveAndFindId(beans);
     }
 
-    public Usuario login(String username, String password) {
-        if (username == null || password == null) return null;
-        return usuarioRepository.login(username, password);
+    public Usuario login(String correo, String password) {
+        if (correo == null || password == null) return null;
+        return usuarioRepository.login(correo, password);
     }
 }

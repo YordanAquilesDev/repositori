@@ -4,10 +4,13 @@
  */
 package RunMain;
 
+import Aplicacion.Service.UsuarioServiceImpl;
+import Dominio.Modelo.Usuario;
 import Presentacion.GuiAdmin.FrmAdmind;
 import Presentacion.GuiUsuario.FrmUsuario;
 
 import java.awt.GridBagLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,7 +22,6 @@ public class LoginF extends javax.swing.JPanel {
         initComponents();
         configurarFondoResponsivo();
     }
-   
 
     private void configurarFondoResponsivo() {
         this.setLayout(new GridBagLayout());
@@ -28,7 +30,7 @@ public class LoginF extends javax.swing.JPanel {
         contenedorLogin.setPreferredSize(new java.awt.Dimension(1410, 770));
         contenedorLogin.setMaximumSize(new java.awt.Dimension(1410, 770));
         this.add(contenedorLogin, new java.awt.GridBagConstraints());
-        this.setBackground(new java.awt.Color(240, 238, 233)); 
+        this.setBackground(new java.awt.Color(240, 238, 233));
     }
 
     /**
@@ -78,51 +80,35 @@ public class LoginF extends javax.swing.JPanel {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-    java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
-    Main ventanaPrincipal= (Main) comp;
+        String correo = txtUsuario.getText().trim();
+        String password = txtPasword.getText().trim();
 
-        if( txtUsuario.getText().equals("123")){
-            FrmAdmind  guiAdmin = new FrmAdmind();
-            guiAdmin.setVisible(true);
-          /*  HomeAdmin panelAdmin = new HomeAdmin();
-          /*  ventanaPrincipal.cambiarPantalla(panelAdmin);*/
-        }else{
-            FrmUsuario guiUsuario= new FrmUsuario();
-            guiUsuario.setVisible(true);
+        if (correo.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese usuario y contraseña.");
+            return;
         }
-        /*  String username = txtUsuario.getText();
-    String password = txtPassword.getText();
-      System.out.println("LLego la paticion aca ");
-    
-    UsuarioServiceImpl usuarioService = new UsuarioServiceImpl();
-    Usuario usuario = usuarioService.login(username, password);
-    
-    if (usuario == null) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Usuario o contraseña incorrectos.",
-                "Error de inicio de sesión",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    java.awt.Component comp = javax.swing.SwingUtilities.getWindowAncestor(this);
-    
-    if (comp instanceof Main) {
-        Main ventanaPrincipal = (Main) comp;
-        
-        if ("ADMIN".equals(usuario.getRol())) {
-            HomeAdmin panelAdmin = new HomeAdmin(usuario);
-            ventanaPrincipal.cambiarPantalla(panelAdmin);
-        } else {
-            HomeUsuario panelUsuario = new HomeUsuario(usuario);
-            ventanaPrincipal.cambiarPantalla(panelUsuario);
+
+        try {
+            UsuarioServiceImpl usuarioService = new UsuarioServiceImpl();
+            Usuario usuario = usuarioService.login(correo, password);
+
+            if (usuario == null) {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
+                return;
+            }
+
+            if (usuario.getIdRol() == 1) {
+                FrmAdmind guiAdmin = new FrmAdmind();
+                guiAdmin.setVisible(true);
+            } else if (usuario.getIdRol() == 2) {
+                FrmUsuario guiUsuario = new FrmUsuario();
+                guiUsuario.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Rol no reconocido.");
+            }
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "No se pudo validar el usuario con la base de datos.");
         }
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Error crítico: No se encontró la ventana principal.",
-                "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-    }*/
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
 
