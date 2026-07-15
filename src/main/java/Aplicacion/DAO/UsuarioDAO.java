@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UsuarioRepository implements ICRUD<Usuario, Integer> {
+public class UsuarioDAO implements ICRUD<Usuario, Integer> {
 
     @Override
     public int save(Usuario beans) {

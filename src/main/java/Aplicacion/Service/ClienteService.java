@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Aplicacion.Service;
 
 import Dominio.Modelo.Cliente;
+import Aplicacion.DAO.ClienteDAO;
 import Dominio.repository.ICRUD;
 
 import java.util.List;
@@ -14,38 +11,51 @@ import java.util.Optional;
  *
  * @author user
  */
-public class ClienteService implements ICRUD<Cliente,Integer> {
+public class ClienteService implements ICRUD<Cliente, Integer> {
+
+    private final ClienteDAO clienteDAO;
+
+    public ClienteService() {
+        this.clienteDAO = new ClienteDAO();
+    }
 
     @Override
     public int save(Cliente beans) {
-        if(beans==null){
+        if (beans == null) {
             return -1;
         }
- return  0;
+        return clienteDAO.save(beans);
     }
 
     @Override
     public int update(Cliente beans) {
-        return 0;
+        if (beans == null || beans.getIdCliente() <= 0) return -1;
+        return clienteDAO.update(beans);
     }
 
     @Override
-    public int delete(Integer integer) {
-        return 0;
+    public int delete(Integer id) {
+        if (id == null || id < 0) return -1;
+        return clienteDAO.delete(id);
     }
 
     @Override
     public Optional<Cliente> findById(Integer integer) {
-        return Optional.empty();
+        return clienteDAO.findById(integer);
     }
 
     @Override
     public List<Cliente> findAll() {
-        return List.of();
+        return clienteDAO.findAll();
+    }
+
+    public Optional<Cliente> findByUsuarioId(int idUsuario) {
+        return clienteDAO.findByUsuarioId(idUsuario);
     }
 
     @Override
     public int saveAndFindId(Cliente beans) {
-        return 0;
+        if (beans == null) return -1;
+        return clienteDAO.saveAndFindId(beans);
     }
 }

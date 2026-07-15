@@ -1,8 +1,6 @@
 package Aplicacion.DAO;
 
-import Aplicacion.Service.ProductoService;
 import Dominio.Modelo.DetalleVenta;
-import Dominio.Modelo.Venta;
 import Dominio.repository.ICRUD;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -14,36 +12,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
+public class DetalleVentaDAO implements ICRUD<DetalleVenta, Integer> {
 
-    private final ProductoService productoService;
-  public DetalleVentaRepository() {
-       this.productoService = new ProductoService();
-  }
+    public DetalleVentaDAO() {
+    }
     @Override
     public int save(DetalleVenta beans) {
         Connection conexion = null;
         PreparedStatement ps = null;
-        int resultado=0;
+        int resultado = 0;
         try {
-            String sql= """
-                    INSERT INTO detalleVenta VALUES (?,?,?,?,?)
+            String sql = """
+                    INSERT INTO DetalleVenta(idVenta, idAnimal, cantidad, precio, subtotal)
+                    VALUES (?,?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
             ps.setInt(1, beans.getIdVenta());
             ps.setInt(2, beans.getIdAnimal());
-            ps.setInt(3,beans.getCantidad());
+            ps.setInt(3, beans.getCantidad());
             ps.setDouble(4, beans.getPrecio());
-            ps.setDouble(4, beans.getSubtotal());
-            resultado=ps.executeUpdate();
-            return  resultado;
+            ps.setDouble(5, beans.getSubtotal());
+            resultado = ps.executeUpdate();
+            return resultado;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            try{
+            try {
                 if (ps != null) ps.close();
-                if(conexion!= null) conexion.close();
+                if (conexion != null) conexion.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -52,17 +49,18 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
     @Override
     public int update(DetalleVenta detalleVenta) {
-        String sql = "UPDATE detalle_venta "
-                + "SET id_venta = ?, id_producto = ?, cantidad = ?, subtotal = ? "
-                + "WHERE id_detalle = ?";
+        String sql = "UPDATE DetalleVenta "
+                + "SET idVenta = ?, idAnimal = ?, cantidad = ?, precio = ?, subtotal = ? "
+                + "WHERE idDetalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, detalleVenta.getIdVenta());
-            pstmt.setInt(2, detalleVenta.getIdProducto());
-            pstmt.setDouble(3, detalleVenta.getCantidad());
-            pstmt.setDouble(4, detalleVenta.getSubtotal());
-            pstmt.setInt(5, detalleVenta.getIdDetalle());
+            pstmt.setInt(2, detalleVenta.getIdAnimal());
+            pstmt.setInt(3, detalleVenta.getCantidad());
+            pstmt.setDouble(4, detalleVenta.getPrecio());
+            pstmt.setDouble(5, detalleVenta.getSubtotal());
+            pstmt.setInt(6, detalleVenta.getIdDetalle());
 
             return pstmt.executeUpdate();
 
@@ -73,7 +71,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
     @Override
     public int delete(Integer id) {
-        String sql = "DELETE FROM detalle_venta WHERE id_detalle = ?";
+        String sql = "DELETE FROM DetalleVenta WHERE idDetalle = ?";
 
         try (Connection conn = ConexionMySQL.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -87,7 +85,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
     @Override
     public Optional<DetalleVenta> findById(Integer id) {
-    String sql = "SELECT * FROM detalle_venta WHERE id_detalle = ?";
+    String sql = "SELECT * FROM DetalleVenta WHERE idDetalle = ?";
 
     try (Connection conn = ConexionMySQL.getConexion();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -98,11 +96,11 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
 
             if (rs.next()) {
                 DetalleVenta detalle = new DetalleVenta(
-                        rs.getInt("id_detalle"),
-                        rs.getInt("id_venta"),
-                        rs.getInt("id_producto"),
+                        rs.getInt("idDetalle"),
+                        rs.getInt("idVenta"),
+                        rs.getInt("idAnimal"),
                         rs.getInt("cantidad"),
-                        rs.getDouble("precio_unitario"), // Cambia por el nombre correcto
+                        rs.getDouble("precio"),
                         rs.getDouble("subtotal")
                 );
 
@@ -121,7 +119,7 @@ public class DetalleVentaRepository implements ICRUD<DetalleVenta, Integer> {
     @Override
 public List<DetalleVenta> findAll() {
     List<DetalleVenta> lista = new ArrayList<>();
-    String sql = "SELECT * FROM detalle_venta";
+    String sql = "SELECT * FROM DetalleVenta";
 
     try (Connection conn = ConexionMySQL.getConexion();
          PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -129,12 +127,12 @@ public List<DetalleVenta> findAll() {
 
         while (rs.next()) {
             lista.add(new DetalleVenta(
-                    rs.getInt("id_detalle"),
-                    rs.getInt("id_venta"),
-                    rs.getInt("id_producto"),
-                    rs.getInt("id_animal"),
+                    rs.getInt("idDetalle"),
+                    rs.getInt("idVenta"),
+                    rs.getInt("idAnimal"),
                     rs.getInt("cantidad"),
-                    rs.getDouble("precio")));
+                    rs.getDouble("precio"),
+                    rs.getDouble("subtotal")));
         }
 
         return lista;
@@ -146,14 +144,15 @@ public List<DetalleVenta> findAll() {
 
     @Override
     public int saveAndFindId(DetalleVenta detalleVenta) {
-        String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad, subtotal) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO DetalleVenta(idVenta, idAnimal, cantidad, precio, subtotal) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, detalleVenta.getIdVenta());
-            pstmt.setInt(2, detalleVenta.getIdProducto());
-            pstmt.setDouble(3, detalleVenta.getCantidad());
-            pstmt.setDouble(4, detalleVenta.getSubtotal());
+            pstmt.setInt(2, detalleVenta.getIdAnimal());
+            pstmt.setInt(3, detalleVenta.getCantidad());
+            pstmt.setDouble(4, detalleVenta.getPrecio());
+            pstmt.setDouble(5, detalleVenta.getSubtotal());
 
             pstmt.executeUpdate();
 

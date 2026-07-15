@@ -19,7 +19,7 @@ public Main() {
     this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     contenedorLogin.removeAll();
     contenedorLogin.setLayout(new java.awt.BorderLayout());
-    LoginF login = new LoginF();
+    LoginF2 login = new LoginF2();
     contenedorLogin.add(login, java.awt.BorderLayout.CENTER);
     contenedorLogin.revalidate();
     contenedorLogin.repaint();
@@ -35,12 +35,10 @@ public Main() {
     private void initComponents() {
 
         contenedorLogin = new javax.swing.JPanel();
-        loginF1 = new RunMain.LoginF();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         contenedorLogin.setLayout(new java.awt.BorderLayout());
-        contenedorLogin.add(loginF1, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,6 +91,5 @@ public Main() {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contenedorLogin;
-    private RunMain.LoginF loginF1;
     // End of variables declaration//GEN-END:variables
 }

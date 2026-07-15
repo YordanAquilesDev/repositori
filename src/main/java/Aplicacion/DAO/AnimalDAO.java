@@ -1,8 +1,6 @@
 package Aplicacion.DAO;
 
-import Aplicacion.Service.RazaService;
 import Dominio.Modelo.Animal;
-import Dominio.Modelo.Raza;
 import Dominio.repository.ICRUD;
 import Aplicacion.utils.ConexionMySQL;
 
@@ -15,12 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AnimalRepository implements ICRUD<Animal, Integer> {
+public class AnimalDAO implements ICRUD<Animal, Integer> {
 
-    private final RazaService razaService;
-
-    public AnimalRepository() {
-        this.razaService = new RazaService();
+    public AnimalDAO() {
     }
 
     @Override
@@ -30,7 +25,8 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         int resultado = 0;
         try {
             String sql = """
-                    INSERT INTO animal VALUES (?,?,?,?,?,?,?)
+                    INSERT INTO Animal(idRaza, nombre, sexo, edad, precio, stock, estado)
+                    VALUES (?,?,?,?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
@@ -64,22 +60,22 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         Connection conexion = null;
         PreparedStatement ps = null;
         int resultado = -1;
-        String sql = """ 
- UPDATE animal SET 
- nombre = ?,
-    edad =?,
-    precio =?,
-    stock =?,
-    estado =?,
-""";
+        String sql = """
+                UPDATE Animal
+                SET idRaza = ?, nombre = ?, sexo = ?, edad = ?, precio = ?, stock = ?, estado = ?
+                WHERE idAnimal = ?
+                """;
         try {
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
-            ps.setString(1, beans.getNombre());
-            ps.setInt(2, beans.getEdad());
-            ps.setDouble(3, beans.getPrecio());
-            ps.setInt(4, beans.getStock());
-            ps.setString(5, beans.getEstado());
+            ps.setInt(1, beans.getIdRaza());
+            ps.setString(2, beans.getNombre());
+            ps.setString(3, beans.getSexo());
+            ps.setInt(4, beans.getEdad());
+            ps.setDouble(5, beans.getPrecio());
+            ps.setInt(6, beans.getStock());
+            ps.setString(7, beans.getEstado());
+            ps.setInt(8, beans.getIdAnimal());
             resultado = ps.executeUpdate();
             return resultado;
         } catch (SQLException e) {
@@ -104,7 +100,7 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         Connection conexion = null;
         PreparedStatement ps = null;
         int resultado = -1;
-        String sql = "DELETE FROM animal WHERE id_animal = ?";
+        String sql = "DELETE FROM Animal WHERE idAnimal = ?";
 
         try {
             conexion = ConexionMySQL.getConexion();
@@ -136,7 +132,7 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM animal WHERE id_animal = ?";
+            String sql = "SELECT * FROM Animal WHERE idAnimal = ?";
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
             ps.setInt(1, id);
@@ -176,7 +172,7 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         ResultSet rs = null;
         List<Animal> list = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM animal";
+            String sql = "SELECT * FROM Animal";
             conn = ConexionMySQL.getConexion();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
@@ -217,7 +213,8 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
         int idGeneradoPorLaBaseDeDatos = 0;
         try {
             String sql = """
-                    INSERT INTO animal VALUES (?,?,?,?,?,?,?)
+                    INSERT INTO Animal(idRaza, nombre, sexo, edad, precio, stock, estado)
+                    VALUES (?,?,?,?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -228,9 +225,11 @@ public class AnimalRepository implements ICRUD<Animal, Integer> {
             ps.setDouble(5, beans.getPrecio());
             ps.setInt(6, beans.getStock());
             ps.setString(7, beans.getEstado());
+            ps.executeUpdate();
             rs = ps.getGeneratedKeys();
-            rs.next();
-            idGeneradoPorLaBaseDeDatos = rs.getInt(1);
+            if (rs.next()) {
+                idGeneradoPorLaBaseDeDatos = rs.getInt(1);
+            }
             return idGeneradoPorLaBaseDeDatos;
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -19,7 +19,7 @@ import java.util.Optional;
  *
  * @author user
  */
-public class RolRepository implements ICRUD<Rol, Integer>{
+public class RolDAO implements ICRUD<Rol, Integer>{
 
     @Override
     public int save(Rol beans) {

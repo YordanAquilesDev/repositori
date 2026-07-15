@@ -18,7 +18,7 @@ import java.util.Optional;
  *
  * @author user
  */
-public class ClienteRepository implements ICRUD<Cliente,Integer> {
+public class ClienteDAO implements ICRUD<Cliente,Integer> {
 
     @Override
     public int save(Cliente beans) {
@@ -27,7 +27,8 @@ public class ClienteRepository implements ICRUD<Cliente,Integer> {
         int resultado=0;
         try {
             String sql= """
-                    INSERT INTO cliente VALUES (?,?,?,?)
+                    INSERT INTO Cliente(idUsuario, dni, telefono, direccion)
+                    VALUES (?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
@@ -57,13 +58,16 @@ public class ClienteRepository implements ICRUD<Cliente,Integer> {
 
         try  {
             String sql = """
-UPDATE cliente SET dni=?,telefono=?,direccion=? WHERE id=?;
-""";
+                    UPDATE Cliente
+                    SET dni = ?, telefono = ?, direccion = ?
+                    WHERE idCliente = ?
+                    """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql);
             ps.setString(1, beans.getDni());
             ps.setString(2, beans.getTelefono());
             ps.setString(3, beans.getDireccion());
+            ps.setInt(4, beans.getIdCliente());
             resultado=ps.executeUpdate();
             return  resultado;
         } catch (SQLException e) {
@@ -85,7 +89,7 @@ UPDATE cliente SET dni=?,telefono=?,direccion=? WHERE id=?;
         Connection conexion = null;
         PreparedStatement ps = null;
         int resultado=-1;
-        String sql = "DELETE FROM cliente WHERE idCliente=?;";
+        String sql = "DELETE FROM Cliente WHERE idCliente=?;";
 
         try  {
             conexion = ConexionMySQL.getConexion();
@@ -147,7 +151,7 @@ UPDATE cliente SET dni=?,telefono=?,direccion=? WHERE id=?;
         ResultSet rs = null;
         List<Cliente> list = new ArrayList<>();
         try {
-            String sql= "SELECT * FROM cliente";
+            String sql= "SELECT * FROM Cliente";
             conn = ConexionMySQL.getConexion();
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
@@ -181,7 +185,8 @@ UPDATE cliente SET dni=?,telefono=?,direccion=? WHERE id=?;
         int idGeneradoPorLaBaseDeDatos=0;
         try {
             String sql= """
-                    INSERT INTO cliente VALUES (?,?,?,?)
+                    INSERT INTO Cliente(idUsuario, dni, telefono, direccion)
+                    VALUES (?,?,?,?)
                     """;
             conexion = ConexionMySQL.getConexion();
             ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -189,9 +194,11 @@ UPDATE cliente SET dni=?,telefono=?,direccion=? WHERE id=?;
             ps.setString(2, beans.getDni());
             ps.setString(3,beans.getTelefono());
             ps.setString(4, beans.getDireccion());
+            ps.executeUpdate();
             rs = ps.getGeneratedKeys();
-            rs.next();
-            idGeneradoPorLaBaseDeDatos = rs.getInt(1);
+            if (rs.next()) {
+                idGeneradoPorLaBaseDeDatos = rs.getInt(1);
+            }
             return  idGeneradoPorLaBaseDeDatos;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -203,6 +210,38 @@ UPDATE cliente SET dni=?,telefono=?,direccion=? WHERE id=?;
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public Optional<Cliente> findByUsuarioId(int idUsuario) {
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM Cliente WHERE idUsuario = ?";
+            conexion = ConexionMySQL.getConexion();
+            ps = conexion.prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return Optional.of(new Cliente(
+                        rs.getInt("idCliente"),
+                        rs.getInt("idUsuario"),
+                        rs.getString("dni"),
+                        rs.getString("telefono"),
+                        rs.getString("direccion")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conexion != null) conexion.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Optional.empty();
     }
 
 }

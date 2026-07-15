@@ -19,7 +19,7 @@ import java.util.Optional;
  *
  * @author user
  */
-public class RazaRepository implements ICRUD<Raza, Integer>{
+public class RazaDAO implements ICRUD<Raza, Integer>{
 
     @Override
     public int save(Raza beans) {

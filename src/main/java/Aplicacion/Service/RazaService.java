@@ -1,48 +1,48 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Aplicacion.Service;
 
+import Aplicacion.DAO.RazaDAO;
 import Dominio.Modelo.Raza;
 import Dominio.repository.ICRUD;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- * @author user
- */
-public class RazaService implements ICRUD<Raza,Integer>{
+public class RazaService implements ICRUD<Raza, Integer> {
+
+    private final RazaDAO razaDAO;
+
+    public RazaService() {
+        this.razaDAO = new RazaDAO();
+    }
 
     @Override
     public int save(Raza beans) {
-        return 0;
+        return razaDAO.save(beans);
     }
 
     @Override
     public int update(Raza beans) {
-        return 0;
+        return razaDAO.update(beans);
     }
 
     @Override
     public int delete(Integer integer) {
-        return 0;
+        return razaDAO.delete(integer);
     }
 
     @Override
     public Optional<Raza> findById(Integer integer) {
-        return Optional.empty();
+        if (integer == null || integer < 0) return Optional.empty();
+        return razaDAO.findById(integer);
     }
 
     @Override
     public List<Raza> findAll() {
-        return List.of();
+        return razaDAO.findAll();
     }
 
     @Override
     public int saveAndFindId(Raza beans) {
-        return 0;
+        return razaDAO.saveAndFindId(beans);
     }
 }

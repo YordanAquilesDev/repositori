@@ -4,19 +4,10 @@ public class DetalleVenta {
 
     private int idDetalle;
     private int idVenta;
-    private int idProducto;
     private int idAnimal;
     private int cantidad;
     private double precio;
     private double subtotal;
-
-    public int getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
-    }
 
     public DetalleVenta(int idDetalle, int idVenta, int idAnimal, int cantidad, double precio, double subtotal) {
         this.idDetalle = idDetalle;
@@ -25,7 +16,6 @@ public class DetalleVenta {
         this.cantidad = cantidad;
         this.precio = precio;
         this.subtotal = subtotal;
-        this.idProducto = idProducto;
     }
 
     public DetalleVenta() {

@@ -4,7 +4,7 @@
  */
 package RunMain;
 
-import Aplicacion.Service.UsuarioServiceImpl;
+import Aplicacion.Service.UsuarioService;
 import Dominio.Modelo.Usuario;
 import Presentacion.GuiAdmin.FrmAdmind;
 import Presentacion.GuiUsuario.FrmUsuario;
@@ -71,9 +71,9 @@ public class LoginF extends javax.swing.JPanel {
         add(contenedorLogin);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+    private void txtPaswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPaswordActionPerformed
         btnIniciarSesion.doClick();
-    }//GEN-LAST:event_txtPasswordActionPerformed
+    }//GEN-LAST:event_txtPaswordActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
@@ -89,7 +89,7 @@ public class LoginF extends javax.swing.JPanel {
         }
 
         try {
-            UsuarioServiceImpl usuarioService = new UsuarioServiceImpl();
+            UsuarioService usuarioService = new UsuarioService();
             Usuario usuario = usuarioService.login(correo, password);
 
             if (usuario == null) {

@@ -3,82 +3,92 @@ package Aplicacion.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import Aplicacion.DAO.VentaRepository;
+import Aplicacion.DAO.VentaDAO;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Venta;
 import Dominio.repository.ICRUD;
 
-public class VentaService  implements ICRUD<Venta,Integer> {
-   private final VentaRepository ventaRepository;
-   private  final DetalleVentaServiceImpl detalleVentaService;
-   public VentaService() {
-  //
-       this.detalleVentaService = new DetalleVentaServiceImpl();
-       this.ventaRepository =  new VentaRepository();
-   }
+public class VentaService implements ICRUD<Venta, Integer> {
+
+    private final VentaDAO ventaDAO;
+    private final DetalleVentaService detalleVentaService;
+    private final AnimalService animalService;
+
+    public VentaService() {
+        this.detalleVentaService = new DetalleVentaService();
+        this.ventaDAO = new VentaDAO();
+        this.animalService = new AnimalService();
+    }
 
     @Override
     public int save(Venta beans) {
-       int guardarYgenerarId = 0;
-       int filasAfectadas = 0;
-       double total = 0;
+        if (beans == null || beans.getDetalleVentas() == null || beans.getDetalleVentas().isEmpty()) {
+            throw new IllegalArgumentException("No se puede registrar una venta sin detalles.");
+        }
 
+        beans.getDetalleVentas()
+                .forEach(detalle -> animalService.validarDisponibilidad(detalle.getIdAnimal(), detalle.getCantidad()));
 
-        total =beans.getDetalleVentas()
+        double total = beans.getDetalleVentas()
                 .stream()
                 .mapToDouble(DetalleVenta::getSubtotal)
                 .sum();
-
         beans.setTotal(total);
-        // guardamos la venta primero  debido a que
-        // DetalleVenta depende del idVenta
-        guardarYgenerarId = saveAndFindId(beans);
-        if(guardarYgenerarId>0){
-            int idVenta = guardarYgenerarId;
-            //cargamos el idVenta a todos los detalles
-            beans.getDetalleVentas()
-                    .forEach(bean -> {
 
-                    });
-
-            //ahora guardamos detalleVenta en la db
-          filasAfectadas=  beans.getDetalleVentas()
-                  .stream()
-                  .mapToInt(detalleVentaService::save) //capturamos la respuesta de filas afectadas en la db
-                  .sum();  // lo sumanos
-          if(filasAfectadas>0){
-              // si se guardo la venta y los detalles correctamente
-              return 1;
-          }else{
-              //caso que  se guardo la venta pero no los detalles
-              return 0;
-          }
+        if (beans.getFecha() == null || beans.getFecha().isEmpty()) {
+            beans.setFecha(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
-        // caso que  no se guardo la venta
-        return -1;
-    }
 
+        int idVenta = saveAndFindId(beans);
+        if (idVenta <= 0) {
+            return -1;
+        }
+
+        beans.getDetalleVentas()
+                .forEach(bean -> bean.setIdVenta(idVenta));
+
+        List<Integer> idsDetalleGuardados = new ArrayList<>();
+        for (DetalleVenta detalle : beans.getDetalleVentas()) {
+            int idDetalle = detalleVentaService.saveAndFindId(detalle);
+            if (idDetalle <= 0) {
+                idsDetalleGuardados.forEach(detalleVentaService::delete);
+                ventaDAO.delete(idVenta);
+                return 0;
+            }
+            detalle.setIdDetalle(idDetalle);
+            idsDetalleGuardados.add(idDetalle);
+        }
+
+        for (DetalleVenta detalle : beans.getDetalleVentas()) {
+            int actualizado = animalService.descontarStock(detalle.getIdAnimal(), detalle.getCantidad());
+            if (actualizado <= 0) {
+                idsDetalleGuardados.forEach(detalleVentaService::delete);
+                ventaDAO.delete(idVenta);
+                return 0;
+            }
+        }
+        return 1;
+    }
 
     @Override
     public Optional<Venta> findById(Integer integer) {
-       if(integer==null||integer<0){
-           throw new IllegalArgumentException("id no puede ser null o negativo");
-       }
-        return ventaRepository.findById(integer);
+        if (integer == null || integer < 0) {
+            throw new IllegalArgumentException("id no puede ser null o negativo");
+        }
+        return ventaDAO.findById(integer);
     }
 
     @Override
     public List<Venta> findAll() {
-        return ventaRepository.findAll();
+        return ventaDAO.findAll();
     }
+
     @Override
     public int saveAndFindId(Venta beans) {
-        // 1. Validaciones estructurales básicas
-
-
-        // 2. Automatizar datos: Asignar la fecha actual del sistema
-        // 3. Regla de negocio: Calcular el total dinámicamente si hay detalles
         if (beans.getDetalleVentas() != null && !beans.getDetalleVentas().isEmpty()) {
             double totalCalculado = beans.getDetalleVentas().stream()
                     .mapToDouble(DetalleVenta::getSubtotal)
@@ -88,9 +98,7 @@ public class VentaService  implements ICRUD<Venta,Integer> {
             throw new IllegalArgumentException("No se puede registrar una venta sin detalles/productos.");
         }
 
-        // 4. Regla de negocio avanzada: Verificar y descontar stock aquí si fuera necesario
-        // productoService.descontarStock(beans.getDetalleVentas());
-        return ventaRepository.saveAndFindId(beans);
+        return ventaDAO.saveAndFindId(beans);
     }
 
     @Override
@@ -99,16 +107,14 @@ public class VentaService  implements ICRUD<Venta,Integer> {
             throw new IllegalArgumentException("El objeto venta o su ID son inválidos para actualizar.");
         }
 
-        // 1. Regla de negocio: Verificar si la venta realmente existe en la DB antes de modificarla
-        Optional<Venta> ventaExistente = ventaRepository.findById(beans.getIdVenta());
+        Optional<Venta> ventaExistente = ventaDAO.findById(beans.getIdVenta());
         if (ventaExistente.isEmpty()) {
             throw new NoSuchElementException("No se encontró la venta con el ID especificado: " + beans.getIdVenta());
         }
 
-        // 2. Mantener la fecha original si no se desea cambiar en la edición
         beans.setFecha(ventaExistente.get().getFecha());
 
-        return ventaRepository.update(beans);
+        return ventaDAO.update(beans);
     }
 
     @Override
@@ -117,17 +123,11 @@ public class VentaService  implements ICRUD<Venta,Integer> {
             throw new IllegalArgumentException("El ID de la venta debe ser un número positivo.");
         }
 
-        // Regla de negocio: Verificar existencia antes de eliminar
-        Optional<Venta> venta = ventaRepository.findById(id);
+        Optional<Venta> venta = ventaDAO.findById(id);
         if (venta.isEmpty()) {
             throw new NoSuchElementException("Intento de eliminar una venta inexistente.");
         }
 
-        // Aquí podrías validar: si la venta tiene más de X días, impedir su eliminación.
-
-        return ventaRepository.delete(id);
+        return ventaDAO.delete(id);
     }
-
-
-
 }

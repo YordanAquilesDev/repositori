@@ -1,33 +1,28 @@
 package Aplicacion.Service;
 
-import Aplicacion.DAO.DetalleVentaRepository;
+import Aplicacion.DAO.DetalleVentaDAO;
 import Dominio.Modelo.DetalleVenta;
-import Dominio.Modelo.Producto;
 import Dominio.repository.ICRUD;
 
 import java.util.List;
 import java.util.Optional;
 
-public class DetalleVentaServiceImpl implements ICRUD<DetalleVenta, Integer> {
+public class DetalleVentaService implements ICRUD<DetalleVenta, Integer> {
 
-    private final ProductoService productoService;
-    private final DetalleVentaRepository detalleVentaRepository;
+    private final DetalleVentaDAO detalleVentaDAO;
 
-    public DetalleVentaServiceImpl() {
-        // esto viene de de VentaServiceImpl
-        this.productoService = new ProductoService();
-        this.detalleVentaRepository = new DetalleVentaRepository();
+    public DetalleVentaService() {
+        this.detalleVentaDAO = new DetalleVentaDAO();
     }
 
     @Override
     public int save(DetalleVenta detalleVenta) {
-
-        return -1;
+        return detalleVentaDAO.save(detalleVenta);
     }
 
     @Override
     public int update(DetalleVenta beans) {
-        return detalleVentaRepository.update(beans);
+        return detalleVentaDAO.update(beans);
     }
 
     @Override
@@ -35,7 +30,7 @@ public class DetalleVentaServiceImpl implements ICRUD<DetalleVenta, Integer> {
         if (integer == null || integer < 0) {
             throw new IllegalArgumentException("valores de objetos nulos ");
         }
-        return detalleVentaRepository.delete(integer);
+        return detalleVentaDAO.delete(integer);
     }
 
     @Override
@@ -43,17 +38,17 @@ public class DetalleVentaServiceImpl implements ICRUD<DetalleVenta, Integer> {
         if (integer == null || integer < 0) {
             throw new IllegalArgumentException("valores de objetos nulos ");
         }
-        return detalleVentaRepository.findById(integer);
+        return detalleVentaDAO.findById(integer);
     }
 
     @Override
     public List<DetalleVenta> findAll() {
-        return detalleVentaRepository.findAll();
+        return detalleVentaDAO.findAll();
     }
 
     @Override
     public int saveAndFindId(DetalleVenta beans) {
         if (beans == null) return -1;
-        return detalleVentaRepository.saveAndFindId(beans);
+        return detalleVentaDAO.saveAndFindId(beans);
     }
 }

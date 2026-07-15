@@ -1,6 +1,6 @@
 package Aplicacion.Service;
 
-import Aplicacion.DAO.AnimalRepository;
+import Aplicacion.DAO.AnimalDAO;
 import Dominio.Modelo.Animal;
 import Dominio.repository.ICRUD;
 
@@ -12,93 +12,75 @@ import java.util.Optional;
  * Realiza validaciones antes de acceder al repositorio encargado de la base de datos.
  */
 public class AnimalService implements ICRUD<Animal, Integer> {
-//funcioan ok sin ningun problemas
-    private final AnimalRepository animalRepository;
-    
-     /**
-     * Constructor de la clase.
-     * Inicializa el repositorio de animales.
-     */
-    public AnimalService() {
 
-        this.animalRepository = new AnimalRepository();
+    private final AnimalDAO animalDAO;
+
+    public AnimalService() {
+        this.animalDAO = new AnimalDAO();
     }
 
-    /**
-     * Guarda un nuevo animal en la base de datos.
-     * @param beans Objeto Animal que contiene la información a registrar.
-     * @return Devuelve el resultado del registro o -1 si los datos son inválidos.
-     */
     @Override
     public int save(Animal beans) {
-        // Guarda el animal en la base de datos.
-        return animalRepository.save(beans);
+        return animalDAO.save(beans);
     }
 
-    /**
-     * Actualiza la información de un animal existente.
-     * @param beans Objeto Animal con la nueva información.
-     * @return Resultado de la actualización o -1 si los datos son inválidos.
-     */
     @Override
     public int update(Animal beans) {
-         // Verifica que el objeto exista y tenga un ID válido.
         if (beans == null || beans.getIdAnimal() <= 0) return -1;
-        // Actualiza el registro del animal.
-        return animalRepository.update(beans);
+        return animalDAO.update(beans);
     }
 
-     /**
-     * Elimina un animal utilizando su ID.
-     * @param id Identificador del animal.
-     * @return Resultado de la eliminación o -1 si el ID es inválido.
-     */
     @Override
     public int delete(Integer id) {
-        // Verifica que el ID recibido sea válido.
         if (id == null || id < 0) return -1;
-        // Elimina el animal del repositorio.
-        return animalRepository.delete(id);
+        return animalDAO.delete(id);
     }
 
-    /**
-     * Busca un animal mediante su ID.
-     * @param id Identificador del animal.
-     * @return Un Optional que contiene el animal encontrado o vacío si no existe.
-     */
     @Override
     public Optional<Animal> findById(Integer id) {
-        // Verifica que el ID recibido sea válido.
         if (id == null || id < 0) return Optional.empty();
-        // Busca el animal en la base de datos.
-        return animalRepository.findById(id);
+        return animalDAO.findById(id);
     }
 
-     /**
-     * Obtiene todos los animales registrados
-     * @return Lista con todos los animales almacenados.
-     */
     @Override
     public List<Animal> findAll() {
-          // Recupera todos los animales desde la base de datos.
-        return animalRepository.findAll();
+        return animalDAO.findAll();
     }
 
-    /**
-     * Guarda un animal y devuelve el ID generado automáticamente.
-     * @param beans Objeto Animal que será registrado.
-     * @return ID generado o -1 si los datos son inválidos.
-     */
     @Override
     public int saveAndFindId(Animal beans) {
-
-        //guarda el animal y regresa el id generado
-        return animalRepository.saveAndFindId(beans);
+        return animalDAO.saveAndFindId(beans);
     }
 
-    /**
-     * Obtiene la lista de animales destinada al módulo de consumo.
-     * @return Lista de animales obtenida desde el repositorio.
-     */
+    public int descontarStock(int idAnimal, int cantidad) {
+        if (idAnimal <= 0 || cantidad <= 0) {
+            throw new IllegalArgumentException("Animal o cantidad invalida.");
+        }
 
+        Animal animal = validarDisponibilidad(idAnimal, cantidad);
+        int nuevoStock = animal.getStock() - cantidad;
+        animal.setStock(nuevoStock);
+        animal.setEstado(nuevoStock == 0 ? "Vendido" : "Disponible");
+
+        return update(animal);
+    }
+
+    public Animal validarDisponibilidad(int idAnimal, int cantidad) {
+        if (idAnimal <= 0 || cantidad <= 0) {
+            throw new IllegalArgumentException("Animal o cantidad invalida.");
+        }
+
+        Animal animal = findById(idAnimal)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontro el animal con ID " + idAnimal));
+
+        if ("Vendido".equalsIgnoreCase(animal.getEstado())) {
+            throw new IllegalArgumentException("El animal ya fue vendido: " + animal.getNombre());
+        }
+
+        if (animal.getStock() < cantidad) {
+            throw new IllegalArgumentException("Stock insuficiente para " + animal.getNombre());
+        }
+
+        return animal;
+    }
 }

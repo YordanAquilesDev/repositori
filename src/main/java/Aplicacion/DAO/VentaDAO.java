@@ -9,11 +9,9 @@ import Dominio.Modelo.Venta;
 import Dominio.repository.ICRUD;
 import Aplicacion.utils.ConexionMySQL;
 
-public class VentaRepository implements ICRUD<Venta, Integer> {
-    private final UsuarioRepository usuarioRepository;
+public class VentaDAO implements ICRUD<Venta, Integer> {
 
-    public VentaRepository() {
-        this.usuarioRepository = new UsuarioRepository();
+    public VentaDAO() {
     }
     @Override
     public int save(Venta beans) {
