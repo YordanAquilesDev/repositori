@@ -171,17 +171,17 @@ public class CarritoPanel extends JPanel {
         }
     }
 
-    static class CarritoItem {
+    public  static class CarritoItem {
 
-        final Animal animal;
-        int cantidad;
+        public final Animal animal;
+        public int cantidad;
 
         CarritoItem(Animal animal, int cantidad) {
             this.animal = animal;
             this.cantidad = cantidad;
         }
 
-        double getSubtotal() {
+        public double getSubtotal() {
             return animal.getPrecio() * cantidad;
         }
     }

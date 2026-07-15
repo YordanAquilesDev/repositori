@@ -59,6 +59,7 @@ public class LoginF extends javax.swing.JPanel {
 
         txtPasword.setBackground(new java.awt.Color(253, 243, 250));
         txtPasword.setBorder(null);
+        txtPasword.addActionListener(this::txtPaswordActionPerformed);
         contenedorLogin.add(txtPasword, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 430, 280, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/login.png"))); // NOI18N
