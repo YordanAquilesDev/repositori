@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Presentacion.GuiCliente3;
+package Presentacion.GuiCliente;
 
 import Aplicacion.Service.AnimalService;
 import Aplicacion.Service.RazaService;
@@ -109,8 +109,8 @@ public class PanelCatalogo extends javax.swing.JPanel {
         }
 
         Component parent = javax.swing.SwingUtilities.getWindowAncestor(this);
-        if (parent instanceof FrmCliente3) {
-            ((FrmCliente3) parent).agregarAlCarrito(animal);
+        if (parent instanceof FrmCliente) {
+            ((FrmCliente) parent).agregarAlCarrito(animal);
         }
     }
 

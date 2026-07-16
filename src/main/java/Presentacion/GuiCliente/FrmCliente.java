@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package Presentacion.GuiCliente3;
+package Presentacion.GuiCliente;
 
 import ArchivoPDF.PDF;
 import Aplicacion.Service.ClienteService;
@@ -27,9 +27,9 @@ import javax.swing.border.EmptyBorder;
  *
  * @author neker
  */
-public class FrmCliente3 extends javax.swing.JFrame {
+public class FrmCliente extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCliente3.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCliente.class.getName());
 
     private final Usuario usuario;
     private final Cliente cliente;
@@ -41,7 +41,7 @@ public class FrmCliente3 extends javax.swing.JFrame {
     /**
      * Constructor que recibe el usuario logueado.
      */
-    public FrmCliente3(Usuario usuario) {
+    public FrmCliente(Usuario usuario) {
         this.usuario = usuario;
         this.cliente = buscarCliente(usuario.getIdUsuario());
 
@@ -60,7 +60,7 @@ public class FrmCliente3 extends javax.swing.JFrame {
     /**
      * Constructor vacio requerido por NetBeans.
      */
-    public FrmCliente3() {
+    public FrmCliente() {
         this.usuario = null;
         this.cliente = null;
         initComponents();
@@ -269,7 +269,7 @@ public class FrmCliente3 extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmCliente3().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmCliente().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

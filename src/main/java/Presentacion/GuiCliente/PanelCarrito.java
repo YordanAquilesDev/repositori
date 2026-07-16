@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Presentacion.GuiCliente3;
+package Presentacion.GuiCliente;
 
 import Dominio.Modelo.Animal;
 
@@ -110,8 +110,8 @@ public class PanelCarrito extends javax.swing.JPanel {
                 "Confirmar Compra", JOptionPane.YES_NO_OPTION);
         if (resp == JOptionPane.YES_OPTION) {
             Component parent = SwingUtilities.getWindowAncestor(this);
-            if (parent instanceof FrmCliente3) {
-                ((FrmCliente3) parent).procesarCompra();
+            if (parent instanceof FrmCliente) {
+                ((FrmCliente) parent).procesarCompra();
             }
         }
     }
