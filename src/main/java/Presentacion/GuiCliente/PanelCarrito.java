@@ -5,10 +5,8 @@
 package Presentacion.GuiCliente;
 
 import Dominio.Modelo.Animal;
-import java.awt.Color;
 
 import java.awt.Component;
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -41,22 +39,6 @@ public class PanelCarrito extends javax.swing.JPanel {
             }
         };
         tblCarrito.setModel(modelo);
-
-        tblCarrito.setRowHeight(26);
-        
-        //COLORES
-        jScrollPane1.setBackground(new Color(200, 200, 200));
-        jScrollPane1.getViewport().setBackground(new Color(200, 200, 200));
-        tblCarrito.setBackground(new Color(200, 200, 200));
-        tblCarrito.getTableHeader().setBackground(new Color(150,150,150));
-        tblCarrito.getTableHeader().setForeground(Color.WHITE); 
-        
-        tblCarrito.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        tblCarrito.getTableHeader().setBackground(new java.awt.Color(244, 247, 246));
-        tblCarrito.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
-        btnComprar.addActionListener(evt -> comprar());
-        btnVaciarCarrito.addActionListener(evt -> limpiar());
     }
 
     public void agregarAnimal(Animal animal) {
@@ -109,22 +91,6 @@ public class PanelCarrito extends javax.swing.JPanel {
         txtTotalCarrito.setText(String.format("Total: S/ %.2f", getTotal()));
     }
 
-    private void comprar() {
-        if (items.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El carrito esta vacio.");
-            return;
-        }
-        int resp = JOptionPane.showConfirmDialog(this,
-                "Confirmar compra por S/ " + String.format("%.2f", getTotal()) + "?",
-                "Confirmar Compra", JOptionPane.YES_NO_OPTION);
-        if (resp == JOptionPane.YES_OPTION) {
-            Component parent = SwingUtilities.getWindowAncestor(this);
-            if (parent instanceof FrmCliente) {
-                ((FrmCliente) parent).procesarCompra();
-            }
-        }
-    }
-
     static class CarritoItem implements ArchivoPDF.PDF.CarritoItemData {
 
         final Animal animal;
@@ -175,19 +141,28 @@ public class PanelCarrito extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
 
-        txtTituloCarrito.setBackground(new java.awt.Color(153, 153, 153));
+        txtTituloCarrito.setBackground(new java.awt.Color(0, 153, 255));
+        txtTituloCarrito.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        txtTituloCarrito.setForeground(new java.awt.Color(255, 255, 255));
         txtTituloCarrito.setText("     Mi Carrito");
+        txtTituloCarrito.setMinimumSize(new java.awt.Dimension(67, 45));
         txtTituloCarrito.setOpaque(true);
-        txtTituloCarrito.setPreferredSize(new java.awt.Dimension(53, 30));
+        txtTituloCarrito.setPreferredSize(new java.awt.Dimension(53, 45));
         add(txtTituloCarrito, java.awt.BorderLayout.PAGE_START);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(489, 130));
 
+        txtTotalCarrito.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCarrito.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        txtTotalCarrito.setForeground(new java.awt.Color(255, 255, 255));
         txtTotalCarrito.setText("Total: S/ 0.00");
 
-        btnComprar.setBackground(new java.awt.Color(255, 51, 51));
-        btnComprar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        btnComprar.setBackground(new java.awt.Color(0, 153, 51));
+        btnComprar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnComprar.setForeground(new java.awt.Color(255, 255, 255));
         btnComprar.setText("Comprar");
+        btnComprar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnComprar.setOpaque(true);
         btnComprar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,31 +170,40 @@ public class PanelCarrito extends javax.swing.JPanel {
             }
         });
 
-        btnVaciarCarrito.setBackground(new java.awt.Color(255, 51, 51));
+        btnVaciarCarrito.setBackground(new java.awt.Color(255, 51, 0));
+        btnVaciarCarrito.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnVaciarCarrito.setForeground(new java.awt.Color(255, 255, 255));
         btnVaciarCarrito.setText("Vaciar Carrito");
+        btnVaciarCarrito.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnVaciarCarrito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVaciarCarritoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnComprar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtTotalCarrito)
-                    .addComponent(btnVaciarCarrito, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
-                .addContainerGap(49, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnComprar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVaciarCarrito, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
                 .addComponent(txtTotalCarrito)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnComprar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnVaciarCarrito)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnVaciarCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         add(jPanel1, java.awt.BorderLayout.PAGE_END);
@@ -228,6 +212,28 @@ public class PanelCarrito extends javax.swing.JPanel {
 
         tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
@@ -243,8 +249,24 @@ public class PanelCarrito extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-        // TODO add your handling code here:
+        if (items.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El carrito esta vacio.");
+            return;
+        }
+        int resp = JOptionPane.showConfirmDialog(this,
+                "Confirmar compra por S/ " + String.format("%.2f", getTotal()) + "?",
+                "Confirmar Compra", JOptionPane.YES_NO_OPTION);
+        if (resp == JOptionPane.YES_OPTION) {
+            Component parent = SwingUtilities.getWindowAncestor(this);
+            if (parent instanceof FrmCliente) {
+                ((FrmCliente) parent).procesarCompra();
+            }
+        }
     }//GEN-LAST:event_btnComprarActionPerformed
+
+    private void btnVaciarCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVaciarCarritoActionPerformed
+        limpiar();
+    }//GEN-LAST:event_btnVaciarCarritoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

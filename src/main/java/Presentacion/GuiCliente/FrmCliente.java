@@ -11,17 +11,12 @@ import Dominio.Modelo.Cliente;
 import Dominio.Modelo.DetalleVenta;
 import Dominio.Modelo.Usuario;
 import Dominio.Modelo.Venta;
-import RunMain.Main;
+import Presentacion.GuiLogin.FrmLogin;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.util.Optional;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -74,24 +69,8 @@ public class FrmCliente extends javax.swing.JFrame {
     private void initLogic() {
         setTitle("Cliente - Sistema de Granja");
         setMinimumSize(new Dimension(1100, 720));
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         txtBienvenida.setText("Bienvenido, " + usuario.getNombre());
-
-        jButton1.addActionListener(evt -> cerrarSesion());
-
-        jPanelHeader.setBackground(Color.WHITE);
-        jPanelHeader.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(225, 231, 229)),
-                new EmptyBorder(8, 10, 8, 10)
-        ));
-
-        jButton1.setBackground(new Color(220, 53, 69));
-        jButton1.setForeground(Color.WHITE);
-        jButton1.setFocusPainted(false);
-        jButton1.setBorderPainted(false);
-        jButton1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        jButton1.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
 
         catalogoPanel = new PanelCatalogo();
         carritoPanel = new PanelCarrito();
@@ -104,11 +83,6 @@ public class FrmCliente extends javax.swing.JFrame {
 
         revalidate();
         repaint();
-    }
-
-    private void cerrarSesion() {
-        new Main().setVisible(true);
-        dispose();
     }
 
     public void agregarAlCarrito(Dominio.Modelo.Animal animal) {
@@ -174,12 +148,19 @@ public class FrmCliente extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
+        jPanelHeader.setBackground(new java.awt.Color(204, 255, 204));
+        jPanelHeader.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setText("Catalogo");
 
+        txtBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtBienvenida.setText("Bienvenido, ");
 
-        jButton1.setText("Cerrar cesion");
+        jButton1.setBackground(new java.awt.Color(255, 0, 51));
+        jButton1.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Cerrar sesion");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -192,21 +173,24 @@ public class FrmCliente extends javax.swing.JFrame {
             jPanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelHeaderLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 621, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(txtBienvenida, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 372, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
         jPanelHeaderLayout.setVerticalGroup(
             jPanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelHeaderLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBienvenida)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(jPanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanelHeaderLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2))
+                    .addGroup(jPanelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtBienvenida)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -244,7 +228,8 @@ public class FrmCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        new FrmLogin().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

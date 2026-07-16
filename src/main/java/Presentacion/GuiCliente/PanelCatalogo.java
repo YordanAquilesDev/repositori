@@ -9,9 +9,6 @@ import Aplicacion.Service.RazaService;
 import Dominio.Modelo.Animal;
 import Dominio.Modelo.Raza;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -45,16 +42,6 @@ public class PanelCatalogo extends javax.swing.JPanel {
             }
         };
         tblCatalogo.setModel(modelo);
-
-        tblCatalogo.setRowHeight(30);
-        tblCatalogo.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tblCatalogo.getTableHeader().setBackground(new Color(230, 237, 235));
-        tblCatalogo.getTableHeader().setForeground(new Color(25, 40, 37));
-        tblCatalogo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblCatalogo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-
-        btnAgregarCarrito.addActionListener(evt -> agregarAlCarrito());
-
         cargarRazas();
         cargarAnimales();
     }
@@ -88,32 +75,6 @@ public class PanelCatalogo extends javax.swing.JPanel {
         }
     }
 
-    private void agregarAlCarrito() {
-        int fila = tblCatalogo.getSelectedRow();
-        if (fila < 0) {
-            JOptionPane.showMessageDialog(this, "Selecciona un animal de la tabla.");
-            return;
-        }
-        int modeloFila = tblCatalogo.convertRowIndexToModel(fila);
-        DefaultTableModel modelo = (DefaultTableModel) tblCatalogo.getModel();
-        int idAnimal = (int) modelo.getValueAt(modeloFila, 0);
-
-        Animal animal = animalService.findById(idAnimal).orElse(null);
-        if (animal == null) {
-            JOptionPane.showMessageDialog(this, "No se encontro el animal.");
-            return;
-        }
-        if ("Vendido".equals(animal.getEstado())) {
-            JOptionPane.showMessageDialog(this, "Este animal ya fue vendido.");
-            return;
-        }
-
-        Component parent = javax.swing.SwingUtilities.getWindowAncestor(this);
-        if (parent instanceof FrmCliente) {
-            ((FrmCliente) parent).agregarAlCarrito(animal);
-        }
-    }
-
     public void recargar() {
         cargarRazas();
         cargarAnimales();
@@ -138,9 +99,15 @@ public class PanelCatalogo extends javax.swing.JPanel {
 
         jPanelCatalogoTop.setPreferredSize(new java.awt.Dimension(400, 50));
 
+        txtTituloAnimales.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
         txtTituloAnimales.setText("Animales disponibles");
 
         btnAgregarCarrito.setText("Agregar al Carrito");
+        btnAgregarCarrito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCarritoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelCatalogoTopLayout = new javax.swing.GroupLayout(jPanelCatalogoTop);
         jPanelCatalogoTop.setLayout(jPanelCatalogoTopLayout);
@@ -148,8 +115,8 @@ public class PanelCatalogo extends javax.swing.JPanel {
             jPanelCatalogoTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCatalogoTopLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(txtTituloAnimales, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 466, Short.MAX_VALUE)
+                .addComponent(txtTituloAnimales, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 401, Short.MAX_VALUE)
                 .addComponent(btnAgregarCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
@@ -170,6 +137,32 @@ public class PanelCatalogo extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
@@ -180,6 +173,32 @@ public class PanelCatalogo extends javax.swing.JPanel {
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCarritoActionPerformed
+        int fila = tblCatalogo.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this, "Selecciona un animal de la tabla.");
+            return;
+        }
+        int modeloFila = tblCatalogo.convertRowIndexToModel(fila);
+        DefaultTableModel modelo = (DefaultTableModel) tblCatalogo.getModel();
+        int idAnimal = (int) modelo.getValueAt(modeloFila, 0);
+
+        Animal animal = animalService.findById(idAnimal).orElse(null);
+        if (animal == null) {
+            JOptionPane.showMessageDialog(this, "No se encontro el animal.");
+            return;
+        }
+        if ("Vendido".equals(animal.getEstado())) {
+            JOptionPane.showMessageDialog(this, "Este animal ya fue vendido.");
+            return;
+        }
+
+        java.awt.Component parent = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (parent instanceof FrmCliente) {
+            ((FrmCliente) parent).agregarAlCarrito(animal);
+        }
+    }//GEN-LAST:event_btnAgregarCarritoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

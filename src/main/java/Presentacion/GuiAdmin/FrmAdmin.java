@@ -293,7 +293,7 @@ public class FrmAdmin extends javax.swing.JFrame {
         );
 
         if (opcion == JOptionPane.YES_OPTION) {
-            new RunMain.Main().setVisible(true);
+            new Presentacion.GuiLogin.FrmLogin().setVisible(true);
             dispose();
         }
     }
