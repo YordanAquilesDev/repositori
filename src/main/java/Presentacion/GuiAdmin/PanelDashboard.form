@@ -137,7 +137,7 @@
                       <Component id="txtDescriptionStockTotal" min="-2" max="-2" attributes="0"/>
                       <Component id="txtStockTotal" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="47" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -164,7 +164,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="25" green="28" red="19" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Animales"/>
+            <Property name="text" type="java.lang.String" value="Stock Total"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="NumStockTotal">
@@ -186,7 +186,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9c" green="a0" red="96" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cantidad total de animales registrados"/>
+            <Property name="text" type="java.lang.String" value="Suma de todas las unidades disponibles"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -217,11 +217,11 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtDescriptionStockBajo" min="-2" max="-2" attributes="0"/>
                       <Component id="NumStockBajo" min="-2" max="-2" attributes="0"/>
                       <Component id="txtStockBajo" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDescriptionStockBajo" alignment="0" min="-2" pref="205" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="54" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -248,7 +248,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="25" green="28" red="19" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Animales"/>
+            <Property name="text" type="java.lang.String" value="Stock bajo"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="NumStockBajo">
@@ -270,7 +270,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9c" green="a0" red="96" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cantidad total de animales registrados"/>
+            <Property name="text" type="java.lang.String" value="Animales con 5 o menos unidades"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -301,11 +301,11 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtDescriptionMontoVendido" min="-2" max="-2" attributes="0"/>
                       <Component id="NumMontoVendido" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtMontoVendido" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDescriptionMontoVendido" alignment="0" min="-2" pref="215" max="-2" attributes="0"/>
+                      <Component id="txtMontoVendido" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="44" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -332,7 +332,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="25" green="28" red="19" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Animales"/>
+            <Property name="text" type="java.lang.String" value="Moto vendido"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="NumMontoVendido">
@@ -354,7 +354,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9c" green="a0" red="96" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cantidad total de animales registrados"/>
+            <Property name="text" type="java.lang.String" value="Total acumulado de todas las ventas"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -385,11 +385,11 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtDescriptionVentas" min="-2" max="-2" attributes="0"/>
                       <Component id="NumVentas" min="-2" max="-2" attributes="0"/>
                       <Component id="txtVentas" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDescriptionVentas" alignment="0" min="-2" pref="201" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="58" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -416,7 +416,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="25" green="28" red="19" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Animales"/>
+            <Property name="text" type="java.lang.String" value="Ventas"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="NumVentas">
@@ -438,7 +438,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9c" green="a0" red="96" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cantidad total de animales registrados"/>
+            <Property name="text" type="java.lang.String" value="N&#xfa;mero total de ventas realizadas"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -473,7 +473,7 @@
                       <Component id="NumClientes" min="-2" max="-2" attributes="0"/>
                       <Component id="TxtClientes" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="109" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -500,7 +500,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="25" green="28" red="19" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Animales"/>
+            <Property name="text" type="java.lang.String" value="Clientes"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="NumClientes">
@@ -522,7 +522,8 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9c" green="a0" red="96" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cantidad total de animales registrados"/>
+            <Property name="text" type="java.lang.String" value="Total de clientes registrados"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
       </SubComponents>

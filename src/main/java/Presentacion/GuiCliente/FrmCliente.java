@@ -155,7 +155,7 @@ public class FrmCliente extends javax.swing.JFrame {
         jLabel1.setText("Catalogo");
 
         txtBienvenida.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtBienvenida.setText("Bienvenido, ");
+        txtBienvenida.setText("Bienvenid@, ");
 
         jButton1.setBackground(new java.awt.Color(255, 0, 51));
         jButton1.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N

@@ -28,8 +28,6 @@ public class PanelDashboard extends javax.swing.JPanel {
      */
     public PanelDashboard() {
         initComponents();
-        setBackground(new java.awt.Color(244, 247, 246));
-        configurarTextos();
         cargarDatos();
     }
 
@@ -118,7 +116,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtStockTotal.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         txtStockTotal.setForeground(new java.awt.Color(25, 40, 37));
-        txtStockTotal.setText("Animales");
+        txtStockTotal.setText("Stock Total");
 
         NumStockTotal.setFont(new java.awt.Font("Segoe UI", 1, 32)); // NOI18N
         NumStockTotal.setForeground(new java.awt.Color(35, 132, 110));
@@ -126,7 +124,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtDescriptionStockTotal.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         txtDescriptionStockTotal.setForeground(new java.awt.Color(150, 160, 156));
-        txtDescriptionStockTotal.setText("Cantidad total de animales registrados");
+        txtDescriptionStockTotal.setText("Suma de todas las unidades disponibles");
 
         javax.swing.GroupLayout jPanelStockLayout = new javax.swing.GroupLayout(jPanelStock);
         jPanelStock.setLayout(jPanelStockLayout);
@@ -138,7 +136,7 @@ public class PanelDashboard extends javax.swing.JPanel {
                     .addComponent(NumStockTotal)
                     .addComponent(txtDescriptionStockTotal)
                     .addComponent(txtStockTotal))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanelStockLayout.setVerticalGroup(
             jPanelStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +158,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtStockBajo.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         txtStockBajo.setForeground(new java.awt.Color(25, 40, 37));
-        txtStockBajo.setText("Animales");
+        txtStockBajo.setText("Stock bajo");
 
         NumStockBajo.setFont(new java.awt.Font("Segoe UI", 1, 32)); // NOI18N
         NumStockBajo.setForeground(new java.awt.Color(35, 132, 110));
@@ -168,7 +166,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtDescriptionStockBajo.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         txtDescriptionStockBajo.setForeground(new java.awt.Color(150, 160, 156));
-        txtDescriptionStockBajo.setText("Cantidad total de animales registrados");
+        txtDescriptionStockBajo.setText("Animales con 5 o menos unidades");
 
         javax.swing.GroupLayout jPanelStockBajoLayout = new javax.swing.GroupLayout(jPanelStockBajo);
         jPanelStockBajo.setLayout(jPanelStockBajoLayout);
@@ -177,10 +175,10 @@ public class PanelDashboard extends javax.swing.JPanel {
             .addGroup(jPanelStockBajoLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanelStockBajoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDescriptionStockBajo)
                     .addComponent(NumStockBajo)
-                    .addComponent(txtStockBajo))
-                .addContainerGap(53, Short.MAX_VALUE))
+                    .addComponent(txtStockBajo)
+                    .addComponent(txtDescriptionStockBajo, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         jPanelStockBajoLayout.setVerticalGroup(
             jPanelStockBajoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,7 +200,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtMontoVendido.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         txtMontoVendido.setForeground(new java.awt.Color(25, 40, 37));
-        txtMontoVendido.setText("Animales");
+        txtMontoVendido.setText("Moto vendido");
 
         NumMontoVendido.setFont(new java.awt.Font("Segoe UI", 1, 32)); // NOI18N
         NumMontoVendido.setForeground(new java.awt.Color(35, 132, 110));
@@ -210,7 +208,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtDescriptionMontoVendido.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         txtDescriptionMontoVendido.setForeground(new java.awt.Color(150, 160, 156));
-        txtDescriptionMontoVendido.setText("Cantidad total de animales registrados");
+        txtDescriptionMontoVendido.setText("Total acumulado de todas las ventas");
 
         javax.swing.GroupLayout jPanelMontoVendidoLayout = new javax.swing.GroupLayout(jPanelMontoVendido);
         jPanelMontoVendido.setLayout(jPanelMontoVendidoLayout);
@@ -219,10 +217,10 @@ public class PanelDashboard extends javax.swing.JPanel {
             .addGroup(jPanelMontoVendidoLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanelMontoVendidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDescriptionMontoVendido)
                     .addComponent(NumMontoVendido)
+                    .addComponent(txtDescriptionMontoVendido, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMontoVendido))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanelMontoVendidoLayout.setVerticalGroup(
             jPanelMontoVendidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,7 +242,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtVentas.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         txtVentas.setForeground(new java.awt.Color(25, 40, 37));
-        txtVentas.setText("Animales");
+        txtVentas.setText("Ventas");
 
         NumVentas.setFont(new java.awt.Font("Segoe UI", 1, 32)); // NOI18N
         NumVentas.setForeground(new java.awt.Color(35, 132, 110));
@@ -252,7 +250,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtDescriptionVentas.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         txtDescriptionVentas.setForeground(new java.awt.Color(150, 160, 156));
-        txtDescriptionVentas.setText("Cantidad total de animales registrados");
+        txtDescriptionVentas.setText("Número total de ventas realizadas");
 
         javax.swing.GroupLayout jPanelVentasLayout = new javax.swing.GroupLayout(jPanelVentas);
         jPanelVentas.setLayout(jPanelVentasLayout);
@@ -261,10 +259,10 @@ public class PanelDashboard extends javax.swing.JPanel {
             .addGroup(jPanelVentasLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDescriptionVentas)
                     .addComponent(NumVentas)
-                    .addComponent(txtVentas))
-                .addContainerGap(53, Short.MAX_VALUE))
+                    .addComponent(txtVentas)
+                    .addComponent(txtDescriptionVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanelVentasLayout.setVerticalGroup(
             jPanelVentasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,7 +284,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         TxtClientes.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         TxtClientes.setForeground(new java.awt.Color(25, 40, 37));
-        TxtClientes.setText("Animales");
+        TxtClientes.setText("Clientes");
 
         NumClientes.setFont(new java.awt.Font("Segoe UI", 1, 32)); // NOI18N
         NumClientes.setForeground(new java.awt.Color(35, 132, 110));
@@ -294,7 +292,8 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         txtDescriptionClientes.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         txtDescriptionClientes.setForeground(new java.awt.Color(150, 160, 156));
-        txtDescriptionClientes.setText("Cantidad total de animales registrados");
+        txtDescriptionClientes.setText("Total de clientes registrados");
+        txtDescriptionClientes.setToolTipText("");
 
         javax.swing.GroupLayout jPanelClientesLayout = new javax.swing.GroupLayout(jPanelClientes);
         jPanelClientes.setLayout(jPanelClientesLayout);
@@ -306,7 +305,7 @@ public class PanelDashboard extends javax.swing.JPanel {
                     .addComponent(txtDescriptionClientes)
                     .addComponent(NumClientes)
                     .addComponent(TxtClientes))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         jPanelClientesLayout.setVerticalGroup(
             jPanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -359,25 +358,7 @@ public class PanelDashboard extends javax.swing.JPanel {
         NumClientes.setText(String.valueOf(totalClientes));
     }
 
-    private void configurarTextos() {
-        txtAnimales.setText("Animales");
-        txtDescriptionAnimales.setText("Cantidad total de animales registrados");
-
-        txtStockTotal.setText("Stock total");
-        txtDescriptionStockTotal.setText("Suma de todas las unidades disponibles");
-
-        txtStockBajo.setText("Stock bajo");
-        txtDescriptionStockBajo.setText("Animales con 5 o menos unidades");
-
-        txtVentas.setText("Ventas");
-        txtDescriptionVentas.setText("Número total de ventas realizadas");
-
-        txtMontoVendido.setText("Monto vendido");
-        txtDescriptionMontoVendido.setText("Total acumulado de todas las ventas");
-
-        TxtClientes.setText("Clientes");
-        txtDescriptionClientes.setText("Total de clientes registrados");
-    }
+   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
